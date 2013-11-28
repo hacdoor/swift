@@ -1,0 +1,471 @@
+<?php
+
+class SwiftController extends BackendController {
+
+    protected function beforeAction($action) {
+        $this->checkAccess();
+        return parent::beforeAction($action);
+    }
+
+    public function actionIndex() {
+        $this->checkAccess('swift.view');
+
+        $data = null;
+        $pages = null;
+        $filters = array(
+            'localId' => '',
+            'noLtdln' => '',
+        );
+
+        $criteria = new CDbCriteria;
+        $criteria->order = 'localId ASC';
+//$criteria->condition = '';
+
+        if (isset($_GET['Filter']))
+            $filters = $_GET['Filter'];
+        if ($filters['localId'])
+            $criteria->addSearchCondition('localId', $filters['localId']);
+        if ($filters['noLtdln'])
+            $criteria->addSearchCondition('noLtdln', $filters['noLtdln']);
+
+        $dataCount = Swift::model()->count($criteria);
+
+        $pages = new CPagination($dataCount);
+        $pages->setPageSize(Yii::app()->setting->get('list_size'));
+        $pages->applyLimit($criteria);
+
+        $sort = new CSort;
+        $sort->modelClass = 'Negara';
+        $sort->attributes = array('*');
+        $sort->applyOrder($criteria);
+
+        $data = Swift::model()->findAll($criteria);
+
+        $vars = array(
+            'data' => $data,
+            'pages' => $pages,
+            'filters' => $filters,
+            'sort' => $sort
+        );
+
+        $this->render('index', $vars);
+    }
+
+    public function actionCreate($type) {
+        $this->checkAccess('swift.create');
+
+        $model = new Swift;
+        $peroranganPengirimSwIn = new PeroranganPengirimSwIn;
+        $korporasiPengirimSwIn = new KorporasiPengirimSwIn;
+        $nonNasabahPengirimSwIn = new NonNasabahPengirimSwIn;
+        $number = Yii::app()->util->getNumberSwift($type);
+
+
+        if (isset($_POST['Swift'])) {
+            $flag = TRUE;
+            $flagSave = TRUE;
+
+            $nasabahPengirimSwIn = new NasabahPengirimSwIn;
+            $identitasPengirimSwIn = new IdentitasPengirimSwIn;
+
+            $jenisPost = $_POST['type'];
+            $jenisPengirim = $jenisPost['pengirim'];
+            $jenisNasabah = $jenisPost['nasabah'];
+
+            $data = $_POST['Swift'];
+            $model->attributes = $data;
+            $model->tglLaporan = date('Y-m-d', strtotime($data['tglLaporan']));
+            $model->jenisLaporan = 1;
+            $model->jenisSwift = 1;
+
+            if ($model->validate()) {
+                if ($jenisPengirim == 1) {
+                    if ($jenisNasabah == 1) {
+                        $data = $_POST['PeroranganPengirimSwIn'];
+                        $peroranganPengirimSwIn->attributes = $data;
+                        $peroranganPengirimSwIn->tglLahir = date('Y-m-d', strtotime($data['tglLahir']));
+                        if (!$peroranganPengirimSwIn->validate()) {
+                            $flag = false;
+                        }
+                    } else {
+                        $data = $_POST['KorporasiPengirimSwIn'];
+                        $korporasiPengirimSwIn->attributes = $data;
+                        if (!$korporasiPengirimSwIn->validate()) {
+                            $flag = false;
+                        }
+                    }
+                } else {
+                    $data = $_POST['NonNasabahPengirimSwIn'];
+                    $nonNasabahPengirimSwIn->attributes = $data;
+                    $nonNasabahPengirimSwIn->tglLahir = date('Y-m-d', strtotime($data['tglLahir']));
+                    if (!$nonNasabahPengirimSwIn->validate()) {
+                        $flag = false;
+                    }
+                }
+            } else {
+                $flag = false;
+            }
+
+            if ($flag) {
+                if ($model->save()) {
+                    $identitasPengirimSwIn->jenis = $jenisPengirim;
+                    $identitasPengirimSwIn->swift_id = $model->id;
+                    if ($identitasPengirimSwIn->save()) {
+                        if ($jenisPengirim == 1) {
+                            $nasabahPengirimSwIn->jenis = $jenisNasabah;
+                            $nasabahPengirimSwIn->identitasPengirimSwIn_id = $identitasPengirimSwIn->id;
+                            if ($nasabahPengirimSwIn->save()) {
+                                if ($jenisNasabah == 1) {
+                                    $peroranganPengirimSwIn->nasabahPengirimSwIn_id = $nasabahPengirimSwIn->id;
+                                    if ($peroranganPengirimSwIn->save()) {
+                                        
+                                    } else {
+                                        $flagSave = false;
+                                    }
+                                } else {
+                                    $korporasiPengirimSwIn->nasabahPengirimSwIn_id = $nasabahPengirimSwIn->id;
+                                    if ($korporasiPengirimSwIn->save()) {
+                                        
+                                    } else {
+                                        $flagSave = false;
+                                    }
+                                }
+                            } else {
+                                $flagSave = false;
+                            }
+                        } else {
+                            $nonNasabahPengirimSwIn->identitasPengirimSwIn_id = $identitasPengirimSwIn->id;
+                            if ($nonNasabahPengirimSwIn->save()) {
+                                
+                            } else {
+                                $flagSave = false;
+                            }
+                        }
+                    } else {
+                        $flagSave = false;
+                    }
+                }
+            } else {
+                Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed creating Swift Incoming, please check below for errors.');
+            }
+
+
+
+            if ($flagSave && $flag) {
+                Yii::app()->util->setLog('Swift Incoming', $model->id, 'Tambah data');
+                Yii::app()->user->setFlash('success', 'Success!|' . 'New Swift Incoming has been created.');
+                $this->redirect($this->vars['backendUrl'] . 'swift?type=' . $type);
+            }
+        }
+
+
+        $vars = array(
+            'model' => $model,
+            'peroranganPengirimSwIn' => $peroranganPengirimSwIn,
+            'korporasiPengirimSwIn' => $korporasiPengirimSwIn,
+            'nonNasabahPengirimSwIn' => $nonNasabahPengirimSwIn,
+            'number' => $number
+        );
+
+        $this->render('create', $vars);
+    }
+
+    public function actionUpdate($id) {
+        $this->checkAccess('swift.update');
+
+        $model = Swift::model()->findByPk($id);
+        $peroranganPengirimSwIn = new PeroranganPengirimSwIn;
+        $korporasiPengirimSwIn = new KorporasiPengirimSwIn;
+        $nonNasabahPengirimSwIn = new NonNasabahPengirimSwIn;
+
+
+        $oldModel = $model->attributes;
+        $oldPeroranganPengirimSwIn = $peroranganPengirimSwIn->attributes;
+        $oldKorporasiPengirimSwIn = $korporasiPengirimSwIn->attributes;
+        $oldNonNasabahPengirimSwIn = $nonNasabahPengirimSwIn->attributes;
+
+        $type = $_GET['type'];
+
+        $identitasPengirimSwIn = IdentitasPengirimSwIn::model()->find('swift_id=' . $model->id);
+        if ($identitasPengirimSwIn) {
+            if ($identitasPengirimSwIn->jenis == 1) {
+                $nasabahPengirimSwIn = NasabahPengirimSwIn::model()->find('identitasPengirimSwIn_id=' . $identitasPengirimSwIn->id);
+                if ($nasabahPengirimSwIn->jenis == 1) {
+                    $peroranganPengirimSwIn = PeroranganPengirimSwIn::model()->find('nasabahPengirimSwIn_id=' . $nasabahPengirimSwIn->id);
+                    $oldPeroranganPengirimSwIn = $peroranganPengirimSwIn->attributes;
+                } else {
+                    $korporasiPengirimSwIn = KorporasiPengirimSwIn::model()->find('nasabahPengirimSwIn_id=' . $nasabahPengirimSwIn->id);
+                    $oldKorporasiPengirimSwIn = $korporasiPengirimSwIn->attributes;
+                }
+            } else {
+                $nonNasabahPengirimSwIn = NonNasabahPengirimSwIn::model()->find('identitasPengirimSwIn_id=' . $identitasPengirimSwIn->id);
+                $oldNonNasabahPengirimSwIn = $nonNasabahPengirimSwIn->attributes;
+            }
+        }
+
+        if (!$model) {
+            $this->redirect($this->vars['backendUrl'] . 'swift');
+            Yii::app()->end();
+        }
+
+        if (isset($_POST['Swift'])) {
+            $flag = TRUE;
+            $flagSave = TRUE;
+
+            $jenisPost = $_POST['type'];
+            $jenisPengirim = $jenisPost['pengirim'];
+            $jenisNasabah = $jenisPost['nasabah'];
+
+            $data = $_POST['Swift'];
+            $model->attributes = $data;
+            $model->tglLaporan = date('Y-m-d', strtotime($data['tglLaporan']));
+            $model->jenisLaporan = 1;
+            $model->jenisSwift = 1;
+
+
+            if ($model->validate()) {
+                if ($jenisPengirim == 1) {
+                    if ($jenisNasabah == 1) {
+                        $data = $_POST['PeroranganPengirimSwIn'];
+                        $peroranganPengirimSwIn->attributes = $data;
+                        $peroranganPengirimSwIn->tglLahir = date('Y-m-d', strtotime($data['tglLahir']));
+                        if ($peroranganPengirimSwIn->validate()) {
+                            
+                        } else {
+                            $flag = false;
+                        }
+                    } else {
+                        $data = $_POST['KorporasiPengirimSwIn'];
+                        $korporasiPengirimSwIn->attributes = $data;
+                        if ($korporasiPengirimSwIn->validate()) {
+                            
+                        } else {
+                            $flag = false;
+                        }
+                    }
+                } else {
+                    $data = $_POST['NonNasabahPengirimSwIn'];
+                    $nonNasabahPengirimSwIn->attributes = $data;
+                    $nonNasabahPengirimSwIn->tglLahir = date('Y-m-d', strtotime($data['tglLahir']));
+                    if ($nonNasabahPengirimSwIn->validate()) {
+                        
+                    } else {
+                        $flag = false;
+                    }
+                }
+            } else {
+                $flag = false;
+            }
+
+            if ($flag) {
+                if ($model->save()) {
+                    $label = $model->attributeLabels();
+                    $data_diff = array('old' => $oldModel, 'new' => $model->attributes, 'label' => $label);
+                    Yii::app()->util->setLog('Swift Incoming', $model->id, 'Edit data', $data_diff);
+                    $identitasPengirimSwIn->jenis = $jenisPengirim;
+                    $identitasPengirimSwIn->swift_id = $model->id;
+                    if ($identitasPengirimSwIn->save()) {
+                        if ($jenisPengirim == 1) {
+                            $nasabahPengirimSwIn->jenis = $jenisNasabah;
+                            $nasabahPengirimSwIn->identitasPengirimSwIn_id = $identitasPengirimSwIn->id;
+                            if ($nasabahPengirimSwIn->save()) {
+                                if ($jenisNasabah == 1) {
+                                    $peroranganPengirimSwIn->nasabahPengirimSwIn_id = $nasabahPengirimSwIn->id;
+                                    if ($peroranganPengirimSwIn->save()) {
+                                        $label = $peroranganPengirimSwIn->attributeLabels();
+                                        $data_diff = array('old' => $oldPeroranganPengirimSwIn, 'new' => $peroranganPengirimSwIn->attributes, 'label' => $label);
+                                        Yii::app()->util->setLog('Swift Incoming[Identitas Pengirim]', $model->id, 'Edit data', $data_diff);
+                                    } else {
+                                        $flagSave = false;
+                                    }
+                                } else {
+                                    $korporasiPengirimSwIn->nasabahPengirimSwIn_id = $nasabahPengirimSwIn->id;
+                                    if ($korporasiPengirimSwIn->save()) {
+                                        $label = $korporasiPengirimSwIn->attributeLabels();
+                                        $data_diff = array('old' => $oldKorporasiPengirimSwIn, 'new' => $korporasiPengirimSwIn->attributes, 'label' => $label);
+                                        Yii::app()->util->setLog('Swift Incoming[Identitas Pengirim]', $model->id, 'Edit data', $data_diff);
+                                    } else {
+                                        $flagSave = false;
+                                    }
+                                }
+                            } else {
+                                $flagSave = false;
+                            }
+                        } else {
+                            $nonNasabahPengirimSwIn->identitasPengirimSwIn_id = $identitasPengirimSwIn->id;
+                            if ($nonNasabahPengirimSwIn->save()) {
+                                $label = $nonNasabahPengirimSwIn->attributeLabels();
+                                $data_diff = array('old' => $oldNonNasabahPengirimSwIn, 'new' => $nonNasabahPengirimSwIn->attributes, 'label' => $label);
+                                Yii::app()->util->setLog('Swift Incoming[Identitas Pengirim]', $model->id, 'Edit data', $data_diff);
+                            } else {
+                                $flagSave = false;
+                            }
+                        }
+                    } else {
+                        $flagSave = false;
+                    }
+                }
+            } else {
+                Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed updating Swift Incoming, please check below for errors.');
+            }
+
+
+
+            if ($flagSave && $flag) {
+                Yii::app()->user->setFlash('success', 'Success!|' . 'Swift Incoming has been updated.');
+                $this->redirect($this->vars['backendUrl'] . 'swift?type=' . $type);
+            }
+        }
+
+        $vars = array(
+            'model' => $model,
+            'peroranganPengirimSwIn' => $peroranganPengirimSwIn,
+            'korporasiPengirimSwIn' => $korporasiPengirimSwIn,
+            'nonNasabahPengirimSwIn' => $nonNasabahPengirimSwIn,
+        );
+
+        $this->render('update', $vars);
+    }
+
+    public function actionDelete($id) {
+        $this->checkAccess('swift.delete');
+
+        $model = Swift::model()->findByPk($id);
+
+        if (!$model) {
+            $this->redirect($this->vars['backendUrl'] . 'swift');
+            Yii::app()->end();
+        }
+
+        $type = $_GET['type'];
+        $admin = Yii::app()->user->getState('admin');
+
+        $t = $model->getRelated('identitasPengirimSwIns');
+        $identitasPengirimSwIn = IdentitasPengirimSwIn::model()->find('swift_id=' . $model->id);
+        if ($identitasPengirimSwIn) {
+            if ($identitasPengirimSwIn->jenis == 1) {
+                $nasabahPengirimSwIn = NasabahPengirimSwIn::model()->find('identitasPengirimSwIn_id=' . $identitasPengirimSwIn->id);
+                if ($nasabahPengirimSwIn->jenis == 1) {
+                    $peroranganPengirimSwIn = PeroranganPengirimSwIn::model()->find('nasabahPengirimSwIn_id=' . $nasabahPengirimSwIn->id);
+                    if ($peroranganPengirimSwIn)
+                        $peroranganPengirimSwIn->delete();
+                } else {
+                    $korporasiPengirimSwIn = KorporasiPengirimSwIn::model()->find('nasabahPengirimSwIn_id=' . $nasabahPengirimSwIn->id);
+                    if ($korporasiPengirimSwIn)
+                        $korporasiPengirimSwIn->delete();
+                }
+                $nasabahPengirimSwIn->delete();
+            } else {
+                $nonNasabahPengirimSwIn = NonNasabahPengirimSwIn::model()->find('identitasPengirimSwIn_id=' . $identitasPengirimSwIn->id);
+                if ($nonNasabahPengirimSwIn)
+                    $nonNasabahPengirimSwIn->delete();
+            }
+            $identitasPengirimSwIn->delete();
+        }
+// Delete admin
+        if ($model->delete()) {
+            Yii::app()->util->setLog('Swift', $id, 'Hapus data');
+            Yii::app()->user->setFlash('success', 'Success!|' . 'Swift has been deleted.');
+            $this->redirect($this->vars['backendUrl'] . 'swift?type=' . $_GET['type']);
+        } else {
+            Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed deleting Swift, please try again.');
+            $this->redirect($this->vars['backendUrl'] . 'swift?type=' . $_GET['type']);
+        }
+
+        Yii::app()->end();
+    }
+
+    public function actionAutocomplete() {
+        if (isset($_GET['term']) && ($keyword = trim($_GET['term'])) !== '') {
+            $norek = NasabahPerorangan::model()->getNoRekening($keyword);
+            header('Content-type: application/json');
+            echo CJSON::encode($norek);
+        }
+    }
+
+    public function actionRekeningKorporasi() {
+        if (isset($_GET['term']) && ($keyword = trim($_GET['term'])) !== '') {
+            $norek = NasabahKorporasi::model()->getNoRekening($keyword);
+            header('Content-type: application/json');
+            echo CJSON::encode($norek);
+        }
+    }
+
+    public function actionGenerateXml() {
+        $model = Swift::model()->findAll();
+        $header = header('Content-Type: application/xml; charset=utf-8');
+        $peroranganPengirimSwInTemplate = "
+            <noRekening/>
+            <namaLengkap/>
+            <tglLahir/>
+            <kewarganegaraan>
+              <wargaNegara/>
+              <idNegara/>
+              <negaraLain/>
+            </kewarganegaraan>
+            <alamatSesuaiVoucher>
+              <alamat/>
+              <negaraBagianKota/>
+              <idNegara/>
+              <negaraLain/>
+            </alamatSesuaiVoucher>
+            <noTelp/>
+            <buktiIdentitas>
+              <ktp/>
+              <sim/>
+              <passport/>
+              <kimsKitasKitap/>
+              <npwp/>
+              <buktiLain>
+                <jenisBuktiLain/>
+                <noBuktiLain/>
+              </buktiLain>
+            </buktiIdentitas>
+        ";
+        $korporasiPengirimSwInTemplate = "
+            <noRekening/>
+            <namaKorporasi/>
+            <alamatSesuaiVoucher>
+              <alamat/>
+              <negaraBagianKota/>
+              <idNegara/>
+              <negaraLain/>
+            </alamatSesuaiVoucher>
+            <noTelp/>
+        ";
+        $nonNasabahPengirimSwInTemplate = "
+            <noRekening/>
+            <namaLengkap/>
+            <tglLahir/>
+            <alamatSesuaiVoucher>
+              <alamat/>
+              <negaraBagianKota/>
+              <idNegara/>
+              <negaraLain/>
+            </alamatSesuaiVoucher>
+            <noTelp/>
+        ";
+        $dataFile = array();
+        foreach ($model as $value) {
+            $type = Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $value->jenisSwift)));
+            $filename = $value->localId .'-'.$type. '.xml';
+            $type = Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $value->jenisSwift)));
+            $tglLaporan = Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' => 'tanggal', 'data' => $value->tglLaporan)));
+            $str = '<ifti xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="' . $type . '" xsi:noNamespaceSchemaLocation="Ifti' . $type . '.xsd">';
+            $str .= "<localId>$value->localId</localId>";
+            $str .= '<umum>';
+            $str .= "<tglLaporan> $tglLaporan</tglLaporan>";
+            $str .= "<jenisLaporan>$value->jenisLaporan</jenisLaporan>";
+            $str .= "<noLtklKoreksi>$value->noLtdlnKoreksi</noLtklKoreksi>";
+            $str .= '</umum>';
+            $str .= "<pjkBankSebagai>$value->pjkBankSebagai</pjkBankSebagai>";
+
+            $str .= '</ifti>';
+            file_put_contents($filename, $str);
+            $dataFile[] = $filename;
+        }
+
+        Yii::app()->util->actionCreatefile('SWIFTXML.zip', $dataFile);
+    }
+
+}

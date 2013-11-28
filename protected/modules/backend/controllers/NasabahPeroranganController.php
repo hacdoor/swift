@@ -1,0 +1,144 @@
+<?php
+
+class NasabahPeroranganController extends BackendController {
+
+    protected function beforeAction($action) {
+        $this->checkAccess();
+        return parent::beforeAction($action);
+    }
+
+    public function actionIndex() {
+        $this->checkAccess('nasabahPerorangan.view');
+
+        $data = null;
+        $pages = null;
+        $filters = array(
+            'namaLengkap' => '',
+            'noRekening' => '',
+        );
+
+        $criteria = new CDbCriteria;
+
+        if (isset($_GET['Filter']))
+            $filters = $_GET['Filter'];
+        if ($filters['namaLengkap'])
+            $criteria->addSearchCondition('namaLengkap', $filters['namaLengkap']);
+        if ($filters['noRekening'])
+            $criteria->addSearchCondition('noRekening', $filters['noRekening']);
+
+        $dataCount = NasabahPerorangan::model()->count($criteria);
+
+        $pages = new CPagination($dataCount);
+        $pages->setPageSize(Yii::app()->setting->get('list_size'));
+        $pages->applyLimit($criteria);
+
+        $sort = new CSort;
+        $sort->modelClass = 'NasabahPerorangan';
+        $sort->attributes = array('*');
+        $sort->applyOrder($criteria);
+        
+        $data = NasabahPerorangan::model()->findAll($criteria);
+
+        $vars = array(
+            'data' => $data,
+            'pages' => $pages,
+            'filters' => $filters,
+            'sort'  => $sort
+        );
+
+        $this->render('index', $vars);
+    }
+
+    public function actionCreate() {
+        $this->checkAccess('nasabahPerorangan.create');
+
+        $model = new NasabahPerorangan;
+
+        if (isset($_POST['NasabahPerorangan'])) {
+            $data = $_POST['NasabahPerorangan'];
+            $data['tglLahir'] = date('Y-m-d', strtotime($data['tglLahir']));
+            $model->attributes = $data;
+            if ($model->validate()) {
+                if ($model->save()) {
+                    // Redirect
+                    Yii::app()->util->setLog('NasabahPerorangan', $model->id, 'Tambah data');
+                    Yii::app()->user->setFlash('success', 'Success!|' . 'New NasabahPerorangan has been created.');
+                    $this->redirect($this->vars['backendUrl'] . 'nasabahPerorangan');
+                } else {
+                    Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed creating NasabahPerorangan, please try again.');
+                }
+            } else {
+                Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed creating NasabahPerorangan, please check below for errors.');
+            }
+        }
+
+        $vars = array(
+            'model' => $model,
+        );
+
+        $this->render('create', $vars);
+    }
+
+    public function actionUpdate($id) {
+        $this->checkAccess('nasabahPerorangan.update');
+
+        $model = NasabahPerorangan::model()->findByPk($id);
+        $old = $model->attributes;
+        if (!$model) {
+            $this->redirect($this->vars['backendUrl'] . 'nasabahPerorangan');
+            Yii::app()->end();
+        }
+
+        if (isset($_POST['NasabahPerorangan'])) {
+            $data = $_POST['NasabahPerorangan'];
+            $data['tglLahir'] = date('Y-m-d', strtotime($data['tglLahir']));
+            $model->attributes = $data;
+            if ($model->validate()) {
+                if ($model->save()) {
+                    // Redirect
+                    $label = $model->attributeLabels();
+                    $data_diff = array('old' => $old, 'new' => $model->attributes, 'label' => $label);
+                    Yii::app()->util->setLog('NasabahPerorangan', $id, 'Edit data', $data_diff);
+                    Yii::app()->user->setFlash('success', 'Success!|' . 'NasabahPerorangan has been updated.');
+                    $this->redirect($this->vars['backendUrl'] . 'nasabahPerorangan');
+                } else {
+                    Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed updating NasabahPerorangan, please try again.');
+                }
+            } else {
+                Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed updating NasabahPerorangan, please check below for errors.');
+            }
+        }
+        $model->tglLahir = date('d-m-Y', strtotime($model->tglLahir));
+        $vars = array(
+            'model' => $model,
+        );
+
+        $this->render('update', $vars);
+    }
+
+    public function actionDelete($id) {
+        $this->checkAccess('nasabahPerorangan.delete');
+
+        $model = NasabahPerorangan::model()->findByPk($id);
+
+        if (!$model) {
+            $this->redirect($this->vars['backendUrl'] . 'nasabahPerorangan');
+            Yii::app()->end();
+        }
+
+        $admin = Yii::app()->user->getState('admin');
+
+        // Delete admin
+        if ($model->delete()) {
+            Yii::app()->util->setLog('NasabahPerorangan', $id, 'Hapus data');
+            Yii::app()->user->setFlash('success', 'Success!|' . 'NasabahPerorangan has been deleted.');
+            $this->redirect($this->vars['backendUrl'] . 'nasabahPerorangan');
+        } else {
+            Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed deleting NasabahPerorangan, please try again.');
+            $this->redirect($this->vars['backendUrl'] . 'nasabahPerorangan');
+        }
+
+        Yii::app()->end();
+    }
+
+}

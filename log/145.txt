@@ -1,0 +1,3 @@
+localId : 15678
+namaPjk : Bank Mandiri
+namaPejabatPjk : Widodo Pangestu
