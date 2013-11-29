@@ -2,28 +2,33 @@
 
 
 /**
- * This is the model class for table "korporasiPengirimSwIn".
+ * This is the model class for table "nasabah_korporasi_ln".
  *
- * The followings are the available columns in table 'korporasiPengirimSwIn':
+ * The followings are the available columns in table 'nasabah_korporasi_ln':
  * @property integer $id
  * @property string $noRekening
  * @property string $namaKorporasi
+ * @property integer $bentukBadan
+ * @property string $bentukBadanLain
+ * @property integer $bidangUsaha
+ * @property string $bidangUsahaLain
  * @property string $alamat
  * @property string $negaraBagianKota
- * @property integer $idNegaraBagianKota
- * @property string $negaraLainnyaBagianKota
+ * @property integer $idNegara
+ * @property string $negaraLain
  * @property string $noTelp
- * @property integer $nasabahPengirimSwIn_id
+ * @property integer $swift_id
  *
  * The followings are the available model relations:
- * @property NasabahPengirimSwIn $nasabahPengirimSwIn
+ * @property Negara $idNegara0
+ * @property Swift $swift
  */
-class KorporasiPengirimSwIn extends CActiveRecord
+class NasabahKorporasiLn extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return KorporasiPengirimSwIn the static model class
+	 * @return NasabahKorporasiLn the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -35,7 +40,7 @@ class KorporasiPengirimSwIn extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'korporasiPengirimSwIn';
+		return 'nasabah_korporasi_ln';
 	}
 
 	/**
@@ -46,15 +51,15 @@ class KorporasiPengirimSwIn extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('noRekening, namaKorporasi,idNegaraBagianKota', 'required'),
-			array('idNegaraBagianKota, nasabahPengirimSwIn_id', 'numerical', 'integerOnly'=>true),
-			array('noRekening, negaraLainnyaBagianKota', 'length', 'max'=>50),
-			array('namaKorporasi', 'length', 'max'=>255),
+			array('namaKorporasi, idNegara, swift_id', 'required'),
+			array('bentukBadan, bidangUsaha, idNegara, swift_id', 'numerical', 'integerOnly'=>true),
+			array('noRekening, bidangUsahaLain, negaraBagianKota, negaraLain', 'length', 'max'=>50),
+			array('namaKorporasi, bentukBadanLain', 'length', 'max'=>255),
 			array('alamat', 'length', 'max'=>100),
-			array('negaraBagianKota, noTelp', 'length', 'max'=>30),
+			array('noTelp', 'length', 'max'=>30),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, noRekening, namaKorporasi, alamat, negaraBagianKota, idNegaraBagianKota, negaraLainnyaBagianKota, noTelp, nasabahPengirimSwIn_id', 'safe', 'on'=>'search'),
+			array('id, noRekening, namaKorporasi, bentukBadan, bentukBadanLain, bidangUsaha, bidangUsahaLain, alamat, negaraBagianKota, idNegara, negaraLain, noTelp, swift_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,7 +71,8 @@ class KorporasiPengirimSwIn extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'nasabahPengirimSwIn' => array(self::BELONGS_TO, 'NasabahPengirimSwIn', 'nasabahPengirimSwIn_id'),
+			'idNegara0' => array(self::BELONGS_TO, 'Negara', 'idNegara'),
+			'swift' => array(self::BELONGS_TO, 'Swift', 'swift_id'),
 		);
 	}
 
@@ -88,12 +94,16 @@ class KorporasiPengirimSwIn extends CActiveRecord
 			'id' => 'ID',
 			'noRekening' => 'No Rekening',
 			'namaKorporasi' => 'Nama Korporasi',
+			'bentukBadan' => 'Bentuk Badan',
+			'bentukBadanLain' => 'Bentuk Badan Lain',
+			'bidangUsaha' => 'Bidang Usaha',
+			'bidangUsahaLain' => 'Bidang Usaha Lain',
 			'alamat' => 'Alamat',
 			'negaraBagianKota' => 'Negara Bagian Kota',
-			'idNegaraBagianKota' => 'Negara',
-			'negaraLainnyaBagianKota' => 'Negara Lainnya',
+			'idNegara' => 'Id Negara',
+			'negaraLain' => 'Negara Lain',
 			'noTelp' => 'No Telp',
-			'nasabahPengirimSwIn_id' => 'Nasabah Pengirim Sw In',
+			'swift_id' => 'Swift',
 		);
 	}
 
@@ -111,12 +121,16 @@ class KorporasiPengirimSwIn extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('noRekening',$this->noRekening,true);
 		$criteria->compare('namaKorporasi',$this->namaKorporasi,true);
+		$criteria->compare('bentukBadan',$this->bentukBadan);
+		$criteria->compare('bentukBadanLain',$this->bentukBadanLain,true);
+		$criteria->compare('bidangUsaha',$this->bidangUsaha);
+		$criteria->compare('bidangUsahaLain',$this->bidangUsahaLain,true);
 		$criteria->compare('alamat',$this->alamat,true);
 		$criteria->compare('negaraBagianKota',$this->negaraBagianKota,true);
-		$criteria->compare('idNegaraBagianKota',$this->idNegaraBagianKota);
-		$criteria->compare('negaraLainnyaBagianKota',$this->negaraLainnyaBagianKota,true);
+		$criteria->compare('idNegara',$this->idNegara);
+		$criteria->compare('negaraLain',$this->negaraLain,true);
 		$criteria->compare('noTelp',$this->noTelp,true);
-		$criteria->compare('nasabahPengirimSwIn_id',$this->nasabahPengirimSwIn_id);
+		$criteria->compare('swift_id',$this->swift_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

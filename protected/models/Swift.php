@@ -14,22 +14,102 @@
  * @property integer $jenisLaporan
  * @property integer $pjkBankSebagai
  * @property integer $jenisSwift
+ * @property integer $status
  *
  * The followings are the available model relations:
- * @property BeneficialOwner[] $beneficialOwners
- * @property IdentitasPenerimaNonSwIn[] $identitasPenerimaNonSwIns
- * @property IdentitasPenerimaNonSwOut[] $identitasPenerimaNonSwOuts
- * @property IdentitasPenerimaSwIn[] $identitasPenerimaSwIns
- * @property IdentitasPenerimaSwOut[] $identitasPenerimaSwOuts
- * @property IdentitasPengirimNonSwIn[] $identitasPengirimNonSwIns
- * @property IdentitasPengirimNonSwOut[] $identitasPengirimNonSwOuts
- * @property IdentitasPengirimSwIn[] $identitasPengirimSwIns
- * @property IdentitasPengirimSwOut[] $identitasPengirimSwOuts
- * @property InfoLain[] $infoLains
- * @property TransaksiNonSwift[] $transaksiNonSwifts
- * @property TransaksiSwift[] $transaksiSwifts
+ * @property Infolain[] $infolains
+ * @property NasabahKorporasiDn[] $nasabahKorporasiDns
+ * @property NasabahKorporasiLn[] $nasabahKorporasiLns
+ * @property NasabahPeroranganDn[] $nasabahPeroranganDns
+ * @property NasabahPeroranganLn[] $nasabahPeroranganLns
+ * @property NonNasabahDn[] $nonNasabahDns
+ * @property NonNasabahLn[] $nonNasabahLns
+ * @property Transaksi[] $transaksis
  */
 class Swift extends CActiveRecord {
+
+    const TYPE_SWIN = 1;
+    const TYPE_SWOUT = 2;
+    const TYPE_NONSWIN = 3;
+    const TYPE_NONSWOUT = 4;
+    
+    const STATUS_DRAFT = 0;
+    const STATUS_FINALIZE = 1;
+    
+    const JENIS_LAPORAN_BARU = 1;
+    const JENIS_LAPORAN_KOREKSI = 2;
+    const JENIS_LAPORAN_RECALL = 3;
+    const JENIS_LAPORAN_REJECT = 4;
+    
+
+    public static function getJenisLaporanOptions() {
+        return array(
+            self::JENIS_LAPORAN_BARU => 'Baru',
+            self::JENIS_LAPORAN_KOREKSI => 'Koreksi',
+            self::JENIS_LAPORAN_RECALL => 'Recall',
+            self::JENIS_LAPORAN_REJECT => 'Reject',
+        );
+    }
+
+    public function getJenisLaporanText($jenisLaporan = null) {
+        $value = ($jenisLaporan === null) ? $this->jenisLaporan : $jenisLaporan;
+        $jenisLaporanOptions = $this->getJenisLaporanOptions();
+        return isset($jenisLaporanOptions[$value]) ?
+                $jenisLaporanOptions[$value] : "unknown jenisLaporan ({$value})";
+    }
+    
+
+    public static function getStatusOptions() {
+        return array(
+            self::STATUS_DRAFT => 'Draft',
+            self::STATUS_FINALIZE => 'Finalize',
+        );
+    }
+
+    public function getStatusText($status = null) {
+        $value = ($status === null) ? $this->status : $status;
+        $statusOptions = $this->getStatusOptions();
+        return isset($statusOptions[$value]) ?
+                $statusOptions[$value] : "unknown status ({$value})";
+    }
+
+    public static function getJenisSwiftOptions() {
+        return array(
+            self::TYPE_SWIN => 'Swift Incoming',
+            self::TYPE_SWOUT => 'Swift Outgoing',
+            self::TYPE_NONSWIN => 'Non Swift Incoming',
+            self::TYPE_NONSWOUT => 'Non Swift Outgoing',
+        );
+    }
+
+    public static function getIdByType($type) {
+        $types = array(
+            'SwIn' => self::TYPE_SWIN,
+            'SwOut' => self::TYPE_SWOUT,
+            'NonSwIn' => self::TYPE_NONSWIN,
+            'NonSwOut' => self::TYPE_NONSWOUT,
+        );
+
+        return $types[$type];
+    }
+
+    public static function getTypeById($id) {
+        $types = array(
+            self::TYPE_SWIN => 'SwIn',
+            self::TYPE_SWOUT => 'SwOut',
+            self::TYPE_NONSWIN => 'NonSwIn',
+            self::TYPE_NONSWOUT => 'NonSwOut',
+        );
+
+        return $types[$id];
+    }
+
+    public function getJenisSwiftText($jenisSwift = null) {
+        $value = ($jenisSwift === null) ? $this->jenisSwift : $jenisSwift;
+        $jenisSwiftOptions = $this->getStatusOptions();
+        return isset($jenisSwiftOptions[$value]) ?
+                $jenisSwiftOptions[$value] : "unknown jenis swift ({$value})";
+    }
 
     /**
      * Returns the static model of the specified AR class.
@@ -54,15 +134,14 @@ class Swift extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('localId, noLtdln, tglLaporan, namaPjk, namaPejabatPjk, jenisLaporan, pjkBankSebagai, jenisSwift', 'required'),
-            array('noLtdln', 'unique'),
+            array('localId, noLtdln, tglLaporan, namaPjk, namaPejabatPjk, jenisLaporan, pjkBankSebagai, jenisSwift, status', 'required'),
             array('jenisLaporan, pjkBankSebagai, jenisSwift', 'numerical', 'integerOnly' => true),
             array('localId', 'length', 'max' => 50),
             array('noLtdln, noLtdlnKoreksi', 'length', 'max' => 30),
             array('namaPjk, namaPejabatPjk', 'length', 'max' => 100),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, localId, noLtdln, noLtdlnKoreksi, tglLaporan, namaPjk, namaPejabatPjk, jenisLaporan, pjkBankSebagai, jenisSwift', 'safe', 'on' => 'search'),
+            array('id, localId, noLtdln, status, noLtdlnKoreksi, tglLaporan, namaPjk, namaPejabatPjk, jenisLaporan, pjkBankSebagai, jenisSwift', 'safe', 'on' => 'search'),
         );
     }
 
@@ -73,18 +152,14 @@ class Swift extends CActiveRecord {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
-            'beneficialOwners' => array(self::HAS_MANY, 'BeneficialOwner', 'swift_id'),
-            'identitasPenerimaNonSwIns' => array(self::HAS_MANY, 'IdentitasPenerimaNonSwIn', 'swift_id'),
-            'identitasPenerimaNonSwOuts' => array(self::HAS_MANY, 'IdentitasPenerimaNonSwOut', 'swift_id'),
-            'identitasPenerimaSwIns' => array(self::HAS_MANY, 'IdentitasPenerimaSwIn', 'swift_id'),
-            'identitasPenerimaSwOuts' => array(self::HAS_MANY, 'IdentitasPenerimaSwOut', 'swift_id'),
-            'identitasPengirimNonSwIns' => array(self::HAS_MANY, 'IdentitasPengirimNonSwIn', 'swift_id'),
-            'identitasPengirimNonSwOuts' => array(self::HAS_MANY, 'IdentitasPengirimNonSwOut', 'swift_id'),
-            'identitasPengirimSwIns' => array(self::HAS_MANY, 'IdentitasPengirimSwIn', 'swift_id'),
-            'identitasPengirimSwOuts' => array(self::HAS_MANY, 'IdentitasPengirimSwOut', 'swift_id'),
-            'infoLains' => array(self::HAS_MANY, 'InfoLain', 'swift_id'),
-            'transaksiNonSwifts' => array(self::HAS_MANY, 'TransaksiNonSwift', 'swift_id'),
-            'transaksiSwifts' => array(self::HAS_MANY, 'TransaksiSwift', 'swift_id'),
+            'infolains' => array(self::HAS_MANY, 'Infolain', 'swift_id'),
+            'nasabahKorporasiDns' => array(self::HAS_MANY, 'NasabahKorporasiDn', 'swift_id'),
+            'nasabahKorporasiLns' => array(self::HAS_MANY, 'NasabahKorporasiLn', 'swift_id'),
+            'nasabahPeroranganDns' => array(self::HAS_MANY, 'NasabahPeroranganDn', 'swift_id'),
+            'nasabahPeroranganLns' => array(self::HAS_MANY, 'NasabahPeroranganLn', 'swift_id'),
+            'nonNasabahDns' => array(self::HAS_MANY, 'NonNasabahDn', 'swift_id'),
+            'nonNasabahLns' => array(self::HAS_MANY, 'NonNasabahLn', 'swift_id'),
+            'transaksis' => array(self::HAS_MANY, 'Transaksi', 'swift_id'),
         );
     }
 
@@ -111,6 +186,7 @@ class Swift extends CActiveRecord {
             'jenisLaporan' => 'Jenis Laporan',
             'pjkBankSebagai' => 'Pjk Bank Sebagai',
             'jenisSwift' => 'Jenis Swift',
+            'status' => 'Status',
         );
     }
 
@@ -134,10 +210,11 @@ class Swift extends CActiveRecord {
         $criteria->compare('jenisLaporan', $this->jenisLaporan);
         $criteria->compare('pjkBankSebagai', $this->pjkBankSebagai);
         $criteria->compare('jenisSwift', $this->jenisSwift);
+        $criteria->compare('status', $this->status);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
-                ));
+        ));
     }
 
 }
