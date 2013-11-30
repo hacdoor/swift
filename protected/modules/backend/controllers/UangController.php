@@ -10,40 +10,14 @@ class UangController extends BackendController {
     public function actionIndex() {
         $this->checkAccess('uang.view');
 
-        $data = null;
-        $pages = null;
-        $filters = array(
-            'nama' => '',
-            'simbol' => '',
-        );
-
-        $criteria = new CDbCriteria;
-
-        if (isset($_GET['Filter']))
-            $filters = $_GET['Filter'];
-        if ($filters['nama'])
-            $criteria->addSearchCondition('nama', $filters['nama']);
-        if ($filters['simbol'])
-            $criteria->addSearchCondition('simbol', $filters['simbol']);
-
-        $dataCount = MataUang::model()->count($criteria);
-
-        $pages = new CPagination($dataCount);
-        $pages->setPageSize(Yii::app()->setting->get('list_size'));
-        $pages->applyLimit($criteria);
-
-        $sort = new CSort;
-        $sort->modelClass = 'MataUang';
-        $sort->attributes = array('*');
-        $sort->applyOrder($criteria);
-
-        $data = MataUang::model()->findAll($criteria);
+        $filters = (isset($_GET['Filter'])) ? $_GET['Filter'] : array('nama' => '', 'simbol' => '',);
+        $data = Yii::app()->util->ahdaGrid('MataUang', $filters);
 
         $vars = array(
-            'data' => $data,
-            'pages' => $pages,
+            'data' => $data['data'],
+            'pages' => $data['pages'],
             'filters' => $filters,
-            'sort' => $sort
+            'sort' => $data['sort']
         );
 
         $this->render('index', $vars);

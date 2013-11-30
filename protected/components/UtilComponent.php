@@ -456,7 +456,8 @@ class UtilComponent extends CApplicationComponent {
         }
         $zip->close();
         foreach ($filelist as $file) {
-            unlink($file);
+            if (file_exists($file))
+                unlink($file);
         }
 
         if (file_exists($destination)) {
@@ -467,7 +468,20 @@ class UtilComponent extends CApplicationComponent {
         }
     }
 
-    public function getFormSwInXml($param) {
+    public function getFormXml($param) {
+        switch ($param->jenisSwift) {
+            case 1:
+                return $this->getFormSwInXml($param);
+                break;
+            case 2:
+                return $this->getFormSwOutXml($param);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public function getFormSwOutXml($param) {
         /* ============================ UMUM ======================================== */
         $umum = $this->getFormUmumXml(array(
             Yii::app()->util->getKodeStandar(array('modul' => 'tanggal', 'data' => $param->tglLaporan)),
@@ -582,6 +596,158 @@ class UtilComponent extends CApplicationComponent {
 
         /* ============================ INFO LAINNYA ================================= */
         $infoLainnya = $this->getFormInfoLainXml(array());
+        /* ============================ END INFO LAINNYA ================================= */
+
+        $ifti = array(
+            'localId' => $param->localId,
+            'umum' => $umum,
+            'pjkBankSebagai' => $param->pjkBankSebagai,
+            'identitasPengirim' => $identitasPengirim,
+            'identitasPenerima' => $identitasPenerima,
+            'transaksi' => $transaksi,
+            'informasiLainnya' => $infoLainnya
+        );
+
+        return $ifti;
+    }
+
+    public function getFormSwInXml($param) {
+
+        /* ============================ GET MODEL ======================================== */
+        $infolains = $param->infolains;
+        $nasabahKorporasiDns = $param->nasabahKorporasiDns;
+        $nasabahKorporasiLns = $param->nasabahKorporasiLns;
+        $nasabahPeroranganDns = $param->nasabahPeroranganDns;
+        $nasabahPeroranganLns = $param->nasabahPeroranganLns;
+        $nonNasabahDns = $param->nonNasabahDns;
+        $nonNasabahLns = $param->nonNasabahLns;
+        $transaksis = $param->transaksis;
+        /* ============================ END GET MODEL ======================================== */
+
+        /* ============================ UMUM ======================================== */
+        $umum = $this->getFormUmumXml(array(
+            Yii::app()->util->getKodeStandar(array('modul' => 'tanggal', 'data' => $param->tglLaporan)),
+            $param->namaPejabatPjk,
+            $param->jenisLaporan,
+            $param->pjkBankSebagai
+                ));
+
+        /* ============================ END UMUM ====================================== */
+
+
+        /* ============================ IDENTITAS PENGIRIM ============================ */
+        $kewarganegaraanPeroranganPengirim = $this->getFormKewarganegaraanXml(array());
+        $alamatSesuaiVoucherPeroranganPengirim = $this->getFormAlamatXml(array());
+
+        $buktiLainPeroranganPengirim = $this->getFormBuktiLainXml(array());
+        $buktiIdentitasPeroranganPengirim = $this->getFormBuktiIdentitasXml(array(5 => $buktiLainPeroranganPengirim));
+
+        $peroranganPengirim = $this->getFormPeroranganXml(array(
+            3 => $kewarganegaraanPeroranganPengirim,
+            4 => $alamatSesuaiVoucherPeroranganPengirim,
+            6 => $buktiIdentitasPeroranganPengirim
+                ));
+        $alamatSesuaiVoucherKorporasiPengirim = $this->getFormAlamatXml(array());
+
+        $korporasiPengirim = $this->getFormKorporasiXml(array(2 => $alamatSesuaiVoucherKorporasiPengirim));
+
+        $alamatSesuaiVoucherNonNasabahPengirim = $this->getFormAlamatXml(array());
+        $nonNasabahPengirim = $this->getFormNonNasabahXml(array(4 => $alamatSesuaiVoucherNonNasabahPengirim));
+        $nasabahPengirim = $this->getFormIdentitasXml(array($peroranganPengirim, $korporasiPengirim), 1);
+
+        $identitasPengirim = $this->getFormIdentitasXml(array($nasabahPengirim, $nonNasabahPengirim));
+
+        /* ============================ END IDENTITAS PENGIRIM ============================ */
+
+
+
+
+        /* ============================ IDENTITAS PENERIMA ================================= */
+        $alamatLengkapKorporasiPenerusPenerima = $this->getFormAlamatXml(array(), 2);
+        $korporasiPenerusPenerima = $this->getFormKorporasiXml(array(
+            7 => $alamatLengkapKorporasiPenerusPenerima
+                ), 2);
+
+        $buktiLainPeroranganPenerusPenerima = $this->getFormBuktiLainXml(array());
+        $buktiIdentitasPeroranganPenerusPenerima = $this->getFormBuktiIdentitasXml(
+                array(5 => $buktiLainPeroranganPenerusPenerima)
+        );
+        $alamatSesuaiBuktiIdentitasPenerusPenerima = $this->getFormAlamatXml(array(), 2);
+        $alamatDomisiliPenerusPenerima = $this->getFormAlamatXml(array(), 2);
+        $kewarganegaraanPenerusPenerima = $this->getFormKewarganegaraanXml(array());
+        $peroranganPenerusPenerima = $this->getFormPeroranganXml(array(
+            4 => $kewarganegaraanPenerusPenerima,
+            7 => $alamatDomisiliPenerusPenerima,
+            8 => $alamatSesuaiBuktiIdentitasPenerusPenerima,
+            10 => $buktiIdentitasPeroranganPenerusPenerima
+                ), 2);
+
+        $buktiLainNonNasabahPenerimaAkhir = $this->getFormBuktiLainXml(array());
+        $buktiIdentitasNonNasabahPenerimaAkhir = $this->getFormBuktiIdentitasXml(
+                array(5 => $buktiLainNonNasabahPenerimaAkhir)
+        );
+
+
+        $nonNasabahPenerimaAkhir = $this->getFormNonNasabahXml(array(
+            4 => $buktiIdentitasNonNasabahPenerimaAkhir
+                ), 2);
+
+        $buktiLainPeroranganPenerimaAkhir = $this->getFormBuktiLainXml(array());
+        $buktiIdentitasPeroranganPenerimaAkhir = $this->getFormBuktiIdentitasXml(
+                array(5 => $buktiLainPeroranganPenerimaAkhir)
+        );
+        $alamatSesuaiBuktiIdentitasPenerimaAkhir = $this->getFormAlamatXml(array(), 2);
+        $alamatDomisiliPenerimaAkhir = $this->getFormAlamatXml(array(), 2);
+        $kewarganegaraanPenerimaAkhir = $this->getFormKewarganegaraanXml(array());
+        $peroranganPenerimaAkhir = $this->getFormPeroranganXml(array(
+            3 => $kewarganegaraanPenerimaAkhir,
+            6 => $alamatDomisiliPenerimaAkhir,
+            7 => $alamatSesuaiBuktiIdentitasPenerimaAkhir,
+            9 => $buktiIdentitasPeroranganPenerimaAkhir
+                ), 3);
+
+        $alamatKorporasiPenerimaAkhrir = $this->getFormAlamatXml(array(), 2);
+        $korporasiPenerimaAkhir = $this->getFormKorporasiXml(array(
+            6 => $alamatKorporasiPenerimaAkhrir
+                ), 3);
+
+        $nasabahPenerimaAkhir = $this->getFormIdentitasXml(array(
+            $peroranganPenerimaAkhir, $korporasiPenerimaAkhir
+                ), 2);
+
+        $penyelenggaraPenerimaAkhir = $this->getFormIdentitasXml(array(
+            $nasabahPenerimaAkhir, $nonNasabahPenerimaAkhir
+                ), 1);
+
+        $penyelenggaraPenerus = $this->getFormIdentitasXml(array(
+            $peroranganPenerusPenerima, $korporasiPenerusPenerima
+                ), 2);
+
+        $identitasPenerima = $this->getFormIdentitasXml(array(
+            $penyelenggaraPenerimaAkhir, $penyelenggaraPenerus
+                ), 3);
+        /* ============================ END IDENTITAS PENERIMA ================================= */
+
+
+        /* ============================ TRANSAKSI ================================= */
+        $trxCurrency = $this->getFormCurrencyInstructedAmountXml(array(
+                ));
+        $trxDate = $this->getFormDateCurrencyAmountXml(array());
+        $transaksi = $this->getFormTransaksiXml(array(7 => $trxDate, 8 => $trxCurrency));
+        /* ============================ END TRANSAKSI ================================= */
+
+
+        /* ============================ INFO LAINNYA ================================= */
+        $infoLainnya = $this->getFormInfoLainXml(array(
+            $infolains->infSendersCorrespondent,
+            $infolains->infReceiverCorrespondent,
+            $infolains->infThirdReimbursementInstitution,
+            $infolains->infIntermediaryInstitution,
+            $infolains->remittanceInformation,
+            $infolains->senderToReceiverInformation,
+            $infolains->regulatoryReporting,
+            $infolains->envelopeContents
+                ));
         /* ============================ END INFO LAINNYA ================================= */
 
         $ifti = array(
@@ -932,7 +1098,7 @@ class UtilComponent extends CApplicationComponent {
         if ($xml == null) {
             $xml = new DOMDocument('1.0', 'UTF-8');
             $xml->formatOutput = true;
-            $root = $xml->createElementNS('http://www.w3.org/2005/Atom', 'ifti');
+            $root = $xml->createElementNS('http://www.w3.org/2005/Atom', $root);
             $xml->appendChild($root);
             $root->setAttribute("type", $type);
             $root->setAttributeNS('http://www.w3.org/2001/XMLSchema-instance', "xsi:noNamespaceSchemaLocation", 'Ifti' . $type . '.xsd');
@@ -947,6 +1113,181 @@ class UtilComponent extends CApplicationComponent {
             }
         }
         return $xml->saveXML();
+    }
+
+    public function ahdaGridForm($data, $pages, $actions, $data_grid) {
+        $admin = Yii::app()->user->getState('admin');
+        $frist = current($data);
+        $labels = $frist->attributeLabels();
+        $url_edit = Yii::app()->baseUrl . '/' . Yii::app()->controller->module->id . '/' . $actions['edit']['url'];
+        $url_delete = Yii::app()->baseUrl . '/' . Yii::app()->controller->module->id . '/' . $actions['delete']['url'];
+        $str = '<div class="col-md-10">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped list">
+                            <thead>
+                                <tr>
+                                    <th class="list-number">#</th>';
+        foreach ($data_grid as $value) {
+            $str.= '<th>' . $labels[$value] . '</th>';
+        }
+        $str .= '<th class="list-actions">Actions</th></tr></thead><tbody>';
+        $currentPage = $pages->currentPage + 1;
+        if ($data) {
+            $i = ($currentPage - 1) * $pages->pageSize;
+            foreach ($data as $d) {
+                $i++;
+                $str .= '<tr><td class="list-number">' . $i . '</td>';
+                foreach ($data_grid as $value) {
+                    $str .= '<td>' . $this->purify($d->{$value}) . '</td>';
+                }
+                $str .= '<td class="list-actions">';
+                if ($admin->hasPermissions($actions['edit']['permission'])) {
+                    $str .= ' <a href="' . $url_edit . $d->id . '" class="btn btn-xs btn-default bootip" title="Update"><span class="icon icon-pencil"></span></a>';
+                }
+                if ($admin->hasPermissions($actions['delete']['permission'])) {
+                    $str .= '<a href="' . $url_delete . $d->id . '" class="btn btn-xs btn-default btn-delete bootip" title="Delete" data-confirm="Are you sure want to delete this record?"><span class="icon icon-trash"></span></a>';
+                }
+                $str .='</td></tr>';
+            }
+        } else {
+            $str .= '<tr><td colspan="8"><div class="alert alert-warning">No record found.</div></td></tr>';
+        }
+        $str .= '</tbody></table> </div></div>';
+        return $str;
+    }
+
+    public function ahdaGrid($model_name, $filters) {
+        $criteria = new CDbCriteria;
+
+        if (isset($_GET['Filter'])) {
+            $filters_x = $_GET['Filter'];
+            foreach ($filters as $key => $value) {
+                if ($filters_x[$key]) {
+                    $criteria->addSearchCondition($key, $value);
+                }
+            }
+        }
+
+        $dataCount = $model_name::model()->count($criteria);
+
+        $pages = new CPagination($dataCount);
+        $pages->setPageSize(Yii::app()->setting->get('list_size'));
+        $pages->applyLimit($criteria);
+
+        $sort = new CSort;
+        $sort->modelClass = $model_name;
+        $sort->attributes = array('*');
+        $sort->applyOrder($criteria);
+
+        $data = $model_name::model()->findAll($criteria);
+
+        return array('data' => $data, 'pages' => $pages, 'sort' => $sort);
+    }
+
+    public function ahdaFilterGridForm($filters) {
+        $str = '<div class="panel panel-default panel-backend">
+                <div class="panel-heading"><span class="glyphicon glyphicon-filter"></span> Filter</div>
+                <div class="panel-body">
+                <form method="get" class="form-filter">';
+        foreach ($filters as $key => $value) {
+            $str .= '<div class="form-group">';
+            $str .= '<input class="form-control" type="text" name="Filter[' . $key . ']" placeholder="' . ucfirst($key) . ' contains ..." value="' . $value . '">';
+            $str .= '</div>';
+        }
+        $str .= '<hr>
+                 <button class="btn btn-danger btn-lg btn-block"><span class="icon icon-filter"></span> Filter</button>
+                 </form>
+                 </div>
+                 </div>';
+
+        return $str;
+    }
+
+    public function ahdaSortGridForm($sort, $data) {
+        $name_sort = $sort->directions;
+        $nameSort = key($name_sort);
+        $option = '';
+        foreach ($data as $value) {
+            $option .= '<li>' . $sort->link($value) . '</li>';
+        }
+        $str = '<div class="panel panel-default panel-backend">
+                        <div class="panel-heading"><span class="glyphicon glyphicon-list"></span> Sortir</div>
+                        <div class="panel-body">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default sortLimit">Sort By ' . ucwords($nameSort) . '</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">';
+        $str .= $option;
+        $str .= '</ul></div></div></div>';
+
+        return $str;
+    }
+
+    public function ahdaPagesGridForm($url, $pages, $filters) {
+        $currentPage = $pages->currentPage + 1;
+        $url = Yii::app()->baseUrl . '/' . Yii::app()->controller->module->id . '/' . $url;
+        $str = '';
+        if ($pages->pageCount > 1) {
+            $qs = array();
+            foreach ($filters as $k => $v) {
+                $qs[] = 'Filter[' . $k . ']=' . $v;
+            }
+            $qs = implode('&', $qs);
+            $str .= '<div class="row paginator"><form method="get"><div class="col-md-4 col-sm-4 col-xs-4">';
+            $disabled = 'disabled';
+            $goto = $currentPage - 1;
+            if ($currentPage > 1)
+                $disabled = '';
+            $str .= '<a href=' . $url . '?page=' . $goto . '&' . $qs . ' class="btn btn-warning btn-sm btn-block ' . $disabled . ' bootip" title="Previous page"><span class="icon icon-chevron-left"></span></a></div>
+                     <div class="col-md-4 col-sm-4 col-xs-4 input">
+                     <input type="text" class="form-control input-sm" name="page" value="' . $currentPage . '">
+                     </div><div class="col-md-4 col-sm-4 col-xs-4">';
+            $disabled = 'disabled';
+            $goto = $currentPage + 1;
+            if ($currentPage < $pages->pageCount)
+                $disabled = '';
+            $str .= '<a href=' . $url . '?page=' . $goto . '&' . $qs . ' class="btn btn-warning btn-sm btn-block ' . $disabled . ' bootip" title="Next page"><span class="icon icon-chevron-right"></span></a></div></form></div>';
+        }
+        $summary = $this->ahdaSummaryPagesGridForm($pages, $currentPage);
+        return $str . $summary;
+    }
+
+    public function ahdaSummaryPagesGridForm($pages, $currentPage) {
+        $str = '<div class="panel panel-default panel-backend">
+                <div class="panel-heading"><span class="glyphicon glyphicon-flag"></span> Summary</div>
+                <div class="panel-body">';
+        $str .= $pages->itemCount . 'record(s) found.<br>Showing page ' . $currentPage . ' of ' . $pages->pageCount;
+        $str .= '</div></div>';
+
+        return $str;
+    }
+
+    public function ahdaCreateGridForm($permission, $url, $label='Buat baru') {
+        $admin = Yii::app()->user->getState('admin');
+        if ($admin->hasPermissions($permission)) {
+            $url = Yii::app()->baseUrl . '/' . Yii::app()->controller->module->id . '/' . $url;
+            return $str = '<a href="' . $url . '" class="btn btn-primary btn-lg btn-block"><span class="icon icon-plus"></span> ' . $label . '</a>';
+        }
+    }
+
+    public function ahdaTitleGridForm($title) {
+        return $str = '<h1 class="page-title"><span class="icon-user"></span> ' . $title . '</h1>';
+    }
+    
+    public function ahdaBreadcrumbGridForm($param) {
+        $url = Yii::app()->baseUrl . '/' . Yii::app()->controller->module->id . '/';
+        $str = '<ol class="breadcrumb">';
+        $str .= '<li><a href="'.$url.'">Dashboard</a></li>';
+        foreach ($param as $value) {
+            $str .= ($value['url']) ? '<li><a href="'.$url.$value['url'].'">'.$value['label'].'</a></li>' : '<li class="active">'.$value['label'].'</li>';
+        }
+        
+        $str .= '</ol>';
+        
+        return $str;
     }
 
 }

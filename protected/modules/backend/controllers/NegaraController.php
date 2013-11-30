@@ -10,41 +10,27 @@ class NegaraController extends BackendController {
     public function actionIndex() {
         $this->checkAccess('negara.view');
 
-        $data = null;
-        $pages = null;
-        $filters = array(
-            'nama' => '',
-            'kode' => '',
+        $filters = (isset($_GET['Filter'])) ? $_GET['Filter'] : array('nama' => '', 'kode' => '',);
+        $data = Yii::app()->util->ahdaGrid('Negara', $filters);
+        $actions = array(
+            'edit' => array('permission' => 'negara.update', 'url' => 'negara/update/'),
+            'delete' => array('permission' => 'negara.delete', 'url' => 'negara/delete/')
+        );
+        $data_grid = array('nama', 'kode');
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Data Master'),
+            1 => array('url' => '', 'label' => 'Negara')
         );
 
-        $criteria = new CDbCriteria;
-
-        if (isset($_GET['Filter']))
-            $filters = $_GET['Filter'];
-        if ($filters['nama'])
-            $criteria->addSearchCondition('nama', $filters['nama']);
-        if ($filters['kode'])
-            $criteria->addSearchCondition('kode', $filters['kode']);
-
-        $dataCount = Negara::model()->count($criteria);
-
-        $pages = new CPagination($dataCount);
-        $pages->setPageSize(Yii::app()->setting->get('list_size'));
-        $pages->applyLimit($criteria);
-
-        $sort = new CSort;
-        $sort->modelClass = 'Negara';
-        $sort->attributes = array('*');
-        $sort->applyOrder($criteria);
-
-        $data = Negara::model()->findAll($criteria);
-
-
         $vars = array(
-            'data' => $data,
-            'pages' => $pages,
+            'data' => $data['data'],
+            'pages' => $data['pages'],
             'filters' => $filters,
-            'sort' => $sort
+            'sort' => $data['sort'],
+            'actions' => $actions,
+            'data_grid' => $data_grid,
+            'title' => 'Negara',
+            'breadcrumb' => $breadcrumb
         );
         $this->render('index', $vars);
     }
@@ -70,8 +56,15 @@ class NegaraController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Data Master'),
+            1 => array('url' => 'negara', 'label' => 'Negara'),
+            2 => array('url' => '', 'label' => 'Buat baru Negara')
+        );
+
         $vars = array(
             'model' => $model,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('create', $vars);
@@ -105,8 +98,15 @@ class NegaraController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Data Master'),
+            1 => array('url' => 'negara', 'label' => 'Negara'),
+            2 => array('url' => '', 'label' => 'Sunting Negara')
+        );
+
         $vars = array(
             'model' => $model,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('update', $vars);

@@ -569,8 +569,8 @@ class SwiftController extends BackendController {
             $type = Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $value->jenisSwift));
             $filename = 'download/' . $value->localId . '-' . $type . '.xml';
 
-            $swIn = Yii::app()->util->getFormSwInXml($value);
-            $xml = Yii::app()->util->genSwiftXml($swIn, $xml = null, $root = null, $type);
+            $form = Yii::app()->util->getFormXml($value);
+            $xml = Yii::app()->util->genSwiftXml($form, $xml = null, $root = 'ifti', $type);
 
 
             file_put_contents($filename, $xml);

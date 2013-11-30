@@ -2,12 +2,7 @@
 $admin = Yii::app()->user->getState('admin');
 ?>
 
-<ol class="breadcrumb">
-    <li><a href="<?php echo $this->vars['backendUrl']; ?>">Dashbord</a></li>
-    <li><a href="<?php echo $this->vars['backendUrl']; ?>negara">Negara</a></li>
-    <li class="active">Buat Baru Negara</li>
-</ol>
-
+<?php echo Yii::app()->util->ahdaBreadcrumbGridForm($breadcrumb) ?>
 <div class="row">
     <div class="col-md-12">
         <div id="content-inner">
