@@ -1,0 +1,21 @@
+
+body{font-family:Ubuntu,"Helvetica Neue",Helvetica,Arial,sans-serif;color:#666;background:#fff;}
+form .form-actions{margin-top:15px;padding-top:15px;border-top:1px solid #eeeeee;}
+form span.required{color:#d9534f;}
+form label{cursor:pointer;}
+hr{margin-top:10px;margin-bottom:10px;}
+a{text-decoration:none;}a:hover{text-decoration:none;}
+.muted{color:#999999;}
+.navbar{-webkit-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.075),0 0 6px #b3b3b3;box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.075),0 0 6px #b3b3b3;margin-bottom:0;}.navbar .navbar-brand{white-space:nowrap;}
+#login-box{-webkit-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.075),0 0 6px #b3b3b3;box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.075),0 0 6px #b3b3b3;}
+#header {background:#ddd;}
+#footer .navbar{position:fixed;z-index: 999999;background:#ddd;left:0;bottom:0;width:100%;margin:0;color:#999999;padding-left: 20px;}
+#main{background-color:#ffffff;height:100%;}#main .inner{padding:20px 0;}
+#main #content .title{font-weight:bold;text-transform:uppercase;}
+#main #sidebar .menu .nav{margin-bottom:15px;}#main #sidebar .menu .nav:last-child{margin-bottom:0;}
+#main #sidebar .menu .nav .nav-header{border-bottom:1px dotted #eeeeee;padding-bottom:5px;margin-bottom:5px;font-weight:bold;font-size:.9em;}
+#main #sidebar .menu .nav a{padding:5px;position:relative;}#main #sidebar .menu .nav a .icon{color:#555555;min-width:16px;display:inline-block;}
+#main #sidebar .menu .nav a.create{position:absolute;right:0;top:0;z-index:1;cursor:pointer !important;}#main #sidebar .menu .nav a.create:hover{color:#333333;background-color:#999999;}
+#main #sidebar .menu .nav .active a{color:#999999;cursor:default;background-color:#eeeeee;}
+#main-login{margin-top:30px;}
+.button-column .view{display:none;}

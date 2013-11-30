@@ -1,0 +1,234 @@
+/* 
+    Document   : style
+    Created on : Aug 30, 2013, 1:09:54 PM
+    Author     : ahda
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+/* Custom Bootstrap */
+
+#channel_category label, #channel_package label, #channel_mini_package label, #package_mini_package label {
+    display: inherit;
+}
+
+.dashbord {
+    color: #999;
+    text-shadow: 0 1px #fafafa;
+}
+
+.block-header-min {
+    position: relative;
+}
+
+.form-search {
+    margin-top: 20px;
+    margin-bottom: 0;
+}
+
+.form-search .control-group, .form-search form {
+    margin-bottom: 0;
+}
+
+.form-search .button-submit-search {
+    margin-top: 25px;
+}
+
+#program-grid_c4 {
+    width: 120px;
+}
+
+.pagination ul li.selected a{
+    background: whitesmoke;
+    cursor: default;
+    color: #999;
+}
+
+.pagination ul li.hidden a {
+    color: #999;
+    cursor: default;
+}
+
+#main #sidebar .menu .nav a.create:hover {
+    background: none !important;
+    color: #444;
+}
+
+#main {
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15) inset;
+    -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15) inset;
+    -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15) inset;
+    background: #fff;
+}
+
+#content, #sidebar {
+    margin-bottom: 30px;
+}
+
+.btn-logout {
+    position: absolute;
+    top: 7px;
+    right: 0;
+}
+
+.user-hello {
+    position: absolute;
+    top: 5px;
+    right: 100px;
+}
+
+.navbar-brand {
+    float: left;
+    margin-right: 5px;
+    margin-left: -15px;
+}
+.navbar-brand {
+    display: block;
+    max-width: 200px;
+    padding: 15px 15px;
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #777;
+    text-align: center;
+}
+
+.visible-lg {
+    padding-top: 6px;
+}
+
+.errorSummary {
+    padding: 8px 35px 8px 14px;
+    margin-bottom: 20px;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+    background-color: #fcf8e3;
+    border: 1px solid #fbeed5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.errorSummary ul {
+    margin: 0;
+}
+
+.errorSummary ul li {
+    color:#DD262C;
+    display: block;
+    list-style: none;
+}
+
+.inner-import {
+    border: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+.inner-import .form-actions {
+    margin-bottom: 0;
+}
+
+/* Login */
+
+#primer {
+    background: url('../img/bg_texture.jpg');
+}
+
+.alert-login {
+    padding-top: 7%;
+    width: 390px;
+    margin: 0 auto;
+}
+
+#login {
+    width: 390px;
+    margin: 0 auto;
+    margin-top: 20px;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border: 1px solid #ccc;
+    background: #fff;
+    -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+    -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+}
+
+#login .form-actions {
+    margin-bottom: 0;
+    margin-top: 0;
+    border-radius: 0 0 10px 10px;
+    -moz-border-radius: 0 0 10px 10px;
+    -webkit-border-radius: 0 0 10px 10px;
+}
+
+#login .header-login {
+    border-radius: 10px 10px 0 0;
+    -moz-border-radius: 10px 10px 0 0;
+    -webkit-border-radius: 10px 10px 0 0;
+    color: #333333;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    background-color: #f5f5f5;
+    background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+    background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);
+    border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+    border: 1px solid #cccccc;
+    border-bottom-color: #b3b3b3;
+    -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+    -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    padding: 10px 20px 5px 20px;
+}
+
+#login #admin-login-forgot {
+    margin-right: 20px;
+}
+
+#login .header-login .title-header {
+    color: #999;
+}
+
+#login .header-login .logo-login {
+    margin-top: 5px;
+}
+
+#login .header-login .logo-login img {
+    width:43px;
+}
+
+#login .inner-login-form {
+    padding: 30px 20px 0 20px;
+}
+
+#login #backend-login-form {
+    margin-bottom: 0;
+}
+
+#login #backend-login-form .control-label {
+    width: 120px;
+}
+
+#login #backend-login-form .controls {
+    margin-left: 130px;
+}
+
+/* Menu */
+
+.menu li {
+    position: relative;
+}

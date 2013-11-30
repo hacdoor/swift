@@ -25,7 +25,7 @@ class BackendModule extends CWebModule {
             // Publish assets
             if ($this->_assetsUrl === null)
                 $this->_assetsUrl = Yii::app()->getAssetManager()->publish(
-                        Yii::getPathOfAlias('backend.assets'), false, // hash by name
+                        Yii::getPathOfAlias('backend.asset'), false, // hash by name
                         -1, // recursive level
                         true  // force copy (disable cache)
                 );
