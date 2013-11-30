@@ -15,9 +15,10 @@
  * @property string $alamat
  * @property integer $idPropinsi
  * @property string $propinsiLain
- * @property integer $kabupaten_id
+ * @property integer $idKabKota
  * @property string $kabKotaLain
  * @property string $noTelp
+ * @property double $nilaiTransaksiDalamRupiah
  * @property integer $swift_id
  *
  * The followings are the available model relations:
@@ -53,15 +54,16 @@ class NasabahKorporasiDn extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('namaKorporasi, idPropinsi, kabupaten_id, swift_id', 'required'),
-			array('bentukBadan, bidangUsaha, idPropinsi, kabupaten_id, swift_id', 'numerical', 'integerOnly'=>true),
+			array('namaKorporasi, idPropinsi, idKabKota, swift_id', 'required'),
+			array('bentukBadan, bidangUsaha, idPropinsi, idKabKota, swift_id', 'numerical', 'integerOnly'=>true),
+			array('nilaiTransaksiDalamRupiah', 'numerical'),
 			array('noRekening, bidangUsahaLain, propinsiLain, kabKotaLain', 'length', 'max'=>50),
 			array('namaKorporasi, bentukBadanLain', 'length', 'max'=>255),
 			array('alamat', 'length', 'max'=>100),
 			array('noTelp', 'length', 'max'=>30),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, noRekening, namaKorporasi, bentukBadan, bentukBadanLain, bidangUsaha, bidangUsahaLain, alamat, idPropinsi, propinsiLain, kabupaten_id, kabKotaLain, noTelp, swift_id', 'safe', 'on'=>'search'),
+			array('id, noRekening, namaKorporasi, bentukBadan, bentukBadanLain, bidangUsaha, bidangUsahaLain, alamat, idPropinsi, propinsiLain, idKabKota, kabKotaLain, noTelp, swift_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -74,7 +76,7 @@ class NasabahKorporasiDn extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'idPropinsi0' => array(self::BELONGS_TO, 'Propinsi', 'idPropinsi'),
-			'kabupaten' => array(self::BELONGS_TO, 'Kabupaten', 'kabupaten_id'),
+			'kabupaten' => array(self::BELONGS_TO, 'Kabupaten', 'idKabKota'),
 			'swift' => array(self::BELONGS_TO, 'Swift', 'swift_id'),
 		);
 	}
@@ -102,11 +104,12 @@ class NasabahKorporasiDn extends CActiveRecord
 			'bidangUsaha' => 'Bidang Usaha',
 			'bidangUsahaLain' => 'Bidang Usaha Lain',
 			'alamat' => 'Alamat',
-			'idPropinsi' => 'Id Propinsi',
+			'idPropinsi' => 'Propinsi',
 			'propinsiLain' => 'Propinsi Lain',
-			'kabupaten_id' => 'Kabupaten',
+			'idKabKota' => 'Kabupaten',
 			'kabKotaLain' => 'Kab Kota Lain',
 			'noTelp' => 'No Telp',
+			'nilaiTransaksiDalamRupiah' => 'Nilai Transaksi Dalam Rupiah',
 			'swift_id' => 'Swift',
 		);
 	}
@@ -132,7 +135,7 @@ class NasabahKorporasiDn extends CActiveRecord
 		$criteria->compare('alamat',$this->alamat,true);
 		$criteria->compare('idPropinsi',$this->idPropinsi);
 		$criteria->compare('propinsiLain',$this->propinsiLain,true);
-		$criteria->compare('kabupaten_id',$this->kabupaten_id);
+		$criteria->compare('idKabKota',$this->idKabKota);
 		$criteria->compare('kabKotaLain',$this->kabKotaLain,true);
 		$criteria->compare('noTelp',$this->noTelp,true);
 		$criteria->compare('swift_id',$this->swift_id);

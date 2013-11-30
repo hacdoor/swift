@@ -32,6 +32,7 @@
  * @property string $npwp
  * @property string $jenisBuktiLain
  * @property string $noBuktiLain
+ * @property double $nilaiTransaksiDalamRupiah
  * @property integer $swift_id
  *
  * The followings are the available model relations:
@@ -72,6 +73,7 @@ class NasabahPeroranganDn extends CActiveRecord
 		return array(
 			array('noRekening, namaLengkap, idNegaraKewarganegaraan, idPropinsiDomisili, idKabKotaDomisili, idPropinsiIdentitas, idKabKotaIdentitas, swift_id', 'required'),
 			array('wargaNegara, idNegaraKewarganegaraan, pekerjaan, idPropinsiDomisili, idKabKotaDomisili, idPropinsiIdentitas, idKabKotaIdentitas, swift_id', 'numerical', 'integerOnly'=>true),
+			array('nilaiTransaksiDalamRupiah', 'numerical'),
 			array('noRekening, negaraLainKewarganegaraan, pekerjaanLain, propinsiLainDomisili, kabKotaLain, propinsiLainIdentitas, kabKotaLainIdentitas', 'length', 'max'=>50),
 			array('namaLengkap', 'length', 'max'=>255),
 			array('alamatDomisili, alamatIdentitas', 'length', 'max'=>100),
@@ -120,28 +122,29 @@ class NasabahPeroranganDn extends CActiveRecord
 			'namaLengkap' => 'Nama Lengkap',
 			'tglLahir' => 'Tgl Lahir',
 			'wargaNegara' => 'Warga Negara',
-			'idNegaraKewarganegaraan' => 'Id Negara Kewarganegaraan',
-			'negaraLainKewarganegaraan' => 'Negara Lain Kewarganegaraan',
+			'idNegaraKewarganegaraan' => 'Kewarganegaraan',
+			'negaraLainKewarganegaraan' => 'Kewarganegaraan Lain',
 			'pekerjaan' => 'Pekerjaan',
 			'pekerjaanLain' => 'Pekerjaan Lain',
 			'alamatDomisili' => 'Alamat Domisili',
-			'idPropinsiDomisili' => 'Id Propinsi Domisili',
-			'propinsiLainDomisili' => 'Propinsi Lain Domisili',
-			'idKabKotaDomisili' => 'Id Kab Kota Domisili',
+			'idPropinsiDomisili' => 'Propinsi',
+			'propinsiLainDomisili' => 'Propinsi Lain',
+			'idKabKotaDomisili' => 'Kab Kota',
 			'kabKotaLain' => 'Kab Kota Lain',
 			'alamatIdentitas' => 'Alamat Identitas',
-			'idPropinsiIdentitas' => 'Id Propinsi Identitas',
-			'propinsiLainIdentitas' => 'Propinsi Lain Identitas',
-			'idKabKotaIdentitas' => 'Id Kab Kota Identitas',
-			'kabKotaLainIdentitas' => 'Kab Kota Lain Identitas',
+			'idPropinsiIdentitas' => 'Propinsi',
+			'propinsiLainIdentitas' => 'Propinsi Lain',
+			'idKabKotaIdentitas' => 'Kab Kota',
+			'kabKotaLainIdentitas' => 'Kab Kota Lain',
 			'noTelp' => 'No Telp',
-			'ktp' => 'Ktp',
-			'sim' => 'Sim',
+			'ktp' => 'KTP',
+			'sim' => 'SIM',
 			'passport' => 'Passport',
 			'kimsKitasKitap' => 'Kims Kitas Kitap',
-			'npwp' => 'Npwp',
+			'npwp' => 'NPWP',
 			'jenisBuktiLain' => 'Jenis Bukti Lain',
 			'noBuktiLain' => 'No Bukti Lain',
+			'nilaiTransaksiDalamRupiah' => 'Nilai Transaksi Dalam Rupiah',
 			'swift_id' => 'Swift',
 		);
 	}

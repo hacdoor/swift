@@ -25,6 +25,7 @@
  * @property string $noBuktiLain
  * @property integer $keterlibatanBeneficialOwner
  * @property string $hubDgnPemilikDana
+ * @property double $nilaiTransaksiDalamRupiah
  * @property integer $swift_id
  *
  * The followings are the available model relations:
@@ -62,6 +63,7 @@ class NonNasabahDn extends CActiveRecord
 		return array(
 			array('noRekening, namaLengkap, idPropinsi, idKabKota, swift_id', 'required'),
 			array('idPropinsi, idKabKota, keterlibatanBeneficialOwner, swift_id', 'numerical', 'integerOnly'=>true),
+			array('nilaiTransaksiDalamRupiah', 'numerical'),
 			array('kodeRahasia, noRekening, propinsiLain, kabKotaLain, hubDgnPemilikDana', 'length', 'max'=>50),
 			array('namaLengkap', 'length', 'max'=>255),
 			array('alamat', 'length', 'max'=>100),
@@ -109,19 +111,20 @@ class NonNasabahDn extends CActiveRecord
 			'tglLahir' => 'Tgl Lahir',
 			'alamat' => 'Alamat',
 			'noTelp' => 'No Telp',
-			'idPropinsi' => 'Id Propinsi',
+			'idPropinsi' => 'Propinsi',
 			'propinsiLain' => 'Propinsi Lain',
-			'idKabKota' => 'Id Kab Kota',
+			'idKabKota' => 'Kab Kota',
 			'kabKotaLain' => 'Kab Kota Lain',
-			'ktp' => 'Ktp',
-			'sim' => 'Sim',
+			'ktp' => 'KTP',
+			'sim' => 'SIM',
 			'passport' => 'Passport',
 			'kimsKitasKitap' => 'Kims Kitas Kitap',
-			'npwp' => 'Npwp',
+			'npwp' => 'NPWP',
 			'jenisBuktiLain' => 'Jenis Bukti Lain',
 			'noBuktiLain' => 'No Bukti Lain',
 			'keterlibatanBeneficialOwner' => 'Keterlibatan Beneficial Owner',
 			'hubDgnPemilikDana' => 'Hub Dgn Pemilik Dana',
+			'nilaiTransaksiDalamRupiah' => 'Nilai Transaksi Dalam Rupiah',
 			'swift_id' => 'Swift',
 		);
 	}

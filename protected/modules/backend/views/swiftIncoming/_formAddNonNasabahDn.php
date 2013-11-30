@@ -80,7 +80,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahDn, 'propinsiLain', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->textField($nonNasabahDn, 'propinsiLain', array('class' => 'form-control')); ?>
+                    <?php echo $form->textField($nonNasabahDn, 'propinsiLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                     <?php echo $form->error($nonNasabahDn, 'propinsiLain'); ?>
                 </div>
             </div>
@@ -96,7 +96,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahDn, 'kabKotaLain', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->textField($nonNasabahDn, 'kabKotaLain', array('class' => 'form-control')); ?>
+                    <?php echo $form->textField($nonNasabahDn, 'kabKotaLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                     <?php echo $form->error($nonNasabahDn, 'kabKotaLain'); ?>
                 </div>
             </div>
@@ -168,6 +168,15 @@
                 </div>
             </div>
         </fieldset>
+        <fieldset><legend>Nilai Transaksi</legend>
+            <div class="form-group">
+                <?php echo $form->labelEx($nonNasabahDn, 'nilaiTransaksiDalamRupiah', array('class' => 'col-md-2 control-label')); ?>
+                <div class="col-md-5">
+                    <?php echo $form->textField($nonNasabahDn, 'nilaiTransaksiDalamRupiah', array('class' => 'form-control')); ?>
+                    <?php echo $form->error($nonNasabahDn, 'nilaiTransaksiDalamRupiah'); ?>
+                </div>
+            </div>
+        </fieldset>
     </div>
 
     <div class="col-md-12 clear form-actions">
@@ -179,3 +188,19 @@
     <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+<script>
+    $('#NonNasabahDn_idPropinsi').on('change', function() {
+        if ($(this).val() == 96) {
+            $("#NonNasabahDn_propinsiLain").removeAttr('readonly');
+        } else {
+            $("#NonNasabahDn_propinsiLain").attr('readonly', 'readonly');
+        }
+    });
+    $('#NonNasabahDn_idKabKota').on('change', function() {
+        if ($(this).val() == 440) {
+            $("#NonNasabahDn_kabKotaLain").removeAttr('readonly');
+        } else {
+            $("#NonNasabahDn_kabKotaLain").attr('readonly', 'readonly');
+        }
+    });
+</script>

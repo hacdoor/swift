@@ -24,6 +24,7 @@
  * @property string $npwp
  * @property string $jenisBuktiLain
  * @property string $noBuktiLain
+ * @property double $nilaiTransaksiDalamRupiah
  * @property integer $swift_id
  *
  * The followings are the available model relations:
@@ -61,6 +62,7 @@ class NasabahPeroranganLn extends CActiveRecord
 		return array(
 			array('noRekening, namaLengkap, idNegaraKewarganegaraan, idNegaraVoucher, swift_id', 'required'),
 			array('wargaNegara, idNegaraKewarganegaraan, idNegaraVoucher, swift_id', 'numerical', 'integerOnly'=>true),
+			array('nilaiTransaksiDalamRupiah', 'numerical'),
 			array('noRekening, negaraLainKewarganegaraan, negaraBagianKota, negaraLainVoucher', 'length', 'max'=>50),
 			array('namaLengkap', 'length', 'max'=>255),
 			array('alamat', 'length', 'max'=>100),
@@ -106,20 +108,21 @@ class NasabahPeroranganLn extends CActiveRecord
 			'namaLengkap' => 'Nama Lengkap',
 			'tglLahir' => 'Tgl Lahir',
 			'wargaNegara' => 'Warga Negara',
-			'idNegaraKewarganegaraan' => 'Id Negara Kewarganegaraan',
-			'negaraLainKewarganegaraan' => 'Negara Lain Kewarganegaraan',
+			'idNegaraKewarganegaraan' => 'Negara',
+			'negaraLainKewarganegaraan' => 'Negara Lain',
 			'alamat' => 'Alamat',
 			'negaraBagianKota' => 'Negara Bagian Kota',
-			'idNegaraVoucher' => 'Id Negara Voucher',
-			'negaraLainVoucher' => 'Negara Lain Voucher',
+			'idNegaraVoucher' => 'Negara',
+			'negaraLainVoucher' => 'Negara Lain',
 			'noTelp' => 'No Telp',
-			'ktp' => 'Ktp',
-			'sim' => 'Sim',
+			'ktp' => 'KTP',
+			'sim' => 'SIM',
 			'passport' => 'Passport',
 			'kimsKitasKitap' => 'Kims Kitas Kitap',
 			'npwp' => 'Npwp',
 			'jenisBuktiLain' => 'Jenis Bukti Lain',
 			'noBuktiLain' => 'No Bukti Lain',
+			'nilaiTransaksiDalamRupiah' => 'Nilai Transaksi Dalam Rupiah',
 			'swift_id' => 'Swift',
 		);
 	}

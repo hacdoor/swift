@@ -221,11 +221,18 @@ class UtilComponent extends CApplicationComponent {
     public function getNumberSwift($param) {
         $number = '';
         switch ($param) {
-            case 'SwIn':
-                $number = strtolower($param) . '/' . $this->generateRandom(5);
-
+            case 1:
+                $number = 'swin' . '/' . $this->generateRandom(5);
                 break;
-
+            case 2:
+                $number = 'swout' . '/' . $this->generateRandom(5);
+                break;
+            case 3:
+                $number = 'nonswin' . '/' . $this->generateRandom(5);
+                break;
+            case 4:
+                $number = 'nonswout' . '/' . $this->generateRandom(5);
+                break;
             default:
                 break;
         }
@@ -333,6 +340,10 @@ class UtilComponent extends CApplicationComponent {
                     '2' => 'SwiftOutgoing',
                     '3' => 'NonSwiftIncoming',
                     '4' => 'NonSwiftOutgoing'
+                ),
+                'swiftStatus' => array(
+                    '1' => 'Draft',
+                    '2' => 'Finalize',
                 ),
                 'upload' => array('cus' => 'Customer', 'trx' => 'Transaksi')
             );

@@ -65,7 +65,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganDn, 'negaraLainKewarganegaraan', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->textField($nasabahPeroranganDn, 'negaraLainKewarganegaraan', array('class' => 'form-control')); ?>
+                    <?php echo $form->textField($nasabahPeroranganDn, 'negaraLainKewarganegaraan', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                     <?php echo $form->error($nasabahPeroranganDn, 'negaraLainKewarganegaraan'); ?>
                 </div>
             </div>
@@ -82,7 +82,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganDn, 'pekerjaanLain', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->textField($nasabahPeroranganDn, 'pekerjaanLain', array('class' => 'form-control')); ?>
+                    <?php echo $form->textField($nasabahPeroranganDn, 'pekerjaanLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                     <?php echo $form->error($nasabahPeroranganDn, 'pekerjaanLain'); ?>
                 </div>
             </div>
@@ -99,7 +99,15 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganDn, 'idPropinsiDomisili', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($nasabahPeroranganDn, 'idPropinsiDomisili', Yii::app()->util->getKodeStandar(array('modul' => 'propinsi', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php
+                    echo $form->dropDownList($nasabahPeroranganDn, 'idPropinsiDomisili', Yii::app()->util->getKodeStandar(array('modul' => 'propinsi', 'data' => 'all&blank')), array(
+                        'class' => 'form-control',
+                        'ajax' => array(
+                            'type' => 'POST', //request type
+                            'url' => array('dynamicKabKotaNasabahPeroranganDnDomisili'),
+                            'update' => '#NasabahPeroranganDn_idKabKotaDomisili',
+                    )));
+                    ?>
                     <?php echo $form->error($nasabahPeroranganDn, 'idPropinsiDomisili'); ?>
                 </div>
             </div>
@@ -107,7 +115,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganDn, 'propinsiLainDomisili', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->textField($nasabahPeroranganDn, 'propinsiLainDomisili', array('class' => 'form-control')); ?>
+                    <?php echo $form->textField($nasabahPeroranganDn, 'propinsiLainDomisili', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                     <?php echo $form->error($nasabahPeroranganDn, 'propinsiLainDomisili'); ?>
                 </div>
             </div>
@@ -123,7 +131,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganDn, 'kabKotaLain', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->textField($nasabahPeroranganDn, 'kabKotaLain', array('class' => 'form-control')); ?>
+                    <?php echo $form->textField($nasabahPeroranganDn, 'kabKotaLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                     <?php echo $form->error($nasabahPeroranganDn, 'kabKotaLain'); ?>
                 </div>
             </div>
@@ -148,7 +156,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganDn, 'propinsiLainIdentitas', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->textField($nasabahPeroranganDn, 'propinsiLainIdentitas', array('class' => 'form-control')); ?>
+                    <?php echo $form->textField($nasabahPeroranganDn, 'propinsiLainIdentitas', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                     <?php echo $form->error($nasabahPeroranganDn, 'propinsiLainIdentitas'); ?>
                 </div>
             </div>
@@ -164,7 +172,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganDn, 'kabKotaLainIdentitas', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->textField($nasabahPeroranganDn, 'kabKotaLainIdentitas', array('class' => 'form-control')); ?>
+                    <?php echo $form->textField($nasabahPeroranganDn, 'kabKotaLainIdentitas', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                     <?php echo $form->error($nasabahPeroranganDn, 'kabKotaLainIdentitas'); ?>
                 </div>
             </div>
@@ -236,6 +244,15 @@
                     </div>
                 </div>
             </fieldset>
+        </fieldset>        
+        <fieldset><legend>Nilai Transaksi</legend>
+            <div class="form-group">
+                <?php echo $form->labelEx($nasabahPeroranganDn, 'nilaiTransaksiDalamRupiah', array('class' => 'col-md-2 control-label')); ?>
+                <div class="col-md-5">
+                    <?php echo $form->textField($nasabahPeroranganDn, 'nilaiTransaksiDalamRupiah', array('class' => 'form-control')); ?>
+                    <?php echo $form->error($nasabahPeroranganDn, 'nilaiTransaksiDalamRupiah'); ?>
+                </div>
+            </div>
         </fieldset>
     </div>
 
@@ -248,3 +265,50 @@
     <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+
+<script>
+    $('#NasabahPeroranganDn_idNegaraKewarganegaraan').on('change', function() {
+        if ($(this).val() == 999) {
+            $("#NasabahPeroranganDn_negaraLainKewarganegaraan").removeAttr('readonly');
+        } else {
+            $("#NasabahPeroranganDn_negaraLainKewarganegaraan").attr('readonly', 'readonly');
+        }
+    });
+    $('#NasabahPeroranganDn_pekerjaan').on('change', function() {
+        if ($(this).val() == 19) {
+            $("#NasabahPeroranganDn_pekerjaanLain").removeAttr('readonly');
+        } else {
+            $("#NasabahPeroranganDn_pekerjaanLain").attr('readonly', 'readonly');
+        }
+    });
+    $('#NasabahPeroranganDn_idPropinsiDomisili').on('change', function() {
+        if ($(this).val() == 96) {
+            $("#NasabahPeroranganDn_propinsiLainDomisili").removeAttr('readonly');
+            $("#NasabahPeroranganDn_kabKotaLain").removeAttr('readonly');
+        } else {
+            $("#NasabahPeroranganDn_propinsiLainDomisili").attr('readonly', 'readonly');
+            $("#NasabahPeroranganDn_kabKotaLain").attr('readonly', 'readonly');
+        }
+    });
+    $('#NasabahPeroranganDn_idKabKotaDomisili').on('change', function() {
+        if ($(this).val() == 440) {
+            $("#NasabahPeroranganDn_kabKotaLain").removeAttr('readonly');
+        } else {
+            $("#NasabahPeroranganDn_kabKotaLain").attr('readonly', 'readonly');
+        }
+    });
+    $('#NasabahPeroranganDn_idPropinsiIdentitas').on('change', function() {
+        if ($(this).val() == 96) {
+            $("#NasabahPeroranganDn_propinsiLainIdentitas").removeAttr('readonly');
+        } else {
+            $("#NasabahPeroranganDn_propinsiLainIdentitas").attr('readonly', 'readonly');
+        }
+    });
+    $('#NasabahPeroranganDn_idKabKotaIdentitas').on('change', function() {
+        if ($(this).val() == 440) {
+            $("#NasabahPeroranganDn_kabKotaLainIdentitas").removeAttr('readonly');
+        } else {
+            $("#NasabahPeroranganDn_kabKotaLainIdentitas").attr('readonly', 'readonly');
+        }
+    });
+</script>

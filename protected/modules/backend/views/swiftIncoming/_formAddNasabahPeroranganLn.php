@@ -64,7 +64,7 @@
                 <div class="form-group">
                     <?php echo $form->labelEx($nasabahPeroranganLn, 'negaraLainKewarganegaraan', array('class' => 'col-md-2 control-label')); ?>
                     <div class="col-md-5">
-                        <?php echo $form->textField($nasabahPeroranganLn, 'negaraLainKewarganegaraan', array('class' => 'form-control')); ?>
+                        <?php echo $form->textField($nasabahPeroranganLn, 'negaraLainKewarganegaraan', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                         <?php echo $form->error($nasabahPeroranganLn, 'negaraLainKewarganegaraan'); ?>
                     </div>
                 </div>
@@ -97,7 +97,7 @@
                 <div class="form-group">
                     <?php echo $form->labelEx($nasabahPeroranganLn, 'negaraLainVoucher', array('class' => 'col-md-2 control-label')); ?>
                     <div class="col-md-5">
-                        <?php echo $form->textField($nasabahPeroranganLn, 'negaraLainVoucher', array('class' => 'form-control')); ?>
+                        <?php echo $form->textField($nasabahPeroranganLn, 'negaraLainVoucher', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                         <?php echo $form->error($nasabahPeroranganLn, 'negaraLainVoucher'); ?>
                     </div>
                 </div>
@@ -178,3 +178,20 @@
     <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+
+<script>
+    $('#NasabahPeroranganLn_idNegaraKewarganegaraan').on('change', function() {
+        if ($(this).val() == 999) {
+            $("#NasabahPeroranganLn_negaraLainKewarganegaraan").removeAttr('readonly');
+        } else {
+            $("#NasabahPeroranganLn_negaraLainKewarganegaraan").attr('readonly', 'readonly');
+        }
+    });
+    $('#NasabahPeroranganLn_idNegaraVoucher').on('change', function() {
+        if ($(this).val() == 999) {
+            $("#NasabahPeroranganLn_negaraLainVoucher").removeAttr('readonly');
+        } else {
+            $("#NasabahPeroranganLn_negaraLainVoucher").attr('readonly', 'readonly');
+        }
+    });
+</script>

@@ -87,6 +87,12 @@ $this->widget('ext.mbmenu.MbMenu', array(
                         'noRekening',
                         'namaLengkap',
                         array(
+                            'name' => 'nilaiTransaksiDalamRupiah',
+                            'header' => 'Nilai Transaksi Keu (Rp)',
+                            'value' => '$data->nilaiTransaksiDalamRupiah',
+                            'type' => 'raw',
+                        ),
+                        array(
                             'name' => 'idPropinsi',
                             'header' => 'Propinsi',
                             'value' => '$data->idPropinsi0->nama',

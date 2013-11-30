@@ -87,7 +87,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahLn, 'negaraLain', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->textField($nonNasabahLn, 'negaraLain', array('class' => 'form-control')); ?>
+                    <?php echo $form->textField($nonNasabahLn, 'negaraLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                     <?php echo $form->error($nonNasabahLn, 'negaraLain'); ?>
                 </div>
             </div>
@@ -161,3 +161,13 @@
     <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+
+<script>
+    $('#NonNasabahLn_idNegara').on('change', function() {
+        if ($(this).val() == 999) {
+            $("#NonNasabahLn_negaraLain").removeAttr('readonly');
+        } else {
+            $("#NonNasabahLn_negaraLain").attr('readonly', 'readonly');
+        }
+    });
+</script>

@@ -17,6 +17,7 @@
  * @property integer $idNegara
  * @property string $negaraLain
  * @property string $noTelp
+ * @property double $nilaiTransaksiDalamRupiah
  * @property integer $swift_id
  *
  * The followings are the available model relations:
@@ -53,6 +54,7 @@ class NasabahKorporasiLn extends CActiveRecord
 		return array(
 			array('namaKorporasi, idNegara, swift_id', 'required'),
 			array('bentukBadan, bidangUsaha, idNegara, swift_id', 'numerical', 'integerOnly'=>true),
+			array('nilaiTransaksiDalamRupiah', 'numerical'),
 			array('noRekening, bidangUsahaLain, negaraBagianKota, negaraLain', 'length', 'max'=>50),
 			array('namaKorporasi, bentukBadanLain', 'length', 'max'=>255),
 			array('alamat', 'length', 'max'=>100),
@@ -100,9 +102,10 @@ class NasabahKorporasiLn extends CActiveRecord
 			'bidangUsahaLain' => 'Bidang Usaha Lain',
 			'alamat' => 'Alamat',
 			'negaraBagianKota' => 'Negara Bagian Kota',
-			'idNegara' => 'Id Negara',
+			'idNegara' => 'Negara',
 			'negaraLain' => 'Negara Lain',
 			'noTelp' => 'No Telp',
+			'nilaiTransaksiDalamRupiah' => 'Nilai Transaksi Dalam Rupiah',
 			'swift_id' => 'Swift',
 		);
 	}

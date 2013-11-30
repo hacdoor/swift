@@ -47,7 +47,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiDn, 'bentukBadanLain', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->textField($nasabahKorporasiDn, 'bentukBadanLain', array('class' => 'form-control')); ?>
+                    <?php echo $form->textField($nasabahKorporasiDn, 'bentukBadanLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                     <?php echo $form->error($nasabahKorporasiDn, 'bentukBadanLain'); ?>
                 </div>
             </div>
@@ -63,7 +63,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiDn, 'bidangUsahaLain', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->textField($nasabahKorporasiDn, 'bidangUsahaLain', array('class' => 'form-control')); ?>
+                    <?php echo $form->textField($nasabahKorporasiDn, 'bidangUsahaLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                     <?php echo $form->error($nasabahKorporasiDn, 'bidangUsahaLain'); ?>
                 </div>
             </div>
@@ -88,23 +88,23 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiDn, 'propinsiLain', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->textField($nasabahKorporasiDn, 'propinsiLain', array('class' => 'form-control')); ?>
+                    <?php echo $form->textField($nasabahKorporasiDn, 'propinsiLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                     <?php echo $form->error($nasabahKorporasiDn, 'propinsiLain'); ?>
                 </div>
             </div>
 
             <div class="form-group">
-                <?php echo $form->labelEx($nasabahKorporasiDn, 'kabupaten_id', array('class' => 'col-md-2 control-label')); ?>
+                <?php echo $form->labelEx($nasabahKorporasiDn, 'idKabKota', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($nasabahKorporasiDn, 'kabupaten_id', Yii::app()->util->getKodeStandar(array('modul' => 'kabupaten', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
-                    <?php echo $form->error($nasabahKorporasiDn, 'kabupaten_id'); ?>
+                    <?php echo $form->dropDownList($nasabahKorporasiDn, 'idKabKota', Yii::app()->util->getKodeStandar(array('modul' => 'kabupaten', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php echo $form->error($nasabahKorporasiDn, 'idKabKota'); ?>
                 </div>
             </div>
 
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiDn, 'kabKotaLain', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->textField($nasabahKorporasiDn, 'kabKotaLain', array('class' => 'form-control')); ?>
+                    <?php echo $form->textField($nasabahKorporasiDn, 'kabKotaLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                     <?php echo $form->error($nasabahKorporasiDn, 'kabKotaLain'); ?>
                 </div>
             </div>
@@ -115,6 +115,15 @@
                 <div class="col-md-5">
                     <?php echo $form->textField($nasabahKorporasiDn, 'noTelp', array('class' => 'form-control')); ?>
                     <?php echo $form->error($nasabahKorporasiDn, 'noTelp'); ?>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset><legend>Nilai Transaksi</legend>
+            <div class="form-group">
+                <?php echo $form->labelEx($nasabahKorporasiDn, 'nilaiTransaksiDalamRupiah', array('class' => 'col-md-2 control-label')); ?>
+                <div class="col-md-5">
+                    <?php echo $form->textField($nasabahKorporasiDn, 'nilaiTransaksiDalamRupiah', array('class' => 'form-control')); ?>
+                    <?php echo $form->error($nasabahKorporasiDn, 'nilaiTransaksiDalamRupiah'); ?>
                 </div>
             </div>
         </fieldset>
@@ -129,3 +138,34 @@
     <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+
+<script>
+    $('#NasabahKorporasiDn_bentukBadan').on('change', function() {
+        if ($(this).val() == 9) {
+            $("#NasabahKorporasiDn_bentukBadanLain").removeAttr('readonly');
+        } else {
+            $("#NasabahKorporasiDn_bentukBadanLain").attr('readonly', 'readonly');
+        }
+    });
+    $('#NasabahKorporasiDn_bidangUsaha').on('change', function() {
+        if ($(this).val() == 22) {
+            $("#NasabahKorporasiDn_bidangUsahaLain").removeAttr('readonly');
+        } else {
+            $("#NasabahKorporasiDn_bidangUsahaLain").attr('readonly', 'readonly');
+        }
+    });
+    $('#NasabahKorporasiDn_idPropinsi').on('change', function() {
+        if ($(this).val() == 96) {
+            $("#NasabahKorporasiDn_propinsiLain").removeAttr('readonly');
+        } else {
+            $("#NasabahKorporasiDn_propinsiLain").attr('readonly', 'readonly');
+        }
+    });
+    $('#NasabahKorporasiDn_idKabKota').on('change', function() {
+        if ($(this).val() == 440) {
+            $("#NasabahKorporasiDn_kabKotaLain").removeAttr('readonly');
+        } else {
+            $("#NasabahKorporasiDn_kabKotaLain").attr('readonly', 'readonly');
+        }
+    });
+</script>

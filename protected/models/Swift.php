@@ -15,6 +15,7 @@
  * @property integer $pjkBankSebagai
  * @property integer $jenisSwift
  * @property integer $status
+ * @property integer $keterlibatanBeneficialOwner
  *
  * The followings are the available model relations:
  * @property Infolain[] $infolains
@@ -135,7 +136,7 @@ class Swift extends CActiveRecord {
         // will receive user inputs.
         return array(
             array('localId, noLtdln, tglLaporan, namaPjk, namaPejabatPjk, jenisLaporan, pjkBankSebagai, jenisSwift, status', 'required'),
-            array('jenisLaporan, pjkBankSebagai, jenisSwift', 'numerical', 'integerOnly' => true),
+            array('jenisLaporan, pjkBankSebagai, jenisSwift, keterlibatanBeneficialOwner', 'numerical', 'integerOnly' => true),
             array('localId', 'length', 'max' => 50),
             array('noLtdln, noLtdlnKoreksi', 'length', 'max' => 30),
             array('namaPjk, namaPejabatPjk', 'length', 'max' => 100),
@@ -187,6 +188,7 @@ class Swift extends CActiveRecord {
             'pjkBankSebagai' => 'Pjk Bank Sebagai',
             'jenisSwift' => 'Jenis Swift',
             'status' => 'Status',
+            'keterlibatanBeneficialOwner' => 'Keterlibatan Beneficial Owner',
         );
     }
 
@@ -211,6 +213,7 @@ class Swift extends CActiveRecord {
         $criteria->compare('pjkBankSebagai', $this->pjkBankSebagai);
         $criteria->compare('jenisSwift', $this->jenisSwift);
         $criteria->compare('status', $this->status);
+        $criteria->compare('keterlibatanBeneficialOwner', $this->keterlibatanBeneficialOwner);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

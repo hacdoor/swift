@@ -46,7 +46,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiLn, 'bentukBadanLain', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->textField($nasabahKorporasiLn, 'bentukBadanLain', array('class' => 'form-control')); ?>
+                    <?php echo $form->textField($nasabahKorporasiLn, 'bentukBadanLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                     <?php echo $form->error($nasabahKorporasiLn, 'bentukBadanLain'); ?>
                 </div>
             </div>
@@ -62,7 +62,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiLn, 'bidangUsahaLain', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->textField($nasabahKorporasiLn, 'bidangUsahaLain', array('class' => 'form-control')); ?>
+                    <?php echo $form->textField($nasabahKorporasiLn, 'bidangUsahaLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                     <?php echo $form->error($nasabahKorporasiLn, 'bidangUsahaLain'); ?>
                 </div>
             </div>
@@ -95,7 +95,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiLn, 'negaraLain', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->textField($nasabahKorporasiLn, 'negaraLain', array('class' => 'form-control')); ?>
+                    <?php echo $form->textField($nasabahKorporasiLn, 'negaraLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                     <?php echo $form->error($nasabahKorporasiLn, 'negaraLain'); ?>
                 </div>
             </div>
@@ -120,3 +120,27 @@
     <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+
+<script>
+    $('#NasabahKorporasiLn_idNegara').on('change', function() {
+        if ($(this).val() == 999) {
+            $("#NasabahKorporasiLn_negaraLain").removeAttr('readonly');
+        } else {
+            $("#NasabahKorporasiLn_negaraLain").attr('readonly', 'readonly');
+        }
+    });
+    $('#NasabahKorporasiLn_bentukBadan').on('change', function() {
+        if ($(this).val() == 9) {
+            $("#NasabahKorporasiLn_bentukBadanLain").removeAttr('readonly');
+        } else {
+            $("#NasabahKorporasiLn_bentukBadanLain").attr('readonly', 'readonly');
+        }
+    });
+    $('#NasabahKorporasiLn_bidangUsaha').on('change', function() {
+        if ($(this).val() == 22) {
+            $("#NasabahKorporasiLn_bidangUsahaLain").removeAttr('readonly');
+        } else {
+            $("#NasabahKorporasiLn_bidangUsahaLain").attr('readonly', 'readonly');
+        }
+    });
+</script>

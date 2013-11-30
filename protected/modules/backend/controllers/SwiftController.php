@@ -27,6 +27,8 @@ class SwiftController extends BackendController {
             $criteria->addSearchCondition('localId', $filters['localId']);
         if ($filters['noLtdln'])
             $criteria->addSearchCondition('noLtdln', $filters['noLtdln']);
+        if (isset($_GET['type']))
+            $criteria->addSearchCondition('jenisSwift', Swift::model()->getIdByType($_GET['type']));
 
         $dataCount = Swift::model()->count($criteria);
 
@@ -51,13 +53,167 @@ class SwiftController extends BackendController {
         $this->render('index', $vars);
     }
 
-    public function actionCreate($type) {
+    public function actionCreate() {
+        $this->checkAccess('swift.create');
+        $model = new Swift;
+
+        // Uncomment the following line if AJAX validation is needed
+        // $this->performAjaxValidation($model);
+
+        if (isset($_POST['Swift'])) {
+            $model->attributes = $_POST['Swift'];
+            $model->noLtdln = Yii::app()->util->getNumberSwift($model->jenisSwift);
+            $model->tglLaporan = date('Y-m-d', strtotime($model->tglLaporan));
+            if ($model->save()) {
+                Yii::app()->util->setLog(Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $model->jenisSwift)), $model->id, 'Tambah data');
+                Yii::app()->user->setFlash('success', 'Success!|' . 'New ' . Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $model->jenisSwift)) . ' has been created.');
+                $this->redirect(array('update', 'id' => $model->id, 'type' => $model->getTypeById($model->jenisSwift)));
+            }
+        }
+
+        $this->render('create', array(
+            'model' => $model,
+        ));
+    }
+
+    public function actionUpdate($id) {
+        $this->checkAccess('swift.update');
+        $model = $this->loadModel($id);
+
+        if (NasabahPeroranganDn::model()->countByAttributes(array('swift_id' => $model->id)) != 0)
+            $nasabahPeroranganDn = NasabahPeroranganDn::model()->findByAttributes(array('swift_id' => $model->id));
+        else
+            $nasabahPeroranganDn = new NasabahPeroranganDn;
+        if (NasabahPeroranganLn::model()->countByAttributes(array('swift_id' => $model->id)) != 0)
+            $nasabahPeroranganLn = NasabahPeroranganLn::model()->findByAttributes(array('swift_id' => $model->id));
+        else
+            $nasabahPeroranganLn = new NasabahPeroranganLn;
+        if (NasabahKorporasiDn::model()->countByAttributes(array('swift_id' => $model->id)) != 0)
+            $nasabahKorporasiDn = NasabahKorporasiDn::model()->findByAttributes(array('swift_id' => $model->id));
+        else
+            $nasabahKorporasiDn = new NasabahKorporasiDn;
+        if (NasabahKorporasiLn::model()->countByAttributes(array('swift_id' => $model->id)) != 0)
+            $nasabahKorporasiLn = NasabahKorporasiLn::model()->findByAttributes(array('swift_id' => $model->id));
+        else
+            $nasabahKorporasiLn = new NasabahKorporasiLn;
+        if (NonNasabahDn::model()->countByAttributes(array('swift_id' => $model->id)) != 0)
+            $nonNasabahDn = NonNasabahDn::model()->findByAttributes(array('swift_id' => $model->id));
+        else
+            $nonNasabahDn = new NonNasabahDn;
+        if (NonNasabahLn::model()->countByAttributes(array('swift_id' => $model->id)) != 0)
+            $nonNasabahLn = NonNasabahLn::model()->findByAttributes(array('swift_id' => $model->id));
+        else
+            $nonNasabahLn = new NonNasabahLn;
+        if (Infolain::model()->countByAttributes(array('swift_id' => $model->id)) != 0)
+            $infoLain = Infolain::model()->findByAttributes(array('swift_id' => $model->id));
+        else
+            $infoLain = new Infolain;
+        if (Transaksi::model()->countByAttributes(array('swift_id' => $model->id)) != 0)
+            $transaksi = Transaksi::model()->findByAttributes(array('swift_id' => $model->id));
+        else
+            $transaksi = new Transaksi;
+
+        if (isset($_POST['Swift'])) {
+            $model->attributes = $_POST['Swift'];
+            $model->tglLaporan = date('Y-m-d', strtotime($model->tglLaporan));
+            if ($model->save()) {
+                Yii::app()->util->setLog(Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $model->jenisSwift)), $model->id, 'Update data');
+                Yii::app()->user->setFlash('success', 'Success!|' . 'New ' . Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $model->jenisSwift)) . ' has been updated.');
+            }
+        }
+
+        if ($model->jenisSwift == Swift::TYPE_SWIN) {
+            if (isset($_POST['NasabahPeroranganLn'])) {
+                $nasabahPeroranganLn->attributes = $_POST['NasabahPeroranganLn'];
+                $nasabahPeroranganLn->swift_id = $model->id;
+                $nasabahPeroranganLn->tglLahir = date('Y-m-d', strtotime($nasabahPeroranganLn->tglLahir));
+                if ($nasabahPeroranganLn->save()) {
+                    Yii::app()->util->setLog('Nasabah Perorangan Ln', $nasabahPeroranganLn->id, 'Update data');
+                    Yii::app()->user->setFlash('success', 'Success!|' . 'Nasabah Perorangan Ln has been updated.');
+                }
+            }
+            if (isset($_POST['NasabahKorporasiLn'])) {
+                $nasabahKorporasiLn->attributes = $_POST['NasabahKorporasiLn'];
+                $nasabahKorporasiLn->swift_id = $model->id;
+                if ($nasabahKorporasiLn->save()) {
+                    Yii::app()->util->setLog('Nasabah Korporasi Ln', $nasabahPeroranganLn->id, 'Update data');
+                    Yii::app()->user->setFlash('success', 'Success!|' . 'Nasabah Korporasi Ln has been updated.');
+                }
+            }
+            if (isset($_POST['NasabahPeroranganDn'])) {
+                $nasabahPeroranganDn->attributes = $_POST['NasabahPeroranganDn'];
+                $nasabahPeroranganDn->swift_id = $model->id;
+                $nasabahPeroranganDn->tglLahir = date('Y-m-d', strtotime($nasabahPeroranganDn->tglLahir));
+                if ($nasabahPeroranganDn->save()) {
+                    Yii::app()->util->setLog('Nasabah Perorangan Dn', $nasabahPeroranganDn->id, 'Update data');
+                    Yii::app()->user->setFlash('success', 'Success!|' . 'Nasabah Perorangan Dn has been updated.');
+                }
+            }
+            if (isset($_POST['NasabahKorporasiDn'])) {
+                $nasabahKorporasiDn->attributes = $_POST['NasabahKorporasiDn'];
+                $nasabahKorporasiDn->swift_id = $model->id;
+                if ($nasabahKorporasiDn->save()) {
+                    Yii::app()->util->setLog('Nasabah Korporasi Dn', $nasabahPeroranganDn->id, 'Update data');
+                    Yii::app()->user->setFlash('success', 'Success!|' . 'Nasabah Korporasi Dn has been updated.');
+                }
+            }
+            if (isset($_POST['NonNasabahDn'])) {
+                $nonNasabahDn->attributes = $_POST['NonNasabahDn'];
+                $nonNasabahDn->swift_id = $model->id;
+                $nonNasabahDn->keterlibatanBeneficialOwner = 1;
+                $nonNasabahDn->tglLahir = date('Y-m-d', strtotime($nonNasabahDn->tglLahir));
+                if ($nonNasabahDn->save()) {
+                    Yii::app()->util->setLog('Non Nasabah Dn (Beneficial Owner)', $nonNasabahDn->id, 'Update data');
+                    Yii::app()->user->setFlash('success', 'Success!|' . 'Non Nasabah Dn has been updated.');
+                }
+            }
+        } elseif ($model->jenisSwift == Swift::TYPE_SWOUT) {
+            
+        } elseif ($model->jenisSwift == Swift::TYPE_NONSWIN) {
+            
+        } elseif ($model->jenisSwift == Swift::TYPE_NONSWOUT) {
+            
+        }
+
+        if (isset($_POST['Infolain'])) {
+            $infoLain->attributes = $_POST['Infolain'];
+            $infoLain->swift_id = $model->id;
+            if ($infoLain->save()) {
+                Yii::app()->util->setLog('Info Lain', $infoLain->id, 'Update data');
+                Yii::app()->user->setFlash('success', 'Success!|' . 'Info Lain has been updated.');
+            }
+        }
+
+        if (isset($_POST['Transaksi'])) {
+            $transaksi->attributes = $_POST['Transaksi'];
+            $transaksi->swift_id = $model->id;
+            $transaksi->tglTransaksi = date('Y-m-d', strtotime($transaksi->tglTransaksi));
+            $transaksi->valueDate = date('Y-m-d', strtotime($transaksi->valueDate));
+            if ($transaksi->save()) {
+                Yii::app()->util->setLog('Transaksi', $transaksi->id, 'Update data');
+                Yii::app()->user->setFlash('success', 'Success!|' . 'Transaksi has been updated.');
+            }
+        }
+        $this->render('update', array(
+            'model' => $model,
+            'nasabahPeroranganDn' => $nasabahPeroranganDn,
+            'nasabahPeroranganLn' => $nasabahPeroranganLn,
+            'nasabahKorporasiDn' => $nasabahKorporasiDn,
+            'nasabahKorporasiLn' => $nasabahKorporasiLn,
+            'nonNasabahDn' => $nonNasabahDn,
+            'nonNasabahLn' => $nonNasabahLn,
+            'infoLain' => $infoLain,
+            'transaksi' => $transaksi,
+        ));
+    }
+
+    public function actionCreate__($type) {
         $this->checkAccess('swift.create');
 
         $model = new Swift;
-        $peroranganPengirimSwIn = new PeroranganPengirimSwIn;
-        $korporasiPengirimSwIn = new KorporasiPengirimSwIn;
-        $nonNasabahPengirimSwIn = new NonNasabahPengirimSwIn;
+        $peroranganPengirimSwIn = new NasabahPeroranganDn;
+        $korporasiPengirimSwIn = new NasabahKorporasiDn;
+        $nonNasabahPengirimSwIn = new NonNasabahDn;
         $number = Yii::app()->util->getNumberSwift($type);
 
 
@@ -170,7 +326,21 @@ class SwiftController extends BackendController {
         $this->render('create', $vars);
     }
 
-    public function actionUpdate($id) {
+    /**
+     * Returns the data model based on the primary key given in the GET variable.
+     * If the data model is not found, an HTTP exception will be raised.
+     * @param integer $id the ID of the model to be loaded
+     * @return Swift the loaded model
+     * @throws CHttpException
+     */
+    public function loadModel($id) {
+        $model = Swift::model()->findByPk($id);
+        if ($model === null)
+            throw new CHttpException(404, 'The requested page does not exist.');
+        return $model;
+    }
+
+    public function actionUpdate__($id) {
         $this->checkAccess('swift.update');
 
         $model = Swift::model()->findByPk($id);
@@ -448,7 +618,7 @@ class SwiftController extends BackendController {
         $dataFile = array();
         foreach ($model as $value) {
             $type = Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $value->jenisSwift)));
-            $filename = $value->localId .'-'.$type. '.xml';
+            $filename = $value->localId . '-' . $type . '.xml';
             $type = Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $value->jenisSwift)));
             $tglLaporan = Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' => 'tanggal', 'data' => $value->tglLaporan)));
             $str = '<ifti xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="' . $type . '" xsi:noNamespaceSchemaLocation="Ifti' . $type . '.xsd">';

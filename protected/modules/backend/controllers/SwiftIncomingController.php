@@ -78,7 +78,8 @@ class SwiftIncomingController extends BackendController {
             $nasabahPeroranganDn->attributes = $_POST['NasabahPeroranganDn'];
             $nasabahPeroranganDn->swift_id = $model->id;
             $nasabahPeroranganDn->tglLahir = date('Y-m-d', strtotime($nasabahPeroranganDn->tglLahir));
-            if ($nasabahPeroranganDn->save()) {
+            if ($nasabahPeroranganDn->save()) { 
+                $this->refresh();
                 Yii::app()->util->setLog('NasabahPeroranganDn', $nasabahPeroranganDn->id, 'Update data');
                 Yii::app()->user->setFlash('success', 'Success!|' . 'NasabahPeroranganDn has been updated.');
             }
@@ -297,8 +298,8 @@ class SwiftIncomingController extends BackendController {
         else
             $infoLain = new InfoLain;
 
-        if (isset($_POST['InfoLain'])) {
-            $infoLain->attributes = $_POST['InfoLain'];
+        if (isset($_POST['Infolain'])) {
+            $infoLain->attributes = $_POST['Infolain'];
             $infoLain->swift_id = $model->id;
             if ($infoLain->save()) {
                 Yii::app()->util->setLog('InfoLain', $infoLain->id, 'Update data');
@@ -362,6 +363,19 @@ class SwiftIncomingController extends BackendController {
         if (isset($_POST['ajax']) && $_POST['ajax'] === 'swift-form') {
             echo CActiveForm::validate($model);
             Yii::app()->end();
+        }
+    }
+
+    /**
+     * List all ajax action to get dinamic kabupaten kota 
+     */
+    public function actionDynamicKabKotaNasabahPeroranganDnDomisili() {
+        $data = Kabupaten::model()->findAll('propinsi_id=:propinsiId', array(':propinsiId' => (int) $_POST['NasabahPeroranganDn']['idPropinsiDomisili']));
+
+        $data = CHtml::listData($data, 'id', 'nama');
+        $data = CMap::mergeArray(array(440=>'Lain-lain'), $data);
+        foreach ($data as $value => $name) {
+            echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);
         }
     }
 
