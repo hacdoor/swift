@@ -563,75 +563,17 @@ class SwiftController extends BackendController {
 
     public function actionGenerateXml() {
         $model = Swift::model()->findAll();
-        $header = header('Content-Type: application/xml; charset=utf-8');
-        $peroranganPengirimSwInTemplate = "
-            <noRekening/>
-            <namaLengkap/>
-            <tglLahir/>
-            <kewarganegaraan>
-              <wargaNegara/>
-              <idNegara/>
-              <negaraLain/>
-            </kewarganegaraan>
-            <alamatSesuaiVoucher>
-              <alamat/>
-              <negaraBagianKota/>
-              <idNegara/>
-              <negaraLain/>
-            </alamatSesuaiVoucher>
-            <noTelp/>
-            <buktiIdentitas>
-              <ktp/>
-              <sim/>
-              <passport/>
-              <kimsKitasKitap/>
-              <npwp/>
-              <buktiLain>
-                <jenisBuktiLain/>
-                <noBuktiLain/>
-              </buktiLain>
-            </buktiIdentitas>
-        ";
-        $korporasiPengirimSwInTemplate = "
-            <noRekening/>
-            <namaKorporasi/>
-            <alamatSesuaiVoucher>
-              <alamat/>
-              <negaraBagianKota/>
-              <idNegara/>
-              <negaraLain/>
-            </alamatSesuaiVoucher>
-            <noTelp/>
-        ";
-        $nonNasabahPengirimSwInTemplate = "
-            <noRekening/>
-            <namaLengkap/>
-            <tglLahir/>
-            <alamatSesuaiVoucher>
-              <alamat/>
-              <negaraBagianKota/>
-              <idNegara/>
-              <negaraLain/>
-            </alamatSesuaiVoucher>
-            <noTelp/>
-        ";
         $dataFile = array();
-        foreach ($model as $value) {
-            $type = Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $value->jenisSwift)));
-            $filename = $value->localId . '-' . $type . '.xml';
-            $type = Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $value->jenisSwift)));
-            $tglLaporan = Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' => 'tanggal', 'data' => $value->tglLaporan)));
-            $str = '<ifti xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="' . $type . '" xsi:noNamespaceSchemaLocation="Ifti' . $type . '.xsd">';
-            $str .= "<localId>$value->localId</localId>";
-            $str .= '<umum>';
-            $str .= "<tglLaporan> $tglLaporan</tglLaporan>";
-            $str .= "<jenisLaporan>$value->jenisLaporan</jenisLaporan>";
-            $str .= "<noLtklKoreksi>$value->noLtdlnKoreksi</noLtklKoreksi>";
-            $str .= '</umum>';
-            $str .= "<pjkBankSebagai>$value->pjkBankSebagai</pjkBankSebagai>";
 
-            $str .= '</ifti>';
-            file_put_contents($filename, $str);
+        foreach ($model as $value) {
+            $type = Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $value->jenisSwift));
+            $filename = 'download/' . $value->localId . '-' . $type . '.xml';
+
+            $swIn = Yii::app()->util->getFormSwInXml($value);
+            $xml = Yii::app()->util->genSwiftXml($swIn, $xml = null, $root = null, $type);
+
+
+            file_put_contents($filename, $xml);
             $dataFile[] = $filename;
         }
 

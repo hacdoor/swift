@@ -249,7 +249,7 @@ class UtilComponent extends CApplicationComponent {
 
     public function getKodeStandar($param) {
         if ($param['modul'] === 'tanggal') {
-            return date('d-m-Y', strtotime($param['data']));
+            return date('d/m/Y', strtotime($param['data']));
         } elseif ($param['modul'] === 'propinsi') {
             $result = array();
             $d = Propinsi::model()->findAll();
@@ -365,44 +365,6 @@ class UtilComponent extends CApplicationComponent {
         }
     }
 
-    /**
-     * Converts an array to Xml
-     *
-     * @param mixed $arData The array to convert
-     * @param mixed $sRootNodeName The name of the root node in the returned Xml
-     * @param string $sXml The converted Xml
-     */
-    public function arrayToXml($arData, $sRootNodeName = 'data', $sXml = null) {
-        // turn off compatibility mode as simple xml doesn't like it
-        if (1 == ini_get('zend.ze1_compatibility_mode'))
-            ini_set('zend.ze1_compatibility_mode', 0);
-
-        if (null == $sXml)
-            $sXml = simplexml_load_string("<?xml version='1.0' encoding='utf-8'?><{$sRootNodeName} />");
-
-        // loop through the data passed in.
-        foreach ($arData as $_sKey => $_oValue) {
-            // no numeric keys in our xml please!
-            if (is_numeric($_sKey))
-                $_sKey = "unknownNode_" . (string) $_sKey;
-
-            // replace anything not alpha numeric
-            $_sKey = preg_replace('/[^a-z]/i', '', $_sKey);
-
-            // if there is another array found recrusively call this function
-            if (is_array($_oValue)) {
-                $_oNode = $sXml->addChild($_sKey);
-                self::arrayToXml($_oValue, $sRootNodeName, $_oNode);
-            } else {
-                // add single node.
-                $_oValue = htmlentities($_oValue);
-                $sXml->addChild($_sKey, $_oValue);
-            }
-        }
-
-        return( $sXml->asXML() );
-    }
-
     public function cleanString($param) {
         $t = str_replace('|', '', $param);
         $t = str_replace('-', '', $t);
@@ -470,7 +432,8 @@ class UtilComponent extends CApplicationComponent {
 
         foreach ($filelist as $file) {
             if (file_exists($file)) {
-                $zip->addFile($file);
+                $new = explode('/', $file);
+                $zip->addFile($file, end($new));
             }
         }
         $zip->close();
@@ -482,43 +445,490 @@ class UtilComponent extends CApplicationComponent {
             header('Content-type: application/zip');
             header('Content-Disposition: attachment; filename="' . $filename . '"');
             readfile($destination);
-            // remove zip file is exists in temp path
             unlink($destination);
         }
     }
 
-    public function createZip($file_name, $filezip = array()) {
-        $filename = Yii::app()->params['tmp'] . $file_name;
-        if (file_exists($filename)) {
-            unlink($filename);
-        }
-        $zip = new ZipArchive();
+    public function getFormSwInXml($param) {
+        /* ============================ UMUM ======================================== */
+        $umum = $this->getFormUmumXml(array(
+            Yii::app()->util->getKodeStandar(array('modul' => 'tanggal', 'data' => $param->tglLaporan)),
+            $param->namaPejabatPjk,
+            $param->jenisLaporan,
+            $param->pjkBankSebagai
+                ));
 
-        if ($zip->open($filename, ZipArchive::CREATE) !== TRUE) {
-            throw new CHttpException(500, 'cannot open <$filename>\n');
-        } else {
-            foreach ($filezip as $filesrc) {
-                $new = explode('/', $filesrc);
-                $zip->addFile($filesrc, end($new));
-            }
-            $zip->close();
-        }
+        /* ============================ END UMUM ====================================== */
+        
+        
+        /* ============================ IDENTITAS PENGIRIM ============================ */
+        $kewarganegaraanPeroranganPengirim = $this->getFormKewarganegaraanXml(array());
+        $alamatSesuaiVoucherPeroranganPengirim = $this->getFormAlamatXml(array());
+
+        $buktiLainPeroranganPengirim = $this->getFormBuktiLainXml(array());
+        $buktiIdentitasPeroranganPengirim = $this->getFormBuktiIdentitasXml(array(5 => $buktiLainPeroranganPengirim));
+
+        $peroranganPengirim = $this->getFormPeroranganXml(array(
+            3 => $kewarganegaraanPeroranganPengirim,
+            4 => $alamatSesuaiVoucherPeroranganPengirim,
+            6 => $buktiIdentitasPeroranganPengirim
+                ));
+        $alamatSesuaiVoucherKorporasiPengirim = $this->getFormAlamatXml(array());
+
+        $korporasiPengirim = $this->getFormKorporasiXml(array(2 => $alamatSesuaiVoucherKorporasiPengirim));
+
+        $alamatSesuaiVoucherNonNasabahPengirim = $this->getFormAlamatXml(array());
+        $nonNasabahPengirim = $this->getFormNonNasabahXml(array(4 => $alamatSesuaiVoucherNonNasabahPengirim));
+        $nasabahPengirim = $this->getFormIdentitasXml(array($peroranganPengirim, $korporasiPengirim), 1);
+
+        $identitasPengirim = $this->getFormIdentitasXml(array($nasabahPengirim, $nonNasabahPengirim));
+
+        /* ============================ END IDENTITAS PENGIRIM ============================ */
+
+
+        
+        
+        /* ============================ IDENTITAS PENERIMA ================================= */
+        $alamatLengkapKorporasiPenerusPenerima = $this->getFormAlamatXml(array(), 2);
+        $korporasiPenerusPenerima = $this->getFormKorporasiXml(array(
+            7 => $alamatLengkapKorporasiPenerusPenerima
+                ), 2);
+
+        $buktiLainPeroranganPenerusPenerima = $this->getFormBuktiLainXml(array());
+        $buktiIdentitasPeroranganPenerusPenerima = $this->getFormBuktiIdentitasXml(
+                array(5 => $buktiLainPeroranganPenerusPenerima)
+        );
+        $alamatSesuaiBuktiIdentitasPenerusPenerima = $this->getFormAlamatXml(array(), 2);
+        $alamatDomisiliPenerusPenerima = $this->getFormAlamatXml(array(), 2);
+        $kewarganegaraanPenerusPenerima = $this->getFormKewarganegaraanXml(array());
+        $peroranganPenerusPenerima = $this->getFormPeroranganXml(array(
+            4 => $kewarganegaraanPenerusPenerima,
+            7 => $alamatDomisiliPenerusPenerima,
+            8 => $alamatSesuaiBuktiIdentitasPenerusPenerima,
+            10 => $buktiIdentitasPeroranganPenerusPenerima
+                ), 2);
+
+        $buktiLainNonNasabahPenerimaAkhir = $this->getFormBuktiLainXml(array());
+        $buktiIdentitasNonNasabahPenerimaAkhir = $this->getFormBuktiIdentitasXml(
+                array(5 => $buktiLainNonNasabahPenerimaAkhir)
+        );
+
+
+        $nonNasabahPenerimaAkhir = $this->getFormNonNasabahXml(array(
+            4 => $buktiIdentitasNonNasabahPenerimaAkhir
+                ), 2);
+
+        $buktiLainPeroranganPenerimaAkhir = $this->getFormBuktiLainXml(array());
+        $buktiIdentitasPeroranganPenerimaAkhir = $this->getFormBuktiIdentitasXml(
+                array(5 => $buktiLainPeroranganPenerimaAkhir)
+        );
+        $alamatSesuaiBuktiIdentitasPenerimaAkhir = $this->getFormAlamatXml(array(), 2);
+        $alamatDomisiliPenerimaAkhir = $this->getFormAlamatXml(array(), 2);
+        $kewarganegaraanPenerimaAkhir = $this->getFormKewarganegaraanXml(array());
+        $peroranganPenerimaAkhir = $this->getFormPeroranganXml(array(
+            3 => $kewarganegaraanPenerimaAkhir,
+            6 => $alamatDomisiliPenerimaAkhir,
+            7 => $alamatSesuaiBuktiIdentitasPenerimaAkhir,
+            9 => $buktiIdentitasPeroranganPenerimaAkhir
+                ), 3);
+
+        $alamatKorporasiPenerimaAkhrir = $this->getFormAlamatXml(array(), 2);
+        $korporasiPenerimaAkhir = $this->getFormKorporasiXml(array(
+            6 => $alamatKorporasiPenerimaAkhrir
+                ), 3);
+
+        $nasabahPenerimaAkhir = $this->getFormIdentitasXml(array(
+            $peroranganPenerimaAkhir, $korporasiPenerimaAkhir
+                ), 2);
+
+        $penyelenggaraPenerimaAkhir = $this->getFormIdentitasXml(array(
+            $nasabahPenerimaAkhir, $nonNasabahPenerimaAkhir
+                ), 1);
+
+        $penyelenggaraPenerus = $this->getFormIdentitasXml(array(
+            $peroranganPenerusPenerima, $korporasiPenerusPenerima
+                ), 2);
+
+        $identitasPenerima = $this->getFormIdentitasXml(array(
+            $penyelenggaraPenerimaAkhir, $penyelenggaraPenerus
+                ), 3);
+        /* ============================ END IDENTITAS PENERIMA ================================= */
+
+        
+        /* ============================ TRANSAKSI ================================= */
+        $trxCurrency = $this->getFormCurrencyInstructedAmountXml(array());
+        $trxDate = $this->getFormDateCurrencyAmountXml(array());
+        $transaksi = $this->getFormTransaksiXml(array(7 => $trxDate, 8 => $trxCurrency));
+        /* ============================ END TRANSAKSI ================================= */
+        
+        
+        /* ============================ INFO LAINNYA ================================= */
+        $infoLainnya = $this->getFormInfoLainXml(array());
+        /* ============================ END INFO LAINNYA ================================= */
+
+        $ifti = array(
+            'localId' => $param->localId,
+            'umum' => $umum,
+            'pjkBankSebagai' => $param->pjkBankSebagai,
+            'identitasPengirim' => $identitasPengirim,
+            'identitasPenerima' => $identitasPenerima,
+            'transaksi' => $transaksi,
+            'informasiLainnya' => $infoLainnya
+        );
+
+        return $ifti;
     }
 
-    public function actionZip() {
-        $filename = time() . '.zip';
-        if (isset($_POST['pics'])) {
-            $this->createZip($filename, $_POST['pics']);
+    public function getFormInfoLainXml($param) {
+        $tmp = array(
+            'infSendersCorrespondent',
+            'infReceiverCorrespondent',
+            'infThirdReimbursementInstitution',
+            'infIntermediaryInstitution',
+            'remittanceInformation',
+            'senderToReceiverInformation',
+            'regulatoryReporting',
+            'envelopeContents'
+        );
+        $data = $this->setArray($tmp, $param);
+        return $data;
+    }
 
-            if (file_exists(Yii::app()->params['tmp'] . $filename)) {
-                // push to download the zip
-                header('Content-type: application/zip');
-                header('Content-Disposition: attachment; filename="' . $filename . '"');
-                readfile(Yii::app()->params['tmp'] . $filename);
-                // remove zip file is exists in temp path
-                unlink(Yii::app()->params['tmp'] . $filename);
+    public function getFormCurrencyInstructedAmountXml($param) {
+        $tmp = array(
+            'currency',
+            'currencyLain',
+            'instructedAmount'
+        );
+        $data = $this->setArray($tmp, $param);
+        return $data;
+    }
+
+    public function getFormDateCurrencyAmountXml($param) {
+        $tmp = array(
+            'valueDate',
+            'amount',
+            'currency',
+            'currencyLain',
+            'amountDalamRupiah'
+        );
+        $data = $this->setArray($tmp, $param);
+        return $data;
+    }
+
+    public function getFormTransaksiXml($param) {
+        $tmp = array(
+            'tglTransaksi',
+            'timeIndication',
+            'sendersReference',
+            'bankOperationCode',
+            'instructionCode',
+            'kanCabPenyelenggaraPengirimAsal',
+            'typeTransactionCode',
+            'dateCurrencyAmount',
+            'currencyInstructedAmount',
+            'exchangeRate',
+            'sendingInstitution',
+            'tujuanTransaksi',
+            'sumberDana'
+        );
+        $data = $this->setArray($tmp, $param);
+        return $data;
+    }
+
+    public function getFormIdentitasXml($param, $type = null) {
+        $type = ($type == null) ? 1 : $type;
+        switch ($type) {
+            case 1:
+                $tmp = array(
+                    'nasabah',
+                    'nonNasabah'
+                );
+                break;
+            case 2:
+                $tmp = array(
+                    'perorangan',
+                    'korporasi'
+                );
+                break;
+            case 3:
+                $tmp = array(
+                    'penyelenggaraPenerimaAkhir',
+                    'penyelenggaraPenerus'
+                );
+                break;
+            default:
+                $tmp = array(
+                    'nasabah',
+                    'nonNasabah'
+                );
+                break;
+        }
+        $data = $this->setArray($tmp, $param);
+        return $data;
+    }
+
+    public function getFormAlamatXml($param, $type = null) {
+        $type = ($type == null) ? 1 : $type;
+        switch ($type) {
+            case 1:
+                $tmp = array(
+                    'alamat',
+                    'negaraBagianKota',
+                    'idNegara',
+                    'negaraLain'
+                );
+                break;
+            case 2:
+                $tmp = array(
+                    'alamat',
+                    'idPropinsi',
+                    'propinsiLain',
+                    'idKabKota',
+                    'kabKotaLain'
+                );
+                break;
+
+            default:
+                $tmp = array(
+                    'alamat',
+                    'negaraBagianKota',
+                    'idNegara',
+                    'negaraLain'
+                );
+                break;
+        }
+        $data = $this->setArray($tmp, $param);
+        return $data;
+    }
+
+    public function getFormNonNasabahXml($param, $type = null) {
+        $type = ($type == null) ? 1 : $type;
+        switch ($type) {
+            case 1:
+                $tmp = array(
+                    'noRekening',
+                    'namaBank',
+                    'namaLengkap',
+                    'tglLahir',
+                    'alamatSesuaiVoucher',
+                    'noTelp'
+                );
+                break;
+            case 2:
+                $tmp = array(
+                    'namaLengkap',
+                    'tglLahir',
+                    'alamat',
+                    'noTelp',
+                    'buktiIdentitas',
+                    'nilaiTransaksiDalamRupiah'
+                );
+                break;
+
+            default:
+                $tmp = array(
+                    'noRekening',
+                    'namaBank',
+                    'namaLengkap',
+                    'tglLahir',
+                    'alamatSesuaiVoucher',
+                    'noTelp'
+                );
+                break;
+        }
+
+
+        $data = $this->setArray($tmp, $param);
+        return $data;
+    }
+
+    public function getFormKorporasiXml($param, $type = null) {
+        $type = ($type == null) ? 1 : $type;
+        switch ($type) {
+            case 1:
+                $tmp = array(
+                    'noRekening',
+                    'namaKorporasi',
+                    'alamatSesuaiVoucher',
+                    'noTelp'
+                );
+                break;
+            case 2:
+                $tmp = array(
+                    'noRekening',
+                    'namaBank',
+                    'namaKorporasi',
+                    'bentukBadan',
+                    'bentukBadanLain',
+                    'bidangUsaha',
+                    'bidangUsahaLain',
+                    'alamatLengkapKorporasi',
+                    'noTelp',
+                    'nilaiTransaksiDalamRupiah'
+                );
+                break;
+            case 3:
+                $tmp = array(
+                    'noRekening',
+                    'namaKorporasi',
+                    'bentukBadan',
+                    'bentukBadanLain',
+                    'bidangUsaha',
+                    'bidangUsahaLain',
+                    'alamatLengkapKorporasi',
+                    'noTelp',
+                    'nilaiTransaksiDalamRupiah'
+                );
+                break;
+
+            default:
+                $tmp = array(
+                    'noRekening',
+                    'namaKorporasi',
+                    'alamatSesuaiVoucher',
+                    'noTelp'
+                );
+                break;
+        }
+
+        $data = $this->setArray($tmp, $param);
+        return $data;
+    }
+
+    public function getFormPeroranganXml($param, $type = null) {
+        $type = ($type == null) ? 1 : $type;
+        switch ($type) {
+            case 1:
+                $tmp = array(
+                    'noRekening',
+                    'namaLengkap',
+                    'tglLahir',
+                    'kewarganegaraan',
+                    'alamatSesuaiVoucher',
+                    'noTelp',
+                    'buktiIdentitas'
+                );
+                break;
+            case 2:
+                $tmp = array(
+                    'noRekening',
+                    'namaBank',
+                    'namaLengkap',
+                    'tglLahir',
+                    'kewarganegaraan',
+                    'pekerjaan',
+                    'pekerjaanLain',
+                    'alamatDomisili',
+                    'alamatSesuaiBuktiIdentitas',
+                    'noTelp',
+                    'buktiIdentitas',
+                    'nilaiTransaksiDalamRupiah'
+                );
+                break;
+            case 3:
+                $tmp = array(
+                    'noRekening',
+                    'namaLengkap',
+                    'tglLahir',
+                    'kewarganegaraan',
+                    'pekerjaan',
+                    'pekerjaanLain',
+                    'alamatDomisili',
+                    'alamatSesuaiBuktiIdentitas',
+                    'noTelp',
+                    'buktiIdentitas',
+                    'nilaiTransaksiDalamRupiah'
+                );
+                break;
+
+            default:
+                $tmp = array(
+                    'noRekening',
+                    'namaLengkap',
+                    'tglLahir',
+                    'kewarganegaraan',
+                    'alamatSesuaiVoucher',
+                    'noTelp',
+                    'buktiIdentitas'
+                );
+                break;
+        }
+
+        $data = $this->setArray($tmp, $param);
+        return $data;
+    }
+
+    public function getFormBuktiIdentitasXml($param) {
+        $tmp = array(
+            'ktp',
+            'sim',
+            'passport',
+            'kimsKitasKitap',
+            'npwp',
+            'buktiLain'
+        );
+        $data = $this->setArray($tmp, $param);
+        return $data;
+    }
+
+    public function getFormBuktiLainXml($param) {
+        $tmp = array(
+            'jenisBuktiLain',
+            'noBuktiLain'
+        );
+        $data = $this->setArray($tmp, $param);
+        return $data;
+    }
+
+    public function getFormKewarganegaraanXml($param) {
+        $tmp = array(
+            'wargaNegara',
+            'idNegara',
+            'negaraLain'
+        );
+        $data = $this->setArray($tmp, $param);
+        return $data;
+    }
+
+    public function getFormUmumXml($param) {
+        $tmp = array(
+            'tglLaporan',
+            'namaPejabatPjk',
+            'jenisLaporan',
+            'noLtklKoreksi'
+        );
+        $data = $this->setArray($tmp, $param);
+        return $data;
+    }
+
+    public function setArray($a, $b) {
+        $data = array();
+        foreach ($a as $key => $value) {
+            $data[$value] = (key_exists($key, $b)) ? $b[$key] : '';
+        }
+        return $data;
+    }
+
+    public function genSwiftXml($param, $xml = null, $root = null, $type = null) {
+        if ($xml == null) {
+            $xml = new DOMDocument('1.0', 'UTF-8');
+            $xml->formatOutput = true;
+            $root = $xml->createElementNS('http://www.w3.org/2005/Atom', 'ifti');
+            $xml->appendChild($root);
+            $root->setAttribute("type", $type);
+            $root->setAttributeNS('http://www.w3.org/2001/XMLSchema-instance', "xsi:noNamespaceSchemaLocation", 'Ifti' . $type . '.xsd');
+        }
+        foreach ($param as $k => $v) {
+            if (is_array($v)) {
+                $tmp = $xml->createElement($k);
+                $nodeTmp = $root->appendChild($tmp);
+                self::genSwiftXml($v, $xml, $nodeTmp);
+            } else {
+                $root->appendChild($xml->createElement($k, $v));
             }
         }
+        return $xml->saveXML();
     }
 
 }

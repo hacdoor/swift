@@ -25,6 +25,13 @@
                     <div id="collapseOne" class="panel-collapse collapse in">
                         <div class="panel-body">
                             <div class="form-group">
+                                <?php echo $form->labelEx($model, 'jenisLaporan', array('class' => 'col-md-2 control-label')); ?>
+                                <div class="col-md-2">
+                                    <?php echo $form->dropDownList($model, 'jenisLaporan', Yii::app()->util->getKodeStandar(array('modul' => 'jenisLaporan', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                                    <?php echo $form->error($model, 'jenisLaporan'); ?>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <?php echo $form->labelEx($model, 'localId', array('class' => 'col-md-2 control-label')); ?>
                                 <div class="col-md-2">
                                     <?php echo $form->textField($model, 'localId', array('class' => 'form-control')); ?>
