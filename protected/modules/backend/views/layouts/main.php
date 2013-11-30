@@ -59,16 +59,30 @@ $admin = Yii::app()->user->getState('admin');
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="icon-exchange"></span> Transaksi <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="<?php echo $this->vars['backendUrl']; ?>swift?type=SwIn">Swift, Incoming</a>
-                                <a href="#">Swift, Outgoing</a>
-                                <a href="#">NonSwift, Incoming</a>
-                                <a href="#">NonSwift, Outgoing</a>
-                                <div class="divider"></div>
-                                <a href="<?php echo $this->vars['backendUrl']; ?>upload?type=cus">Upload data Customer</a>
-                                <a href="<?php echo $this->vars['backendUrl']; ?>upload?type=trx">Upload Transaksi</a>
+                        <ul class="dropdown-menu">                            
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="icon-caret-right caret-sub pull-right"></i>
+                                    Swift
+                                </a>
+                                <ul class="dropdown-menu sub-menu">
+                                    <li><a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming"> Incoming</a></li>
+                                    <li><a href="<?php echo $this->vars['backendUrl']; ?>swiftOutgoing"> Outgoing</a></li>
+                                </ul>
+                            </li>                          
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="icon-caret-right caret-sub pull-right"></i>
+                                    Non Swift
+                                </a>
+                                <ul class="dropdown-menu sub-menu">
+                                    <li><a href="<?php echo $this->vars['backendUrl']; ?>nonswiftIncoming"> Incoming</a></li>
+                                    <li><a href="<?php echo $this->vars['backendUrl']; ?>nonswiftOutgoing"> Outgoing</a></li>
+                                </ul>
                             </li>
+                            <div class="divider"></div>
+                            <li><a href="<?php echo $this->vars['backendUrl']; ?>upload?type=cus">Upload data Customer</a></li>
+                            <li><a href="<?php echo $this->vars['backendUrl']; ?>upload?type=trx">Upload Transaksi</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">

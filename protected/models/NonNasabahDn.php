@@ -2,39 +2,42 @@
 
 
 /**
- * This is the model class for table "peroranganPengirimSwIn".
+ * This is the model class for table "non_nasabah_dn".
  *
- * The followings are the available columns in table 'peroranganPengirimSwIn':
+ * The followings are the available columns in table 'non_nasabah_dn':
  * @property integer $id
+ * @property string $kodeRahasia
  * @property string $noRekening
  * @property string $namaLengkap
  * @property string $tglLahir
- * @property integer $kewarganegaraan
- * @property integer $idNegaraKewarganegaraan
- * @property string $negaraLainnyaKewarganegaraan
  * @property string $alamat
- * @property string $negaraBagianKota
- * @property integer $idNegaraBagianKota
- * @property string $negaraLainnyaBagianKota
  * @property string $noTelp
+ * @property integer $idPropinsi
+ * @property string $propinsiLain
+ * @property integer $idKabKota
+ * @property string $kabKotaLain
  * @property string $ktp
  * @property string $sim
  * @property string $passport
- * @property string $kimsKitasKitab
+ * @property string $kimsKitasKitap
  * @property string $npwp
  * @property string $jenisBuktiLain
  * @property string $noBuktiLain
- * @property integer $nasabahPengirimSwIn_id
+ * @property integer $keterlibatanBeneficialOwner
+ * @property string $hubDgnPemilikDana
+ * @property integer $swift_id
  *
  * The followings are the available model relations:
- * @property NasabahPengirimSwIn $nasabahPengirimSwIn
+ * @property Propinsi $idPropinsi0
+ * @property Kabupaten $idKabKota0
+ * @property Swift $swift
  */
-class PeroranganPengirimSwIn extends CActiveRecord
+class NonNasabahDn extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return PeroranganPengirimSwIn the static model class
+	 * @return NonNasabahDn the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -46,7 +49,7 @@ class PeroranganPengirimSwIn extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'peroranganPengirimSwIn';
+		return 'non_nasabah_dn';
 	}
 
 	/**
@@ -57,16 +60,16 @@ class PeroranganPengirimSwIn extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('noRekening, namaLengkap', 'required'),
-			array('kewarganegaraan, idNegaraKewarganegaraan, idNegaraBagianKota, nasabahPengirimSwIn_id', 'numerical', 'integerOnly'=>true),
-			array('noRekening, negaraLainnyaKewarganegaraan, negaraLainnyaBagianKota', 'length', 'max'=>50),
+			array('noRekening, namaLengkap, idPropinsi, idKabKota, swift_id', 'required'),
+			array('idPropinsi, idKabKota, keterlibatanBeneficialOwner, swift_id', 'numerical', 'integerOnly'=>true),
+			array('kodeRahasia, noRekening, propinsiLain, kabKotaLain, hubDgnPemilikDana', 'length', 'max'=>50),
 			array('namaLengkap', 'length', 'max'=>255),
 			array('alamat', 'length', 'max'=>100),
-			array('negaraBagianKota, noTelp, ktp, sim, passport, kimsKitasKitab, npwp, jenisBuktiLain, noBuktiLain', 'length', 'max'=>30),
+			array('noTelp, ktp, sim, passport, kimsKitasKitap, npwp, jenisBuktiLain, noBuktiLain', 'length', 'max'=>30),
 			array('tglLahir', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, noRekening, namaLengkap, tglLahir, kewarganegaraan, idNegaraKewarganegaraan, negaraLainnyaKewarganegaraan, alamat, negaraBagianKota, idNegaraBagianKota, negaraLainnyaBagianKota, noTelp, ktp, sim, passport, kimsKitasKitab, npwp, jenisBuktiLain, noBuktiLain, nasabahPengirimSwIn_id', 'safe', 'on'=>'search'),
+			array('id, kodeRahasia, noRekening, namaLengkap, tglLahir, alamat, noTelp, idPropinsi, propinsiLain, idKabKota, kabKotaLain, ktp, sim, passport, kimsKitasKitap, npwp, jenisBuktiLain, noBuktiLain, keterlibatanBeneficialOwner, hubDgnPemilikDana, swift_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -78,7 +81,9 @@ class PeroranganPengirimSwIn extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'nasabahPengirimSwIn' => array(self::BELONGS_TO, 'NasabahPengirimSwIn', 'nasabahPengirimSwIn_id'),
+			'idPropinsi0' => array(self::BELONGS_TO, 'Propinsi', 'idPropinsi'),
+			'idKabKota0' => array(self::BELONGS_TO, 'Kabupaten', 'idKabKota'),
+			'swift' => array(self::BELONGS_TO, 'Swift', 'swift_id'),
 		);
 	}
 
@@ -98,25 +103,26 @@ class PeroranganPengirimSwIn extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
+			'kodeRahasia' => 'Kode Rahasia',
 			'noRekening' => 'No Rekening',
 			'namaLengkap' => 'Nama Lengkap',
 			'tglLahir' => 'Tgl Lahir',
-			'kewarganegaraan' => 'Kewarganegaraan',
-			'idNegaraKewarganegaraan' => 'Negara Kewarganegaraan',
-			'negaraLainnyaKewarganegaraan' => 'Negara Lainnya Kewarganegaraan',
 			'alamat' => 'Alamat',
-			'negaraBagianKota' => 'Negara Bagian Kota',
-			'idNegaraBagianKota' => 'Negara',
-			'negaraLainnyaBagianKota' => 'Negara Lainnya',
 			'noTelp' => 'No Telp',
+			'idPropinsi' => 'Id Propinsi',
+			'propinsiLain' => 'Propinsi Lain',
+			'idKabKota' => 'Id Kab Kota',
+			'kabKotaLain' => 'Kab Kota Lain',
 			'ktp' => 'Ktp',
 			'sim' => 'Sim',
 			'passport' => 'Passport',
-			'kimsKitasKitab' => 'Kims Kitas Kitab',
+			'kimsKitasKitap' => 'Kims Kitas Kitap',
 			'npwp' => 'Npwp',
 			'jenisBuktiLain' => 'Jenis Bukti Lain',
 			'noBuktiLain' => 'No Bukti Lain',
-			'nasabahPengirimSwIn_id' => 'Nasabah Pengirim Sw In',
+			'keterlibatanBeneficialOwner' => 'Keterlibatan Beneficial Owner',
+			'hubDgnPemilikDana' => 'Hub Dgn Pemilik Dana',
+			'swift_id' => 'Swift',
 		);
 	}
 
@@ -132,25 +138,26 @@ class PeroranganPengirimSwIn extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
+		$criteria->compare('kodeRahasia',$this->kodeRahasia,true);
 		$criteria->compare('noRekening',$this->noRekening,true);
 		$criteria->compare('namaLengkap',$this->namaLengkap,true);
 		$criteria->compare('tglLahir',$this->tglLahir,true);
-		$criteria->compare('kewarganegaraan',$this->kewarganegaraan);
-		$criteria->compare('idNegaraKewarganegaraan',$this->idNegaraKewarganegaraan);
-		$criteria->compare('negaraLainnyaKewarganegaraan',$this->negaraLainnyaKewarganegaraan,true);
 		$criteria->compare('alamat',$this->alamat,true);
-		$criteria->compare('negaraBagianKota',$this->negaraBagianKota,true);
-		$criteria->compare('idNegaraBagianKota',$this->idNegaraBagianKota);
-		$criteria->compare('negaraLainnyaBagianKota',$this->negaraLainnyaBagianKota,true);
 		$criteria->compare('noTelp',$this->noTelp,true);
+		$criteria->compare('idPropinsi',$this->idPropinsi);
+		$criteria->compare('propinsiLain',$this->propinsiLain,true);
+		$criteria->compare('idKabKota',$this->idKabKota);
+		$criteria->compare('kabKotaLain',$this->kabKotaLain,true);
 		$criteria->compare('ktp',$this->ktp,true);
 		$criteria->compare('sim',$this->sim,true);
 		$criteria->compare('passport',$this->passport,true);
-		$criteria->compare('kimsKitasKitab',$this->kimsKitasKitab,true);
+		$criteria->compare('kimsKitasKitap',$this->kimsKitasKitap,true);
 		$criteria->compare('npwp',$this->npwp,true);
 		$criteria->compare('jenisBuktiLain',$this->jenisBuktiLain,true);
 		$criteria->compare('noBuktiLain',$this->noBuktiLain,true);
-		$criteria->compare('nasabahPengirimSwIn_id',$this->nasabahPengirimSwIn_id);
+		$criteria->compare('keterlibatanBeneficialOwner',$this->keterlibatanBeneficialOwner);
+		$criteria->compare('hubDgnPemilikDana',$this->hubDgnPemilikDana,true);
+		$criteria->compare('swift_id',$this->swift_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
