@@ -37,7 +37,7 @@ class Infolain extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'infolain';
+		return 'info_lain';
 	}
 
 	/**

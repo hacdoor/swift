@@ -47,7 +47,7 @@ class NasabahPerorangan extends CActiveRecord {
      * @return string the associated database table name
      */
     public function tableName() {
-        return 'nasabahPerorangan';
+        return 'nasabah_perorangan';
     }
 
     /**

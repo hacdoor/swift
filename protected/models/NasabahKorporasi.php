@@ -33,7 +33,7 @@ class NasabahKorporasi extends CActiveRecord {
      * @return string the associated database table name
      */
     public function tableName() {
-        return 'nasabahKorporasi';
+        return 'nasabah_korporasi';
     }
 
     /**
