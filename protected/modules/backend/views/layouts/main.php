@@ -21,6 +21,7 @@ $admin = Yii::app()->user->getState('admin');
         <link type="text/css" rel="stylesheet" href="<?php echo $this->vars['assetsUrl']; ?>css/datetimepicker.css">
         <link type="text/css" rel="stylesheet" href="<?php echo $this->vars['assetsUrl']; ?>css/bootstrap-select.min.css">
         <link type="text/css" rel="stylesheet" href="<?php echo $this->vars['assetsUrl']; ?>css/colorbox.css">
+        <link type="text/css" rel="stylesheet" href="<?php echo $this->vars['assetsUrl']; ?>css/chosen.css">
         <link type="text/css" rel="stylesheet" href="<?php echo $this->vars['assetsUrl']; ?>css/yoohee.min.css">
 
     </head>
@@ -158,6 +159,7 @@ $admin = Yii::app()->user->getState('admin');
         <script type="text/javascript" src="<?php echo $this->vars['assetsUrl']; ?>js/jquery.colorbox-min.js"></script>
         <script type="text/javascript" src="<?php echo $this->vars['assetsUrl']; ?>js/jquery.isotope.min.js"></script>
         <script type="text/javascript" src="<?php echo $this->vars['assetsUrl']; ?>js/jquery.table.addrow.js"></script>
+        <script type="text/javascript" src="<?php echo $this->vars['assetsUrl']; ?>js/chosen.jquery.min.js"></script>
         <script type="text/javascript" src="<?php echo $this->vars['assetsUrl']; ?>js/yoohee.js"></script>
 
     </body>
