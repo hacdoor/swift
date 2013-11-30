@@ -247,6 +247,22 @@ class UtilComponent extends CApplicationComponent {
         return $data;
     }
 
+    public function buildDropDownSelect($param, $data) {
+        $id = str_replace('[', '_', $data['name']);
+        $id = str_replace(']', '', $id);
+        $str = '<select class="form-control"  id="' . $id . '" name="' . $data['name'] . '">';
+        $str .= '<option value="">Pilih</option>';
+        foreach ($param as $key => $value) {
+            $data[$key] = $value;
+            $sel = '';
+            if (intval($key) == intval($data['value']))
+                $sel = 'selected="selected"';
+            $str .= '<option value="' . $key . '" ' . $sel . ' >' . $value . '</option>';
+        }
+        $str .= '</select>';
+        return $str;
+    }
+
     public function getKodeStandar($param) {
         if ($param['modul'] === 'tanggal') {
             return date('d/m/Y', strtotime($param['data']));
@@ -354,6 +370,8 @@ class UtilComponent extends CApplicationComponent {
             return $data;
         elseif ($param['data'] === 'all&blank')
             return $this->buildDropDown($data);
+        elseif (is_array($param['data']))
+            return $this->buildDropDownSelect($data, $param['data']);
         else {
             if (array_key_exists($param['data'], $data)) {
                 return $data[$param['data']];
@@ -459,8 +477,8 @@ class UtilComponent extends CApplicationComponent {
                 ));
 
         /* ============================ END UMUM ====================================== */
-        
-        
+
+
         /* ============================ IDENTITAS PENGIRIM ============================ */
         $kewarganegaraanPeroranganPengirim = $this->getFormKewarganegaraanXml(array());
         $alamatSesuaiVoucherPeroranganPengirim = $this->getFormAlamatXml(array());
@@ -486,8 +504,8 @@ class UtilComponent extends CApplicationComponent {
         /* ============================ END IDENTITAS PENGIRIM ============================ */
 
 
-        
-        
+
+
         /* ============================ IDENTITAS PENERIMA ================================= */
         $alamatLengkapKorporasiPenerusPenerima = $this->getFormAlamatXml(array(), 2);
         $korporasiPenerusPenerima = $this->getFormKorporasiXml(array(
@@ -554,14 +572,14 @@ class UtilComponent extends CApplicationComponent {
                 ), 3);
         /* ============================ END IDENTITAS PENERIMA ================================= */
 
-        
+
         /* ============================ TRANSAKSI ================================= */
         $trxCurrency = $this->getFormCurrencyInstructedAmountXml(array());
         $trxDate = $this->getFormDateCurrencyAmountXml(array());
         $transaksi = $this->getFormTransaksiXml(array(7 => $trxDate, 8 => $trxCurrency));
         /* ============================ END TRANSAKSI ================================= */
-        
-        
+
+
         /* ============================ INFO LAINNYA ================================= */
         $infoLainnya = $this->getFormInfoLainXml(array());
         /* ============================ END INFO LAINNYA ================================= */

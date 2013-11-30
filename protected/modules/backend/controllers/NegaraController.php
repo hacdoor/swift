@@ -36,15 +36,15 @@ class NegaraController extends BackendController {
         $sort->modelClass = 'Negara';
         $sort->attributes = array('*');
         $sort->applyOrder($criteria);
-        
+
         $data = Negara::model()->findAll($criteria);
 
-        
+
         $vars = array(
             'data' => $data,
             'pages' => $pages,
             'filters' => $filters,
-            'sort'  => $sort
+            'sort' => $sort
         );
         $this->render('index', $vars);
     }

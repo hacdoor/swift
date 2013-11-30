@@ -78,7 +78,7 @@ class SwiftIncomingController extends BackendController {
             $nasabahPeroranganDn->attributes = $_POST['NasabahPeroranganDn'];
             $nasabahPeroranganDn->swift_id = $model->id;
             $nasabahPeroranganDn->tglLahir = date('Y-m-d', strtotime($nasabahPeroranganDn->tglLahir));
-            if ($nasabahPeroranganDn->save()) { 
+            if ($nasabahPeroranganDn->save()) {
                 $this->refresh();
                 Yii::app()->util->setLog('NasabahPeroranganDn', $nasabahPeroranganDn->id, 'Update data');
                 Yii::app()->user->setFlash('success', 'Success!|' . 'NasabahPeroranganDn has been updated.');
@@ -86,12 +86,12 @@ class SwiftIncomingController extends BackendController {
         }
 
         $dataProvider = new CActiveDataProvider('NasabahPeroranganDn', array(
-            'criteria' => array(
-                'condition' => 'swift_id=:swiftId',
-                'params' => array(':swiftId' => $model->id),
-            ),
-            'pagination' => FALSE,
-        ));
+                    'criteria' => array(
+                        'condition' => 'swift_id=:swiftId',
+                        'params' => array(':swiftId' => $model->id),
+                    ),
+                    'pagination' => FALSE,
+                ));
 
         if (isset($_POST['DeleteButton'])) {
             if (isset($_POST['selectedIds'])) {
@@ -129,12 +129,12 @@ class SwiftIncomingController extends BackendController {
         }
 
         $dataProvider = new CActiveDataProvider('NasabahKorporasiDn', array(
-            'criteria' => array(
-                'condition' => 'swift_id=:swiftId',
-                'params' => array(':swiftId' => $model->id),
-            ),
-            'pagination' => FALSE,
-        ));
+                    'criteria' => array(
+                        'condition' => 'swift_id=:swiftId',
+                        'params' => array(':swiftId' => $model->id),
+                    ),
+                    'pagination' => FALSE,
+                ));
 
         if (isset($_POST['DeleteButton'])) {
             if (isset($_POST['selectedIds'])) {
@@ -172,12 +172,12 @@ class SwiftIncomingController extends BackendController {
         }
 
         $dataProvider = new CActiveDataProvider('NonNasabahDn', array(
-            'criteria' => array(
-                'condition' => 'swift_id=:swiftId',
-                'params' => array(':swiftId' => $model->id),
-            ),
-            'pagination' => FALSE,
-        ));
+                    'criteria' => array(
+                        'condition' => 'swift_id=:swiftId',
+                        'params' => array(':swiftId' => $model->id),
+                    ),
+                    'pagination' => FALSE,
+                ));
 
         if (isset($_POST['DeleteButton'])) {
             if (isset($_POST['selectedIds'])) {
@@ -330,15 +330,56 @@ class SwiftIncomingController extends BackendController {
      * Lists all models.
      */
     public function actionIndex() {
-        $model = new Swift('search');
-        $model->unsetAttributes();  // clear any default values
-        $model->jenisSwift = Swift::TYPE_SWIN;
-        if (isset($_GET['Swift']))
-            $model->attributes = $_GET['Swift'];
 
-        $this->render('index', array(
-            'model' => $model,
-        ));
+        $this->checkAccess('swift.view');
+
+        $data = null;
+        $pages = null;
+        $filters = array(
+            'localId' => '',
+            'noLtdln' => '',
+            'tglLaporan' => '',
+            'jenisLaporan' => '',
+            'status' => ''
+        );
+
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'jenisSwift = :jeniSwift';
+        $criteria->params = array(':jeniSwift' => Swift::TYPE_SWIN);
+
+        if (isset($_GET['Filter']))
+            $filters = $_GET['Filter'];
+        if ($filters['localId'])
+            $criteria->addSearchCondition('localId', $filters['localId']);
+        if ($filters['noLtdln'])
+            $criteria->addSearchCondition('noLtdln', $filters['noLtdln']);
+        if ($filters['tglLaporan'])
+            $criteria->addSearchCondition('tglLaporan', $filters['tglLaporan']);
+        if ($filters['jenisLaporan'])
+            $criteria->addSearchCondition('jenisLaporan', $filters['jenisLaporan']);
+        if ($filters['status'])
+            $criteria->addSearchCondition('status', $filters['status']);
+
+        $dataCount = Swift::model()->count($criteria);
+
+        $pages = new CPagination($dataCount);
+        $pages->setPageSize(Yii::app()->setting->get('list_size'));
+        $pages->applyLimit($criteria);
+
+        $sort = new CSort;
+        $sort->modelClass = 'Swift';
+        $sort->attributes = array('*');
+        $sort->applyOrder($criteria);
+
+        $data = Swift::model()->findAll($criteria);
+
+        $vars = array(
+            'data' => $data,
+            'pages' => $pages,
+            'filters' => $filters,
+            'sort' => $sort,
+        );
+        $this->render('index', $vars);
     }
 
     /**
@@ -373,7 +414,7 @@ class SwiftIncomingController extends BackendController {
         $data = Kabupaten::model()->findAll('propinsi_id=:propinsiId', array(':propinsiId' => (int) $_POST['NasabahPeroranganDn']['idPropinsiDomisili']));
 
         $data = CHtml::listData($data, 'id', 'nama');
-        $data = CMap::mergeArray(array(440=>'Lain-lain'), $data);
+        $data = CMap::mergeArray(array(440 => 'Lain-lain'), $data);
         foreach ($data as $value => $name) {
             echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);
         }

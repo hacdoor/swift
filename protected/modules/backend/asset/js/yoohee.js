@@ -195,21 +195,29 @@ var yoohee = {
             $('.chzn-select').chosen();
         };
         
+        /* Auto Hide Alert */
+        
+        $(".alert-dismissable").animate({
+            opacity: 1.0
+        }, 10000).fadeOut("slow");
+        
         /* Confirm Leave Page */
         
         $('<input type="hidden" id="check" value="" name="check"/>').appendTo($('.form-actions'));
         
         if($('.form-horizontal .form-control').length > 0) {
-            $('.form-horizontal .form-control').each(function(index, item){
-                $(this).change(function(){
-                    $('.form-horizontal #check').val('1');
-                    function closeEditorWarning(){
-                        return 'It looks like you have been editing something -- if you leave before submitting your changes will be lost.'
-                    }
-                    window.onbeforeunload = closeEditorWarning;
+            if(!$('.form-horizontal input[type=submit]').data('clicked')){
+                $('.form-horizontal .form-control').each(function(index, item){
+                    $(this).change(function(){
+                        $('.form-horizontal #check').val('1');
+                        function closeEditorWarning(){
+                            return 'It looks like you have been editing something -- if you leave before submitting your changes will be lost.'
+                        }
+                        window.onbeforeunload = closeEditorWarning;
+                    });
                 });
-            });
-        }
+            };
+        };
         
         /* Add Form Input */
         

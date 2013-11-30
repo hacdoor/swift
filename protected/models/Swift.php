@@ -33,15 +33,12 @@ class Swift extends CActiveRecord {
     const TYPE_SWOUT = 2;
     const TYPE_NONSWIN = 3;
     const TYPE_NONSWOUT = 4;
-    
     const STATUS_DRAFT = 0;
     const STATUS_FINALIZE = 1;
-    
     const JENIS_LAPORAN_BARU = 1;
     const JENIS_LAPORAN_KOREKSI = 2;
     const JENIS_LAPORAN_RECALL = 3;
     const JENIS_LAPORAN_REJECT = 4;
-    
 
     public static function getJenisLaporanOptions() {
         return array(
@@ -58,7 +55,6 @@ class Swift extends CActiveRecord {
         return isset($jenisLaporanOptions[$value]) ?
                 $jenisLaporanOptions[$value] : "unknown jenisLaporan ({$value})";
     }
-    
 
     public static function getStatusOptions() {
         return array(
@@ -216,8 +212,8 @@ class Swift extends CActiveRecord {
         $criteria->compare('keterlibatanBeneficialOwner', $this->keterlibatanBeneficialOwner);
 
         return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
-        ));
+                    'criteria' => $criteria,
+                ));
     }
 
 }

@@ -2,17 +2,18 @@
 $admin = Yii::app()->user->getState('admin');
 $nameSort = (isset($_GET['sort'])) ? $_GET['sort'] : '';
 ?>
+
+<ol class="breadcrumb">
+    <li><a href="<?php echo $this->vars['backendUrl']; ?>">Dashbord</a></li>
+    <li class="active">Negara</li>
+</ol>
+
 <div class="row">
     <div class="col-md-12">
         <div id="content-inner">
             <h1 class="page-title">
                 <span class="icon-user"></span> Negara
-                <div class="btn-group pull-right">
-                    <a href="<?php echo $this->vars['backendUrl']; ?>negara/generatexml" class="btn btn-xs btn-primary" target="blank"><span class="icon icon-file-text"></span> Export to Xml</a>
-                    <a href="<?php echo $this->vars['backendUrl']; ?>negara/genexcel" class="btn btn-xs btn-primary" target="blank"><span class="icon icon-file"></span> Export to Excel</a>
-                </div>
             </h1>
-
             <div class="row">
                 <div class="col-md-10">
                     <div class="table-responsive">
