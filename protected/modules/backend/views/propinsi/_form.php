@@ -25,7 +25,7 @@
                 <?php $listData = Negara::model()->findAll(array('order' => 'nama ASC')); ?>
                 <?php echo $form->labelEx($model, 'negara_id', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-6">
-                    <?php echo $form->dropDownList($model, 'negara_id', CHtml::listData($listData, 'id', 'nama'), array('class' => 'form-control', 'empty' => '- Pilih Negara')); ?>
+                    <?php echo $form->dropDownList($model, 'negara_id', CHtml::listData($listData, 'id', 'nama'), array('class' => 'form-control chzn-select', 'empty' => '- Pilih Negara')); ?>
                     <?php echo $form->error($model, 'negara_id'); ?>
                 </div>
             </div>
