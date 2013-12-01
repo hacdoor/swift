@@ -1193,8 +1193,8 @@ class UtilComponent extends CApplicationComponent {
             $filters_x = $_GET['Filter'];
             foreach ($filters as $key => $value) {
                 if ($filters_x[$key]) {
-                    if (substr_count($key, '&')) {
-                        $exp = explode('&', $key);
+                    if (substr_count($key, '|')) {
+                        $exp = explode('|', $key);
                         $key = current($exp);
                     }
                     $criteria->addSearchCondition($key, $value);
@@ -1226,8 +1226,8 @@ class UtilComponent extends CApplicationComponent {
                 <form method="get" class="form-filter">';
         foreach ($filters as $key => $value) {
             $str .= '<div class="form-group">';
-            if (substr_count($key, '&')) {
-                $exp = explode('&', $key);
+            if (substr_count($key, '|')) {
+                $exp = explode('|', $key);
                 $modul = $exp[1];
                 $str .= Yii::app()->util->getKodeStandar(array('modul' => $modul, 'data' => array('name' => 'Filter[' . $key . ']', 'value' => $value)));
             } else {
