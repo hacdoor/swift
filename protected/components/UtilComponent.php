@@ -16,29 +16,29 @@ class UtilComponent extends CApplicationComponent {
     }
 
     function xssClean($data) {
-        // Fix &entity\n;
+// Fix &entity\n;
         $data = str_replace(array('&', '<', '>'), array('&amp;', '&lt;', '&gt;'), $data);
         $data = preg_replace('/(&#*\w+)[\x00-\x20]+;/u', '$1;', $data);
         $data = preg_replace('/(&#x*[0-9A-F]+);*/iu', '$1;', $data);
         $data = html_entity_decode($data, ENT_COMPAT, 'UTF-8');
-        // Remove any attribute starting with "on" or xmlns
+// Remove any attribute starting with "on" or xmlns
         $data = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu', '$1>', $data);
-        // Remove javascript: and vbscript: protocols
+// Remove javascript: and vbscript: protocols
         $data = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([`\'"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu', '$1=$2nojavascript...', $data);
         $data = preg_replace('#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu', '$1=$2novbscript...', $data);
         $data = preg_replace('#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*-moz-binding[\x00-\x20]*:#u', '$1=$2nomozbinding...', $data);
-        // Only works in IE: <span style="width: expression(alert('Ping!'));"></span>
+// Only works in IE: <span style="width: expression(alert('Ping!'));"></span>
         $data = preg_replace('#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?expression[\x00-\x20]*\([^>]*+>#i', '$1>', $data);
         $data = preg_replace('#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?behaviour[\x00-\x20]*\([^>]*+>#i', '$1>', $data);
         $data = preg_replace('#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*+>#iu', '$1>', $data);
-        // Remove namespaced elements (we do not need them)
+// Remove namespaced elements (we do not need them)
         $data = preg_replace('#</*\w+:\w[^>]*+>#i', '', $data);
         do {
-            // Remove really unwanted tags
+// Remove really unwanted tags
             $old_data = $data;
             $data = preg_replace('#</*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|title|xml)[^>]*+>#i', '', $data);
         } while ($old_data !== $data);
-        // we are done...
+// we are done...
         return $data;
     }
 
@@ -190,7 +190,7 @@ class UtilComponent extends CApplicationComponent {
             'remark' => $remark,
         );
         if ($flag) {
-            //$ci->db->insert('log', $data);
+//$ci->db->insert('log', $data);
             $filename = 'log/logAktifitas.txt';
             if (!file_exists($filename)) {
                 file_put_contents($filename, '');
@@ -209,7 +209,7 @@ class UtilComponent extends CApplicationComponent {
                     exit;
                 }
 
-                // Write $somecontent to our opened file.
+// Write $somecontent to our opened file.
                 if (fwrite($handle, $somecontent) === FALSE) {
                     exit;
                 }
@@ -730,8 +730,7 @@ class UtilComponent extends CApplicationComponent {
 
 
         /* ============================ TRANSAKSI ================================= */
-        $trxCurrency = $this->getFormCurrencyInstructedAmountXml(array(
-                ));
+        $trxCurrency = $this->getFormCurrencyInstructedAmountXml(array());
         $trxDate = $this->getFormDateCurrencyAmountXml(array());
         $transaksi = $this->getFormTransaksiXml(array(7 => $trxDate, 8 => $trxCurrency));
         /* ============================ END TRANSAKSI ================================= */
@@ -1116,36 +1115,67 @@ class UtilComponent extends CApplicationComponent {
     }
 
     public function ahdaGridForm($data, $pages, $actions, $data_grid) {
-        $admin = Yii::app()->user->getState('admin');
-        $frist = current($data);
-        $labels = $frist->attributeLabels();
-        $url_edit = Yii::app()->baseUrl . '/' . Yii::app()->controller->module->id . '/' . $actions['edit']['url'];
-        $url_delete = Yii::app()->baseUrl . '/' . Yii::app()->controller->module->id . '/' . $actions['delete']['url'];
+
         $str = '<div class="col-md-10">
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped list">
                             <thead>
-                                <tr>
-                                    <th class="list-number">#</th>';
-        foreach ($data_grid as $value) {
-            $str.= '<th>' . $labels[$value] . '</th>';
-        }
-        $str .= '<th class="list-actions">Actions</th></tr></thead><tbody>';
-        $currentPage = $pages->currentPage + 1;
+                                <tr>';
+
         if ($data) {
+            $admin = Yii::app()->user->getState('admin');
+            $frist = current($data);
+            $labels = $frist->attributeLabels();
+            $url_edit = Yii::app()->baseUrl . '/' . Yii::app()->controller->module->id . '/' . $actions['edit']['url'];
+            $url_delete = Yii::app()->baseUrl . '/' . Yii::app()->controller->module->id . '/' . $actions['delete']['url'];
+            $str .=' <th class="list-number">#</th>';
+            foreach ($data_grid as $value) {
+                if (is_array($value)) {
+                    $exp = explode('&', $value['relasi']);
+                    $str.= '<th>' . $labels[$exp[0]] . '</th>';
+                } else {
+                    $str.= '<th>' . $labels[$value] . '</th>';
+                }
+            }
+            $str .= '<th class="list-actions">Actions</th></tr></thead><tbody>';
+            $currentPage = $pages->currentPage + 1;
             $i = ($currentPage - 1) * $pages->pageSize;
             foreach ($data as $d) {
                 $i++;
                 $str .= '<tr><td class="list-number">' . $i . '</td>';
                 foreach ($data_grid as $value) {
-                    $str .= '<td>' . $this->purify($d->{$value}) . '</td>';
+                    if (is_array($value)) {
+                        $exp = explode('&', $value['relasi']);
+                        $field = $exp[0];
+                        $relasi = $exp[1];
+                        $modul = explode('[', $relasi);
+                        if (is_array($modul) && count($modul) > 1) {
+                            if ($d->{$field}) {
+                                $modul = str_replace(']', '', $modul[1]);
+                                $data_modul = Yii::app()->util->getKodeStandar(array('modul' => $modul, 'data' => $d->{$field}));
+                                $str .= '<td>' . $this->purify($data_modul) . '</td>';
+                            } else {
+                                $str .= '<td></td>';
+                            }
+                        } else {
+                            if ($d->{$relasi}) {
+                                $str .= '<td>' . $this->purify($d->{$relasi}->{$value['field']}) . '</td>';
+                            } else {
+                                $str .= '<td></td>';
+                            }
+                        }
+                    } else {
+                        $str .= '<td>' . $this->purify($d->{$value}) . '</td>';
+                    }
                 }
                 $str .= '<td class="list-actions customList">';
                 if ($admin->hasPermissions($actions['edit']['permission'])) {
-                    $str .= ' <a href="' . $url_edit . $d->id . '" class="btn btn-xs btn-default bootip" title="Update"><span class="icon icon-pencil"></span></a>';
+                    $icon = key_exists('icon', $actions['edit']) ? $actions['edit']['icon'] : 'pencil';
+                    $str .= ' <a href="' . $url_edit . $d->id . '" class="btn btn-xs btn-default bootip" title="Update"><span class="icon icon-'.$icon.'"></span></a>';
                 }
                 if ($admin->hasPermissions($actions['delete']['permission'])) {
-                    $str .= '<a href="' . $url_delete . $d->id . '" class="btn btn-xs btn-default btn-delete bootip" title="Delete" data-confirm="Are you sure want to delete this record?"><span class="icon icon-trash"></span></a>';
+                    $icon = key_exists('icon', $actions['delete']) ? $actions['delete']['icon'] : 'trash';
+                    $str .= '<a href="' . $url_delete . $d->id . '" class="btn btn-xs btn-default btn-delete bootip" title="Delete" data-confirm="Are you sure want to delete this record?"><span class="icon icon-'.$icon.'"></span></a>';
                 }
                 $str .='</td></tr>';
             }
@@ -1163,6 +1193,10 @@ class UtilComponent extends CApplicationComponent {
             $filters_x = $_GET['Filter'];
             foreach ($filters as $key => $value) {
                 if ($filters_x[$key]) {
+                    if (substr_count($key, '&')) {
+                        $exp = explode('&', $key);
+                        $key = current($exp);
+                    }
                     $criteria->addSearchCondition($key, $value);
                 }
             }
@@ -1192,7 +1226,13 @@ class UtilComponent extends CApplicationComponent {
                 <form method="get" class="form-filter">';
         foreach ($filters as $key => $value) {
             $str .= '<div class="form-group">';
-            $str .= '<input class="form-control" type="text" name="Filter[' . $key . ']" placeholder="' . ucfirst($key) . ' contains ..." value="' . $value . '">';
+            if (substr_count($key, '&')) {
+                $exp = explode('&', $key);
+                $modul = $exp[1];
+                $str .= Yii::app()->util->getKodeStandar(array('modul' => $modul, 'data' => array('name' => 'Filter[' . $key . ']', 'value' => $value)));
+            } else {
+                $str .= '<input class="form-control" type="text" name="Filter[' . $key . ']" placeholder="' . ucfirst($key) . ' contains ..." value="' . $value . '">';
+            }
             $str .= '</div>';
         }
         $str .= '<hr>

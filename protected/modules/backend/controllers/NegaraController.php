@@ -10,11 +10,11 @@ class NegaraController extends BackendController {
     public function actionIndex() {
         $this->checkAccess('negara.view');
 
-        $filters = (isset($_GET['Filter'])) ? $_GET['Filter'] : array('nama' => '', 'kode' => '',);
+        $filters = (isset($_GET['Filter'])) ? $_GET['Filter'] : array('nama' => '', 'kode' => '');
         $data = Yii::app()->util->ahdaGrid('Negara', $filters);
         $actions = array(
-            'edit' => array('permission' => 'negara.update', 'url' => 'negara/update/'),
-            'delete' => array('permission' => 'negara.delete', 'url' => 'negara/delete/')
+            'edit' => array('permission' => 'negara.update', 'url' => 'negara/update/', 'icon' => 'pencil'),
+            'delete' => array('permission' => 'negara.delete', 'url' => 'negara/delete/', 'icon' => 'trash')
         );
         $data_grid = array('nama', 'kode');
         $breadcrumb = array(

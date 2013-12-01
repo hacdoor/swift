@@ -11,13 +11,14 @@ class UangController extends BackendController {
 
         $this->checkAccess('uang.view');
 
-        $filters = (isset($_GET['Filter'])) ? $_GET['Filter'] : array('nama' => '', 'simbol' => '',);
+        $filters = (isset($_GET['Filter'])) ? $_GET['Filter'] : array('nama' => '', 'simbol' => '', 'negara_id&negara' => '');
         $data = Yii::app()->util->ahdaGrid('MataUang', $filters);
         $actions = array(
             'edit' => array('permission' => 'uang.update', 'url' => 'mata-uang/update/'),
             'delete' => array('permission' => 'uang.delete', 'url' => 'mata-uang/delete/')
         );
-        $data_grid = array('nama', 'simbol', 'negara_id');
+        $data_grid = array('nama', 'simbol', array('relasi' => 'negara_id&negara', 'field' => 'nama'));
+        //$data_grid = array('nama', 'simbol', array('relasi' => 'negara_id&modul[negara]'));
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'Data Master'),
             1 => array('url' => '', 'label' => 'Mata Uang')
