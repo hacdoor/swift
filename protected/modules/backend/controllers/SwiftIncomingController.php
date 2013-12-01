@@ -12,6 +12,8 @@ class SwiftIncomingController extends BackendController {
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
+
+        $this->checkAccess('swift.create');
         $model = new Swift;
 
         // Uncomment the following line if AJAX validation is needed
@@ -30,8 +32,15 @@ class SwiftIncomingController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Trasaksi'),
+            1 => array('url' => '', 'label' => 'Swift'),
+            2 => array('url' => '', 'label' => 'Buat Baru Swift Incoming')
+        );
+
         $this->render('create', array(
             'model' => $model,
+            'breadcrumb' => $breadcrumb
         ));
     }
 
@@ -41,6 +50,7 @@ class SwiftIncomingController extends BackendController {
      * @param integer $id the ID of the model to be updated
      */
     public function actionUmum($id) {
+        $this->checkAccess('swift.update');
         $model = $this->loadModel($id);
 
         // Uncomment the following line if AJAX validation is needed
@@ -54,8 +64,15 @@ class SwiftIncomingController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Trasaksi'),
+            1 => array('url' => '', 'label' => 'Swift'),
+            2 => array('url' => '', 'label' => 'Sunting Swift Incoming')
+        );
+
         $this->render('umum', array(
             'model' => $model,
+            'breadcrumb' => $breadcrumb
         ));
     }
 

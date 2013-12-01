@@ -174,7 +174,7 @@ class Swift extends CActiveRecord {
     public function attributeLabels() {
         return array(
             'id' => 'ID',
-            'localId' => 'Local',
+            'localId' => 'Local Id',
             'noLtdln' => 'No Ltdln',
             'noLtdlnKoreksi' => 'No Ltdln Koreksi',
             'tglLaporan' => 'Tgl Laporan',

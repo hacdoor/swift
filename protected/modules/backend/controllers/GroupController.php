@@ -31,11 +31,17 @@ class GroupController extends BackendController {
         $pages->applyLimit($criteria);
 
         $data = Group::model()->findAll($criteria);
+        
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'System'),
+            1 => array('url' => '', 'label' => 'Kelompok')
+        );
 
         $vars = array(
             'data' => $data,
             'pages' => $pages,
             'filters' => $filters,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('index', $vars);
@@ -52,24 +58,11 @@ class GroupController extends BackendController {
         foreach ($rawPermissions as $p) {
             $ps = explode('.', $p->name);
             switch ($ps[0]) {
-                case 'content':
-                    $key = 'Content';
-                    break;
-                case 'comment':
-                    $key = 'Comment';
-                    break;
                 case 'negara':
                     $key = 'Negara';
                     break;
-                case 'taxonomy':
-                case 'classification':
-                    $key = 'Category';
-                    break;
-                case 'media':
-                    $key = 'Media';
-                    break;
-                case 'user':
-                    $key = 'User';
+                case 'propinsi':
+                    $key = 'Propinsi';
                     break;
                 case 'admin':
                     $key = 'Admin';
@@ -131,24 +124,11 @@ class GroupController extends BackendController {
         foreach ($rawPermissions as $p) {
             $ps = explode('.', $p->name);
             switch ($ps[0]) {
-                case 'content':
-                    $key = 'Content';
-                    break;
-                case 'comment':
-                    $key = 'Comment';
-                    break;
                 case 'negara':
                     $key = 'Negara';
                     break;
-                case 'taxonomy':
-                case 'classification':
-                    $key = 'Category';
-                    break;
-                case 'media':
-                    $key = 'Media';
-                    break;
-                case 'user':
-                    $key = 'User';
+                case 'propinsi':
+                    $key = 'Propinsi';
                     break;
                 case 'admin':
                     $key = 'Admin';

@@ -6,8 +6,7 @@ $nameSort = (isset($_GET['sort'])) ? $_GET['sort'] : '';
 <div class="row">
     <div class="col-md-12">
         <div id="content-inner">
-            <h1 class="page-title"><span class="icon-user"></span> Propinsi</h1>
-
+            <?php echo Yii::app()->util->ahdaTitleGridForm(array('icon' => 'map-marker', 'label' => $title)) ?>
             <div class="row">
                 <div class="col-md-10">
                     <div class="table-responsive">

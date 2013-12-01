@@ -22,6 +22,18 @@ body{
     -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
 }
 
+.collapse {
+    position: relative;
+}
+
+.linkHead {
+    position: absolute;
+    width: 15%;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+
 #panel-login {
     margin-top: 15%;
 }
@@ -110,6 +122,52 @@ body{
 
 .chzn-search input {
     width: 100% !important;
+}
+
+/* NavTab Modif */
+
+.modifNavTab .nav-tabs {
+    border-color: #eee;
+}
+
+.modifNavTab .nav-tabs > li.active > a, .modifNavTab .nav-tabs > li.active > a:hover, .modifNavTab .nav-tabs > li.active > a:focus {
+    border-color: #eee;
+    border-bottom-color: transparent;
+    background-color: #fff;
+    color: #000;
+}
+
+.modifNavTab .nav-tabs > li > a {
+    background: #F5F5F5;
+    color: #999;
+    text-shadow: 0 1px #eee;
+}
+
+.modifNavTab .nav-tabs > li .caret {
+    border-top-color: #999;
+    border-bottom-color: #999;
+}
+
+.modifNavTab .nav-tabs > li:hover > a {
+    color: #444;
+    border-bottom-color: transparent;
+}
+
+.modifNavTab .nav-tabs > li:hover .caret {
+    border-top-color: #444;
+    border-bottom-color: #444;
+}
+
+.modifNavTab .nav-tabs .dropdown-menu {
+    min-width: 180px !important;
+}
+
+.infoSwift span.itemSum {
+    cursor: default;
+}
+
+.noBorderTop {
+    border-top: none !important;
 }
 
 /* Dashbord */

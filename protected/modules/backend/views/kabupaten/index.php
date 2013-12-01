@@ -2,11 +2,11 @@
 $admin = Yii::app()->user->getState('admin');
 $nameSort = (isset($_GET['sort'])) ? $_GET['sort'] : '';
 ?>
+<?php echo Yii::app()->util->ahdaBreadcrumbGridForm($breadcrumb) ?>
 <div class="row">
     <div class="col-md-12">
         <div id="content-inner">
-            <h1 class="page-title"><span class="icon-user"></span> Kabupaten</h1>
-
+            <?php echo Yii::app()->util->ahdaTitleGridForm(array('icon' => 'map-marker', 'label' => $title)) ?>
             <div class="row">
                 <div class="col-md-10">
                     <div class="table-responsive">
@@ -57,7 +57,7 @@ $nameSort = (isset($_GET['sort'])) ? $_GET['sort'] : '';
                 <div class="col-md-2">
 
                     <?php if ($admin->hasPermissions('kabupaten.create')): ?>
-                        <a href="<?php echo $this->vars['backendUrl']; ?>kabupaten/create" class="btn btn-primary btn-lg btn-block"><span class="icon icon-plus"></span> Create new</a>
+                        <a href="<?php echo $this->vars['backendUrl']; ?>kabupaten/create" class="btn btn-primary btn-lg btn-block"><span class="icon icon-plus"></span> Buat Baru</a>
                         <hr>
                     <?php endif; ?>
 
@@ -132,7 +132,7 @@ $nameSort = (isset($_GET['sort'])) ? $_GET['sort'] : '';
                                 </div>
                                 <div class="form-group">
                                     <?php $listData = Propinsi::model()->findAll(array('order' => 'nama ASC')); ?>
-                                    <select class="form-control" data-placeholder="Pilih Propinsi" id="search-by-Propinsi" name="Filter[propinsi]">
+                                    <select class="form-control chzn-select" data-placeholder="Pilih Propinsi" id="search-by-Propinsi" name="Filter[propinsi]">
                                         <option value="">Pilih</option>
                                         <?php foreach ($listData as $c): ?>
                                             <?php

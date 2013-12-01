@@ -8,44 +8,32 @@ class NasabahKorporasiController extends BackendController {
     }
 
     public function actionIndex() {
+
         $this->checkAccess('nasabahKorporasi.view');
 
-        $data = null;
-        $pages = null;
-        $filters = array(
-            'namaKorporasi' => '',
-            'noRekening' => '',
+        $filters = (isset($_GET['Filter'])) ? $_GET['Filter'] : array('namaKorporasi' => '', 'noRekening' => '',);
+        $data = Yii::app()->util->ahdaGrid('NasabahKorporasi', $filters);
+        $actions = array(
+            'edit' => array('permission' => 'nasabahKorporasi.update', 'url' => 'nasabahKorporasi/update/'),
+            'delete' => array('permission' => 'nasabahKorporasi.delete', 'url' => 'nasabahKorporasi/delete/')
         );
-
-        $criteria = new CDbCriteria;
-
-        if (isset($_GET['Filter']))
-            $filters = $_GET['Filter'];
-        if ($filters['namaKorporasi'])
-            $criteria->addSearchCondition('namaKorporasi', $filters['namaKorporasi']);
-        if ($filters['noRekening'])
-            $criteria->addSearchCondition('noRekening', $filters['noRekening']);
-
-        $dataCount = NasabahKorporasi::model()->count($criteria);
-
-        $pages = new CPagination($dataCount);
-        $pages->setPageSize(Yii::app()->setting->get('list_size'));
-        $pages->applyLimit($criteria);
-
-        $sort = new CSort;
-        $sort->modelClass = 'NasabahKorporasi';
-        $sort->attributes = array('*');
-        $sort->applyOrder($criteria);
-
-        $data = NasabahKorporasi::model()->findAll($criteria);
+        $data_grid = array('noRekening', 'namaKorporasi', 'idBentukBadan', 'noTelp');
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Data Master'),
+            1 => array('url' => '', 'label' => 'Nasabah'),
+            2 => array('url' => '', 'label' => 'Nasabah Korporasi')
+        );
 
         $vars = array(
-            'data' => $data,
-            'pages' => $pages,
+            'data' => $data['data'],
+            'pages' => $data['pages'],
             'filters' => $filters,
-            'sort' => $sort
+            'sort' => $data['sort'],
+            'actions' => $actions,
+            'data_grid' => $data_grid,
+            'title' => 'Nasabah Korporasi',
+            'breadcrumb' => $breadcrumb
         );
-
         $this->render('index', $vars);
     }
 
@@ -70,8 +58,16 @@ class NasabahKorporasiController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Data Master'),
+            1 => array('url' => '', 'label' => 'Nasabah'),
+            2 => array('url' => 'nasabahKorporasi', 'label' => 'Nasabah Korporasi'),
+            3 => array('url' => '', 'label' => 'Buat Baru Nasabah Korporasi')
+        );
+
         $vars = array(
             'model' => $model,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('create', $vars);
@@ -105,8 +101,16 @@ class NasabahKorporasiController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Data Master'),
+            1 => array('url' => '', 'label' => 'Nasabah'),
+            2 => array('url' => 'nasabahKorporasi', 'label' => 'Nasabah Korporasi'),
+            3 => array('url' => '', 'label' => 'Sunting Nasabah Korporasi')
+        );
+
         $vars = array(
             'model' => $model,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('update', $vars);

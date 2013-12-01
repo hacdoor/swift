@@ -189,6 +189,10 @@ var yoohee = {
     },
     initialize: function() {
         
+        if($('.dropdown-menu li').hasClass('active')){
+            $(this).parent().parent().addClass('active');
+        }
+        
         /* Auto Load Chosen */
     
         if ($('.chzn-select').length > 0) {
@@ -248,26 +252,28 @@ var yoohee = {
         if(!$('a').hasClass('btn-delete')){
             if(!$('.form-horizontal input[type=submit]').data('clicked')){
                 $('a').each(function(){
-                    if (!this.hash || !this.hasClass('btn-delete') || !$('.form-horizontal input[type=submit]')) {
+                    if (!this.hash || !$('a').hasClass('chzn-single') || !this.hasClass('btn-delete') || !$('.form-horizontal input[type=submit]')) {
                         $(this).on('click', function(e) {
-                            var check = $('.form-horizontal #check').val().trim();
-                            if(check.length){
-                                var o = $(this);
-                                var text = 'Anda yakin meninggalkan halaman ini ?';
-                                var href = o.attr('href');
-                                bootbox.confirm(text, function(result) {
-                                    if (result) {
-                                        window.location.href = href;
-                                        window.onbeforeunload = null;
-                                    }
-                                });
-                                return false;
-                            }
-                            return true;
+                            if(!$(this).hasClass('chzn-single')){
+                                var check = $('.form-horizontal #check').val().trim();
+                                if(check.length){
+                                    var o = $(this);
+                                    var text = 'Anda yakin meninggalkan halaman ini ?';
+                                    var href = o.attr('href');
+                                    bootbox.confirm(text, function(result) {
+                                        if (result) {
+                                            window.location.href = href;
+                                            window.onbeforeunload = null;
+                                        }
+                                    });
+                                    return false;
+                                }
+                                return true;
+                            };
                         });
                     };
                 });
-            }
+            };
         };
 
         /* Actived Dropdown */

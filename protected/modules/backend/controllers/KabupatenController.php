@@ -38,12 +38,19 @@ class KabupatenController extends BackendController {
         $sort->applyOrder($criteria);
 
         $data = Kabupaten::model()->findAll($criteria);
+        
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Data Master'),
+            1 => array('url' => '', 'label' => 'Kabupaten')
+        );
 
         $vars = array(
             'data' => $data,
             'pages' => $pages,
             'filters' => $filters,
-            'sort' => $sort
+            'sort' => $sort,
+            'breadcrumb' => $breadcrumb,
+            'title' => 'Kabupaten'
         );
 
         $this->render('index', $vars);
@@ -68,9 +75,16 @@ class KabupatenController extends BackendController {
                 Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed creating Kabupaten, please check below for errors.');
             }
         }
+        
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Data Master'),
+            1 => array('url' => 'kabupaten', 'label' => 'Kabupaten'),
+            2 => array('url' => '', 'label' => 'Buat Baru Kabupaten')
+        );
 
         $vars = array(
             'model' => $model,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('create', $vars);
@@ -101,8 +115,15 @@ class KabupatenController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Data Master'),
+            1 => array('url' => 'kabupaten', 'label' => 'Kabupaten'),
+            2 => array('url' => '', 'label' => 'Sunting Kabupaten')
+        );
+
         $vars = array(
             'model' => $model,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('update', $vars);

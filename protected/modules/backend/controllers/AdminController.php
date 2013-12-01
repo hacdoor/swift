@@ -46,12 +46,18 @@ class AdminController extends BackendController {
         foreach ($allGroups as $ag) {
             $groups[] = $ag;
         }
+        
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'System'),
+            1 => array('url' => '', 'label' => 'Daftar Pengguna')
+        );
 
         $vars = array(
             'data' => $data,
             'pages' => $pages,
             'filters' => $filters,
             'groups' => $groups,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('index', $vars);
@@ -72,24 +78,11 @@ class AdminController extends BackendController {
         foreach ($rawPermissions as $p) {
             $ps = explode('.', $p->name);
             switch ($ps[0]) {
-                case 'content':
-                    $key = 'Content';
-                    break;
-                case 'comment':
-                    $key = 'Comment';
-                    break;
                 case 'negara':
                     $key = 'Negara';
                     break;
-                case 'taxonomy':
-                case 'classification':
-                    $key = 'Category';
-                    break;
-                case 'media':
-                    $key = 'Media';
-                    break;
-                case 'user':
-                    $key = 'User';
+                case 'propinsi':
+                    $key = 'Propinsi';
                     break;
                 case 'admin':
                     $key = 'Admin';
@@ -156,24 +149,11 @@ class AdminController extends BackendController {
         foreach ($rawPermissions as $p) {
             $ps = explode('.', $p->name);
             switch ($ps[0]) {
-                case 'content':
-                    $key = 'Content';
-                    break;
-                case 'comment':
-                    $key = 'Comment';
-                    break;
                 case 'negara':
                     $key = 'Negara';
                     break;
-                case 'taxonomy':
-                case 'classification':
-                    $key = 'Category';
-                    break;
-                case 'media':
-                    $key = 'Media';
-                    break;
-                case 'user':
-                    $key = 'User';
+                case 'propinsi':
+                    $key = 'Propinsi';
                     break;
                 case 'admin':
                     $key = 'Admin';

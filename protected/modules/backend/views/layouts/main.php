@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <?php
 $admin = Yii::app()->user->getState('admin');
-$isHome = ($this->id == 'default' && $this->action->id == 'dashboard') ? true : false;
+$isHome = ($this->id == 'default' && $this->action->id == 'dashboard' || $this->action->id == 'error') ? true : false;
 ?>
 <html>
     <head>
@@ -38,6 +38,9 @@ $isHome = ($this->id == 'default' && $this->action->id == 'dashboard') ? true : 
                 <span class="icon-bar"></span>
             </button>
             <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <a href="<?php echo $this->vars['backendUrl']; ?>">
+                    <div class="linkHead pull-left"></div>
+                </a>
                 <ul class="nav navbar-nav pull-right">
                     <li <?php if ($this->action->id === 'dashboard') : ?>class="active"<?php endif; ?>><a href="<?php echo $this->vars['backendUrl']; ?>"><span class="icon-th-large"></span> Dashboard</a></li>
                     <li class="dropdown">

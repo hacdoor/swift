@@ -2,7 +2,7 @@
 
     <?php
     $form = $this->beginWidget('CActiveForm', array(
-        'id' => 'user-_form-form',
+        'id' => 'nasabah-perorangan-form',
         'enableAjaxValidation' => false,
         'errorMessageCssClass' => 'label label-danger',
         'htmlOptions' => array('class' => 'form-horizontal', 'role' => 'form')
@@ -37,7 +37,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'kewarganegaraan', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($model, 'kewarganegaraan', Yii::app()->util->getKodeStandar(array('modul' => 'kewarganegaraan', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php echo $form->dropDownList($model, 'kewarganegaraan', Yii::app()->util->getKodeStandar(array('modul' => 'kewarganegaraan', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
                     <?php echo $form->error($model, 'kewarganegaraan'); ?>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'idNegaraKewarganegaraan', array('class' => 'col-md-2 control-label')); ?>
                     <div class="col-md-5">
-                        <?php echo $form->dropDownList($model, 'idNegaraKewarganegaraan', Yii::app()->util->getKodeStandar(array('modul' => 'negara', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                        <?php echo $form->dropDownList($model, 'idNegaraKewarganegaraan', Yii::app()->util->getKodeStandar(array('modul' => 'negara', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
                         <?php echo $form->error($model, 'idNegaraKewarganegaraan'); ?>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'idPekerjaan', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($model, 'idPekerjaan', Yii::app()->util->getKodeStandar(array('modul' => 'pekerjaan', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php echo $form->dropDownList($model, 'idPekerjaan', Yii::app()->util->getKodeStandar(array('modul' => 'pekerjaan', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
                     <?php echo $form->error($model, 'idPekerjaan'); ?>
                 </div>
             </div>
@@ -85,7 +85,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'idPropinsi', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($model, 'idPropinsi', Yii::app()->util->getKodeStandar(array('modul' => 'propinsi', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php echo $form->dropDownList($model, 'idPropinsi', Yii::app()->util->getKodeStandar(array('modul' => 'propinsi', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
                     <?php echo $form->error($model, 'idPropinsi'); ?>
                 </div>
             </div>
@@ -101,7 +101,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'idKabKota', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($model, 'idKabKota', Yii::app()->util->getKodeStandar(array('modul' => 'kabupaten', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php echo $form->dropDownList($model, 'idKabKota', Yii::app()->util->getKodeStandar(array('modul' => 'kabupaten', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
                     <?php echo $form->error($model, 'idKabKota'); ?>
                 </div>
             </div>
@@ -124,7 +124,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'idPropinsiBuktiIdentitas', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($model, 'idPropinsiBuktiIdentitas', Yii::app()->util->getKodeStandar(array('modul' => 'propinsi', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php echo $form->dropDownList($model, 'idPropinsiBuktiIdentitas', Yii::app()->util->getKodeStandar(array('modul' => 'propinsi', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
                     <?php echo $form->error($model, 'idPropinsiBuktiIdentitas'); ?>
                 </div>
             </div>
@@ -140,7 +140,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'idKabKotaBuktiIdentitas', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($model, 'idKabKotaBuktiIdentitas', Yii::app()->util->getKodeStandar(array('modul' => 'kabupaten', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php echo $form->dropDownList($model, 'idKabKotaBuktiIdentitas', Yii::app()->util->getKodeStandar(array('modul' => 'kabupaten', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
                     <?php echo $form->error($model, 'idKabKotaBuktiIdentitas'); ?>
                 </div>
             </div>
@@ -248,7 +248,7 @@
                     $.each(data, function(i, o) {
                         kelSelect.append('<option value="' + o['id'] + '">' + o['nama'] + '</option>');
                     });
-//                    kelSelect.append('<option value="' + 440 + '">Lain-lain</option>');
+                    //                    kelSelect.append('<option value="' + 440 + '">Lain-lain</option>');
                     kelSelect.removeAttr('disabled');
                 },
                 error: function() {
@@ -343,7 +343,7 @@
                     $.each(data, function(i, o) {
                         kelSelect.append('<option value="' + o['id'] + '">' + o['nama'] + '</option>');
                     });
-//                    kelSelect.append('<option value="' + 440 + '">Lain-lain</option>');
+                    //                    kelSelect.append('<option value="' + 440 + '">Lain-lain</option>');
                     kelSelect.removeAttr('disabled');
                 },
                 error: function() {

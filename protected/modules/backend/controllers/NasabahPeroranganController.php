@@ -8,44 +8,32 @@ class NasabahPeroranganController extends BackendController {
     }
 
     public function actionIndex() {
+        
         $this->checkAccess('nasabahPerorangan.view');
 
-        $data = null;
-        $pages = null;
-        $filters = array(
-            'namaLengkap' => '',
-            'noRekening' => '',
+        $filters = (isset($_GET['Filter'])) ? $_GET['Filter'] : array('namaLengkap' => '', 'noRekening' => '',);
+        $data = Yii::app()->util->ahdaGrid('NasabahPerorangan', $filters);
+        $actions = array(
+            'edit' => array('permission' => 'nasabahPerorangan.update', 'url' => 'nasabahPerorangan/update/'),
+            'delete' => array('permission' => 'nasabahPerorangan.delete', 'url' => 'nasabahPerorangan/delete/')
         );
-
-        $criteria = new CDbCriteria;
-
-        if (isset($_GET['Filter']))
-            $filters = $_GET['Filter'];
-        if ($filters['namaLengkap'])
-            $criteria->addSearchCondition('namaLengkap', $filters['namaLengkap']);
-        if ($filters['noRekening'])
-            $criteria->addSearchCondition('noRekening', $filters['noRekening']);
-
-        $dataCount = NasabahPerorangan::model()->count($criteria);
-
-        $pages = new CPagination($dataCount);
-        $pages->setPageSize(Yii::app()->setting->get('list_size'));
-        $pages->applyLimit($criteria);
-
-        $sort = new CSort;
-        $sort->modelClass = 'NasabahPerorangan';
-        $sort->attributes = array('*');
-        $sort->applyOrder($criteria);
-        
-        $data = NasabahPerorangan::model()->findAll($criteria);
+        $data_grid = array('noRekening', 'namaLengkap', 'tglLahir', 'kewarganegaraan');
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Data Master'),
+            1 => array('url' => '', 'label' => 'Nasabah'),
+            2 => array('url' => '', 'label' => 'Nasabah Perorangan')
+        );
 
         $vars = array(
-            'data' => $data,
-            'pages' => $pages,
+            'data' => $data['data'],
+            'pages' => $data['pages'],
             'filters' => $filters,
-            'sort'  => $sort
+            'sort' => $data['sort'],
+            'actions' => $actions,
+            'data_grid' => $data_grid,
+            'title' => 'Nasabah Perorangan',
+            'breadcrumb' => $breadcrumb
         );
-
         $this->render('index', $vars);
     }
 
@@ -71,9 +59,17 @@ class NasabahPeroranganController extends BackendController {
                 Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed creating NasabahPerorangan, please check below for errors.');
             }
         }
+        
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Data Master'),
+            1 => array('url' => '', 'label' => 'Nasabah'),
+            2 => array('url' => 'nasabahPerorangan', 'label' => 'Nasabah Perorangan'),
+            3 => array('url' => '', 'label' => 'Buat Baru Nasabah Perorangan'),
+        );
 
         $vars = array(
             'model' => $model,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('create', $vars);
@@ -109,8 +105,16 @@ class NasabahPeroranganController extends BackendController {
             }
         }
         $model->tglLahir = date('d-m-Y', strtotime($model->tglLahir));
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Data Master'),
+            1 => array('url' => '', 'label' => 'Nasabah'),
+            2 => array('url' => 'nasabahPerorangan', 'label' => 'Nasabah Perorangan'),
+            3 => array('url' => '', 'label' => 'Sunting Nasabah Perorangan'),
+        );
+
         $vars = array(
             'model' => $model,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('update', $vars);

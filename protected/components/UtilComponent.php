@@ -250,7 +250,7 @@ class UtilComponent extends CApplicationComponent {
     public function buildDropDownSelect($param, $data) {
         $id = str_replace('[', '_', $data['name']);
         $id = str_replace(']', '', $id);
-        $str = '<select class="form-control"  id="' . $id . '" name="' . $data['name'] . '">';
+        $str = '<select class="form-control chzn-select"  id="' . $id . '" name="' . $data['name'] . '">';
         $str .= '<option value="">Pilih</option>';
         foreach ($param as $key => $value) {
             $data[$key] = $value;
@@ -1314,8 +1314,12 @@ class UtilComponent extends CApplicationComponent {
         }
     }
 
-    public function ahdaTitleGridForm($title) {
-        return $str = '<h1 class="page-title"><span class="icon-user"></span> ' . $title . '</h1>';
+    public function ahdaTitleGridForm($param) {
+        $str = '';
+        if (is_array($param)) {
+            $str .= '<h1 class="page-title"><span class="icon-' . $param['icon'] . '"></span> ' . $param['label'] . '</h1>';
+        }
+        return $str;
     }
 
     public function ahdaBreadcrumbGridForm($param) {

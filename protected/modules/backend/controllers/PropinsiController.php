@@ -49,7 +49,8 @@ class PropinsiController extends BackendController {
             'pages' => $pages,
             'filters' => $filters,
             'sort' => $sort,
-            'breadcrumb' => $breadcrumb
+            'breadcrumb' => $breadcrumb,
+            'title' => 'Propinsi'
         );
 
         $this->render('index', $vars);
@@ -74,9 +75,16 @@ class PropinsiController extends BackendController {
                 Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed creating Propinsi, please check below for errors.');
             }
         }
+        
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Data Master'),
+            1 => array('url' => 'propinsi', 'label' => 'Propinsi'),
+            2 => array('url' => '', 'label' => 'Buat Baru Propinsi')
+        );
 
         $vars = array(
             'model' => $model,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('create', $vars);
@@ -106,9 +114,16 @@ class PropinsiController extends BackendController {
                 Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed updating Propinsi, please check below for errors.');
             }
         }
+        
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Data Master'),
+            1 => array('url' => 'propinsi', 'label' => 'Propinsi'),
+            2 => array('url' => '', 'label' => 'Sunting Propinsi')
+        );
 
         $vars = array(
             'model' => $model,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('update', $vars);

@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col-md-12">
         <div id="content-inner">
-            <?php echo Yii::app()->util->ahdaTitleGridForm($title) ?>
+            <?php echo Yii::app()->util->ahdaTitleGridForm(array('icon' => 'flag', 'label' => $title)) ?>
             <div class="row">
                 <?php echo Yii::app()->util->ahdaGridForm($data, $pages, $actions, $data_grid) ?>
                 <div class="col-md-2">

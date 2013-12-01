@@ -8,7 +8,6 @@ $this->breadcrumbs = array(
     'Update',
 );
 
-
 $this->menu = array(
     array('label' => 'Umum', 'url' => array('umum', 'id' => $model->id)),
     array('label' => 'Identitas Pengirim',
@@ -48,6 +47,7 @@ $this->menu = array(
     array('label' => 'Informasi Lainnya', 'url' => array('addInfoLain', 'id' => $model->id)),
 );
 ?>
+
 <?php if (Yii::app()->user->hasFlash('success')): ?>
     <div class="flash-success">
         <?php echo Yii::app()->user->getFlash('success'); ?>

@@ -1,37 +1,30 @@
-<?php
-/* @var $this SwiftController */
-/* @var $model Swift */
-/* @var $form CActiveForm */
-?>
-
 <div class="form-wrapper">
 
     <?php
     $form = $this->beginWidget('CActiveForm', array(
         'id' => 'swift-form',
-        'enableAjaxValidation' => true,
+        'enableAjaxValidation' => false,
+        'enableClientValidation' => true,
+        'clientOptions' => array(
+            'validateOnSubmit' => true,
+        ),
         'errorMessageCssClass' => 'label label-danger',
         'htmlOptions' => array('class' => 'form-horizontal', 'role' => 'form')
-    ));
+            ));
     ?>
-
 
     <div class="col-md-12">
 
         <fieldset>
 
-            <p class="note">Fields with <span class="required">*</span> are required.</p>
-
-            <?php echo $form->errorSummary($model); ?>
-
-
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'jenisLaporan', array('class' => 'col-md-2 control-label')); ?>
-                <div class="col-md-5">
+                <div class="col-md-2">
                     <?php echo $form->dropDownList($model, 'jenisLaporan', Yii::app()->util->getKodeStandar(array('modul' => 'jenisLaporan', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
                     <?php echo $form->error($model, 'jenisLaporan'); ?>
                 </div>
             </div>
+
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'localId', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-2">
@@ -39,20 +32,23 @@
                     <?php echo $form->error($model, 'localId'); ?>
                 </div>
             </div>
+
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'noLtdlnKoreksi', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-2">
-                    <?php echo $form->textField($model, 'noLtdlnKoreksi', array('class' => 'form-control', 'readonly' => 'readonly', 'value' => isset($number) ? $number : $model->noLtdln)); ?>
+                    <?php echo $form->textField($model, 'noLtdlnKoreksi', array('class' => 'form-control', 'placeholder' => 'Otomatis', 'readonly' => 'readonly', 'value' => isset($number) ? $number : $model->noLtdln)); ?>
                     <?php echo $form->error($model, 'noLtdlnKoreksi'); ?>
                 </div>
             </div>
+
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'tglLaporan', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-2">
-                    <?php echo $form->textField($model, 'tglLaporan', array('class' => 'form-control dateSwift', 'readonly' => 'readonly', 'data-date-format' => 'dd-mm-yyyy')); ?>
+                    <?php echo $form->textField($model, 'tglLaporan', array('class' => 'form-control dateSwift', 'readonly' => 'readonly', 'data-date-format' => 'dd-mm-yyyy', 'value' => date('d-m-Y'))); ?>
                     <?php echo $form->error($model, 'tglLaporan'); ?>
                 </div>
             </div>
+
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'namaPjk', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -60,6 +56,7 @@
                     <?php echo $form->error($model, 'namaPjk'); ?>
                 </div>
             </div>
+
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'namaPejabatPjk', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -67,6 +64,7 @@
                     <?php echo $form->error($model, 'namaPejabatPjk'); ?>
                 </div>
             </div>
+
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'pjkBankSebagai', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -74,6 +72,7 @@
                     <?php echo $form->error($model, 'pjkBankSebagai'); ?>
                 </div>
             </div>
+
         </fieldset>
     </div>
 
@@ -85,7 +84,7 @@
 
     <?php $this->endWidget(); ?>
 
-</div><!-- form -->
+</div>
 
 <script>
     $('#Swift_jenisLaporan').on('change', function() {

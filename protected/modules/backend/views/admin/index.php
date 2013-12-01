@@ -1,11 +1,11 @@
 <?php
 $admin = Yii::app()->user->getState('admin');
 ?>
+<?php echo Yii::app()->util->ahdaBreadcrumbGridForm($breadcrumb) ?>
 <div class="row">
     <div class="col-md-12">
         <div id="content-inner">
             <h1 class="page-title"><span class="icon-user"></span> Admin</h1>
-
             <div class="row">
                 <div class="col-md-10">
                     <div class="table-responsive">
@@ -128,6 +128,12 @@ $admin = Yii::app()->user->getState('admin');
                     </div>
                 </div>
                 <div class="col-md-2">
+
+                    <?php if ($admin->hasPermissions('admin.create')): ?>
+                        <a href="<?php echo $this->vars['backendUrl']; ?>admin/create" class="btn btn-primary btn-lg btn-block"><span class="icon icon-plus"></span> Buat Baru</a>                   
+                        <hr>
+                    <?php endif; ?>
+
                     <?php
                     if ($pages->pageCount > 1):
                         $qs = array();
@@ -219,10 +225,6 @@ $admin = Yii::app()->user->getState('admin');
                             </form>
                         </div>
                     </div>
-                    <?php if ($admin->hasPermissions('admin.create')): ?>
-                        <hr>
-                        <a href="<?php echo $this->vars['backendUrl']; ?>admin/create" class="btn btn-primary btn-lg btn-block"><span class="icon icon-plus"></span> Create new</a>
-                    <?php endif; ?>
                 </div>
             </div>
         </div>

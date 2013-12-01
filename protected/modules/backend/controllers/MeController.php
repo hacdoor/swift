@@ -1,56 +1,66 @@
 <?php
 
-class MeController extends BackendController
-{
-	protected function beforeAction($action) {
-		$this->checkAccess();
-		return parent::beforeAction($action);
-	}
+class MeController extends BackendController {
 
-	public function actionIndex() {
-		$me = Yii::app()->user->getState('admin');
+    protected function beforeAction($action) {
+        $this->checkAccess();
+        return parent::beforeAction($action);
+    }
 
-		$model = Admin::model()->findByPk($me->id);
-		$userPwd = $model->password;
+    public function actionIndex() {
+        $me = Yii::app()->user->getState('admin');
 
-		if (!$model) {
-			$this->redirect($this->vars['backendUrl'] . 'default/dashboard');
-			Yii::app()->end();
-		}
+        $model = Admin::model()->findByPk($me->id);
+        $userPwd = $model->password;
 
-		$tstamp = date('Y-m-d H:i:s');
+        if (!$model) {
+            $this->redirect($this->vars['backendUrl'] . 'default/dashboard');
+            Yii::app()->end();
+        }
 
-		if (isset($_POST['Admin'])) {
-			$model->attributes = $_POST['Admin'];
-			$model->update_time = $tstamp;
-			$model->is_active = 1;
+        $tstamp = date('Y-m-d H:i:s');
 
-			$changePwd = true;
-			if (!isset($_POST['Admin']['change_password'])) {
-				$changePwd = false;
-			} else {
-				if ($_POST['Admin']['change_password'] !== '1') $changePwd = false;
-			}
+        if (isset($_POST['Admin'])) {
+            $model->attributes = $_POST['Admin'];
+            $model->update_time = $tstamp;
+            $model->is_active = 1;
 
-			if (!$changePwd) $model->password = $model->confirm_password = $userPwd;
+            $changePwd = true;
+            if (!isset($_POST['Admin']['change_password'])) {
+                $changePwd = false;
+            } else {
+                if ($_POST['Admin']['change_password'] !== '1')
+                    $changePwd = false;
+            }
 
-			if ($model->validate()) {
-				if ($changePwd) $model->password = $model->confirm_password = Yii::app()->util->encryptPassword($model->password);
-				if ($model->save()) {
-					// Redirect
-					Yii::app()->user->setFlash('success', 'Success!|' . 'Account has been updated.');
-				} else {
-					Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed updating your Account, please try again.');
-				}
-			} else {
-				Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed updating Account, please check below for errors.');
-			}
-		}
+            if (!$changePwd)
+                $model->password = $model->confirm_password = $userPwd;
 
-		$vars = array(
-			'model' => $model,
-		);
+            if ($model->validate()) {
+                if ($changePwd)
+                    $model->password = $model->confirm_password = Yii::app()->util->encryptPassword($model->password);
+                if ($model->save()) {
+                    // Redirect
+                    Yii::app()->user->setFlash('success', 'Success!|' . 'Account has been updated.');
+                } else {
+                    Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed updating your Account, please try again.');
+                }
+            } else {
+                Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed updating Account, please check below for errors.');
+            }
+        }
 
-		$this->render('index', $vars);
-	}
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'System'),
+            1 => array('url' => '', 'label' => $model->username)
+        );
+
+        $vars = array(
+            'model' => $model,
+            'breadcrumb' => $breadcrumb
+        );
+
+        $this->render('index', $vars);
+    }
+
 }

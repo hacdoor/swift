@@ -67,6 +67,7 @@ $this->widget('ext.mbmenu.MbMenu', array(
 <div class="row">
     <div class="col-md-12">
         <div id="content-inner">
+            <?php echo $this->renderPartial('_headerMenu', array('model' => $model)); ?>
             <h1 class="page-title">
                 <span class="icon-plus"></span> <?php echo $nasabahPeroranganDn->isNewRecord ? 'Tambah' : 'Update'; ?> Identitas Penerima Nasabah Perorangan Swift Incoming
                 <a href="<?php echo $this->createUrl('index'); ?>" class="btn btn-xs btn-primary pull-right"><span class="icon icon-chevron-left"></span> Back</a>
@@ -74,11 +75,16 @@ $this->widget('ext.mbmenu.MbMenu', array(
 
             <div class="row">
                 <?php echo CHtml::beginForm(); ?>
+                
                 <?php
                 $this->widget('zii.widgets.grid.CGridView', array(
                     'id' => 'nasabah-perorangan-dn-grid',
                     'dataProvider' => $dataProvider,
                     'selectableRows' => 2,
+                    'itemsCssClass' => 'table table-bordered table-striped list',
+                    'enablePagination' => FALSE,
+                    'enableSorting' => FALSE,
+                    'emptyText' => 'Tidak ada data',
                     'columns' => array(
                         array(
                             'class' => 'CCheckBoxColumn',
@@ -106,10 +112,12 @@ $this->widget('ext.mbmenu.MbMenu', array(
                     ),
                 ));
                 ?>
+                
                 <?php
                 echo CHtml::submitButton('Delete', array('name' => 'DeleteButton',
                     'confirm' => 'Are you sure you want to permanently delete these comments?'));
                 ?>
+                
             </div>
 
             <?php echo CHtml::endForm(); ?>
