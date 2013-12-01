@@ -99,10 +99,17 @@ class GroupController extends BackendController {
                 Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed creating Group, please check below for errors.');
             }
         }
+        
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'System'),
+            1 => array('url' => 'group', 'label' => 'Kelompok'),
+            2 => array('url' => '', 'label' => 'Buat Baru Kelompok')
+        );
 
         $vars = array(
             'model' => $model,
             'permissions' => $permissions,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('create', $vars);
@@ -171,10 +178,17 @@ class GroupController extends BackendController {
                 Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed updating Group, please check below for errors.');
             }
         }
+        
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'System'),
+            1 => array('url' => 'group', 'label' => 'Kelompok'),
+            2 => array('url' => '', 'label' => 'Sunting Kelompok')
+        );
 
         $vars = array(
             'model' => $model,
             'permissions' => $permissions,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('update', $vars);
