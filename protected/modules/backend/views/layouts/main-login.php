@@ -25,7 +25,7 @@
 
         <!-- Container -->
 
-        <div class="container">
+        <div class="container addPadding" id="content">
 
             <?php echo $content; ?>
 

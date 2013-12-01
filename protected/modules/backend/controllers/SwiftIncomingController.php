@@ -369,6 +369,7 @@ class SwiftIncomingController extends BackendController {
         $sort = new CSort;
         $sort->modelClass = 'Swift';
         $sort->attributes = array('*');
+        $sort->defaultOrder = 'id DESC';
         $sort->applyOrder($criteria);
 
         $data = Swift::model()->findAll($criteria);

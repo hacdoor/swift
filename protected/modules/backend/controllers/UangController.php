@@ -8,18 +8,31 @@ class UangController extends BackendController {
     }
 
     public function actionIndex() {
+
         $this->checkAccess('uang.view');
 
         $filters = (isset($_GET['Filter'])) ? $_GET['Filter'] : array('nama' => '', 'simbol' => '',);
         $data = Yii::app()->util->ahdaGrid('MataUang', $filters);
+        $actions = array(
+            'edit' => array('permission' => 'uang.update', 'url' => 'mata-uang/update/'),
+            'delete' => array('permission' => 'uang.delete', 'url' => 'mata-uang/delete/')
+        );
+        $data_grid = array('nama', 'simbol', 'negara_id');
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Data Master'),
+            1 => array('url' => '', 'label' => 'Mata Uang')
+        );
 
         $vars = array(
             'data' => $data['data'],
             'pages' => $data['pages'],
             'filters' => $filters,
-            'sort' => $data['sort']
+            'sort' => $data['sort'],
+            'actions' => $actions,
+            'data_grid' => $data_grid,
+            'title' => 'Mata Uang',
+            'breadcrumb' => $breadcrumb
         );
-
         $this->render('index', $vars);
     }
 
@@ -43,8 +56,15 @@ class UangController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Data Master'),
+            1 => array('url' => 'mata-uang', 'label' => 'Mata Uang'),
+            2 => array('url' => '', 'label' => 'Buat Baru Mata Uang')
+        );
+
         $vars = array(
             'model' => $model,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('create', $vars);
@@ -75,8 +95,15 @@ class UangController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Data Master'),
+            1 => array('url' => 'mata-uang', 'label' => 'Mata Uang'),
+            2 => array('url' => '', 'label' => 'Sunting Mata Uang')
+        );
+
         $vars = array(
             'model' => $model,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('update', $vars);

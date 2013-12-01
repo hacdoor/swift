@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <?php
 $admin = Yii::app()->user->getState('admin');
+$isHome = ($this->id == 'default' && $this->action->id == 'dashboard') ? true : false;
 ?>
 <html>
     <head>
@@ -29,7 +30,7 @@ $admin = Yii::app()->user->getState('admin');
 
         <!-- Header and Navigation -->
 
-        <nav class="navbar navbar-default navbar-fixed-top headerAdmin" role="navigation">
+        <nav class="navbar navbar-default navbar-fixed-top headerAdmin <?php echo ($isHome) ? 'shadow' : '' ?>" role="navigation">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
@@ -120,7 +121,7 @@ $admin = Yii::app()->user->getState('admin');
 
         <div class="container" id="main">
             <div class="row">
-                <div class="col-md-12" id="content">
+                <div class="col-md-12 <?php echo ($isHome) ? 'minPadding' : 'addPadding' ?>" id="content">
 
                     <?php if (Yii::app()->user->getFlashes(false)): ?>
                         <?php

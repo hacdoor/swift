@@ -1,289 +1,303 @@
 <?php
 
-class AdminController extends BackendController
-{
-	protected function beforeAction($action) {
-		$this->checkAccess();
-		return parent::beforeAction($action);
-	}
+class AdminController extends BackendController {
 
-	public function actionIndex() {
-		$this->checkAccess('admin.view');
+    protected function beforeAction($action) {
+        $this->checkAccess();
+        return parent::beforeAction($action);
+    }
 
-		$data = null;
-		$pages = null;
-		$filters = array(
-			'username' => '',
-			'is_active' => 'all',
-			'group_id' => 'all',
-			'created_start' => '',
-			'created_end' => '',
-		);
+    public function actionIndex() {
+        $this->checkAccess('admin.view');
 
-		$criteria = new CDbCriteria;
-		$criteria->order = 'create_time DESC';
+        $data = null;
+        $pages = null;
+        $filters = array(
+            'username' => '',
+            'is_active' => 'all',
+            'group_id' => 'all',
+            'created_start' => '',
+            'created_end' => '',
+        );
 
-		if (isset($_GET['Filter'])) $filters = $_GET['Filter'];
-		if ($filters['username']) $criteria->addSearchCondition('username', $filters['username']);
-		if ($filters['is_active'] != 'all') $criteria->addCondition('is_active = ' . mysql_escape_string($filters['is_active']));
-		if ($filters['created_start'] || $filters['created_end']) $criteria->addBetweenCondition('create_time', $filters['created_start'] . ' 00:00:00', $filters['created_end'] . ' 23:59:59');
-		
-		$dataCount = Admin::model()->count($criteria);
+        $criteria = new CDbCriteria;
+        $criteria->order = 'create_time DESC';
 
-		$pages = new CPagination($dataCount);
-		$pages->setPageSize(Yii::app()->setting->get('list_size'));
-		$pages->applyLimit($criteria);
+        if (isset($_GET['Filter']))
+            $filters = $_GET['Filter'];
+        if ($filters['username'])
+            $criteria->addSearchCondition('username', $filters['username']);
+        if ($filters['is_active'] != 'all')
+            $criteria->addCondition('is_active = ' . mysql_escape_string($filters['is_active']));
+        if ($filters['created_start'] || $filters['created_end'])
+            $criteria->addBetweenCondition('create_time', $filters['created_start'] . ' 00:00:00', $filters['created_end'] . ' 23:59:59');
 
-		$data = Admin::model()->findAll($criteria);
+        $dataCount = Admin::model()->count($criteria);
 
-		// Groups
-		$groups = array();
-		$allGroups = Group::model()->findAll();
-		foreach ($allGroups as $ag) {
-			$groups[] = $ag;
-		}
+        $pages = new CPagination($dataCount);
+        $pages->setPageSize(Yii::app()->setting->get('list_size'));
+        $pages->applyLimit($criteria);
 
-		$vars = array(
-			'data' => $data,
-			'pages' => $pages,
-			'filters' => $filters,
-			'groups' => $groups,
-		);
+        $data = Admin::model()->findAll($criteria);
 
-		$this->render('index', $vars);
-	}
+        // Groups
+        $groups = array();
+        $allGroups = Group::model()->findAll();
+        foreach ($allGroups as $ag) {
+            $groups[] = $ag;
+        }
 
-	public function actionCreate() {
-		$this->checkAccess('admin.create');
+        $vars = array(
+            'data' => $data,
+            'pages' => $pages,
+            'filters' => $filters,
+            'groups' => $groups,
+        );
 
-		$model = new Admin;
-		$tstamp = date('Y-m-d H:i:s');
+        $this->render('index', $vars);
+    }
 
-		// Groups
-		$groups = Group::model()->findAll();
+    public function actionCreate() {
+        $this->checkAccess('admin.create');
 
-		// Permissions
-		$permissions = array();
-		$rawPermissions = Permission::model()->findAll();
-		foreach ($rawPermissions as $p) {
-			$ps = explode('.', $p->name);
-			switch ($ps[0]) {
-				case 'content':
-					$key = 'Content';
-					break;
-				case 'comment':
-					$key = 'Comment';
-					break;
-				case 'taxonomy':
-				case 'classification':
-					$key = 'Category';
-					break;
-				case 'media':
-					$key = 'Media';
-					break;
-				case 'user':
-					$key = 'User';
-					break;
-				case 'admin':
-					$key = 'Admin';
-					break;
-				default:
-					$key = 'System';
-					break;
-			}
-			$permissions[$key][] = $p;
-		}
+        $model = new Admin;
+        $tstamp = date('Y-m-d H:i:s');
 
-		if (isset($_POST['Admin'])) {
-			$model->attributes = $_POST['Admin'];
-			$model->create_time = $model->update_time = $tstamp;
-			$model->is_active = (isset($_POST['Admin']['is_active'])) ? 1 : 0;
+        // Groups
+        $groups = Group::model()->findAll();
 
-			if ($model->validate()) {
-				$model->password = $model->confirm_password = Yii::app()->util->encryptPassword($model->password);
-				if ($model->save()) {
-					// Save permissions
-					if (isset($_POST['Admin']['permissions'])) {
-						foreach ($_POST['Admin']['permissions'] as $p) {
-							$gp = new AdminPermission;
-							$gp->admin_id = $model->id;
-							$gp->permission_id = $p;
-							$gp->save();
-						}
-					}
+        // Permissions
+        $permissions = array();
+        $rawPermissions = Permission::model()->findAll();
+        foreach ($rawPermissions as $p) {
+            $ps = explode('.', $p->name);
+            switch ($ps[0]) {
+                case 'content':
+                    $key = 'Content';
+                    break;
+                case 'comment':
+                    $key = 'Comment';
+                    break;
+                case 'negara':
+                    $key = 'Negara';
+                    break;
+                case 'taxonomy':
+                case 'classification':
+                    $key = 'Category';
+                    break;
+                case 'media':
+                    $key = 'Media';
+                    break;
+                case 'user':
+                    $key = 'User';
+                    break;
+                case 'admin':
+                    $key = 'Admin';
+                    break;
+                default:
+                    $key = 'System';
+                    break;
+            }
+            $permissions[$key][] = $p;
+        }
 
-					// Redirect
-					Yii::app()->user->setFlash('success', 'Success!|' . 'New Admin has been created.');
-					$this->redirect($this->vars['backendUrl'] . 'admin');
-				} else {
-					Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed creating Admin, please try again.');
-				}
-			} else {
-				Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed creating Admin, please check below for errors.');
-			}
-		}
+        if (isset($_POST['Admin'])) {
+            $model->attributes = $_POST['Admin'];
+            $model->create_time = $model->update_time = $tstamp;
+            $model->is_active = (isset($_POST['Admin']['is_active'])) ? 1 : 0;
 
-		$vars = array(
-			'model' => $model,
-			'groups' => $groups,
-			'permissions' => $permissions,
-		);
+            if ($model->validate()) {
+                $model->password = $model->confirm_password = Yii::app()->util->encryptPassword($model->password);
+                if ($model->save()) {
+                    // Save permissions
+                    if (isset($_POST['Admin']['permissions'])) {
+                        foreach ($_POST['Admin']['permissions'] as $p) {
+                            $gp = new AdminPermission;
+                            $gp->admin_id = $model->id;
+                            $gp->permission_id = $p;
+                            $gp->save();
+                        }
+                    }
 
-		$this->render('create', $vars);
-	}
+                    // Redirect
+                    Yii::app()->user->setFlash('success', 'Success!|' . 'New Admin has been created.');
+                    $this->redirect($this->vars['backendUrl'] . 'admin');
+                } else {
+                    Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed creating Admin, please try again.');
+                }
+            } else {
+                Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed creating Admin, please check below for errors.');
+            }
+        }
 
-	public function actionUpdate($id) {
-		$this->checkAccess('admin.create');
+        $vars = array(
+            'model' => $model,
+            'groups' => $groups,
+            'permissions' => $permissions,
+        );
 
-		$model = Admin::model()->findByPk($id);
-		$userPwd = $model->password;
+        $this->render('create', $vars);
+    }
 
-		if (!$model) {
-			$this->redirect($this->vars['backendUrl'] . 'user');
-			Yii::app()->end();
-		}
+    public function actionUpdate($id) {
+        $this->checkAccess('admin.create');
 
-		// Permissions
-		$permissions = array();
-		$rawPermissions = Permission::model()->findAll();
-		foreach ($rawPermissions as $p) {
-			$ps = explode('.', $p->name);
-			switch ($ps[0]) {
-				case 'content':
-					$key = 'Content';
-					break;
-				case 'comment':
-					$key = 'Comment';
-					break;
-				case 'taxonomy':
-				case 'classification':
-					$key = 'Category';
-					break;
-				case 'media':
-					$key = 'Media';
-					break;
-				case 'user':
-					$key = 'User';
-					break;
-				case 'admin':
-					$key = 'Admin';
-					break;
-				default:
-					$key = 'System';
-					break;
-			}
-			$permissions[$key][] = $p;
-		}
+        $model = Admin::model()->findByPk($id);
+        $userPwd = $model->password;
 
-		$tstamp = date('Y-m-d H:i:s');
-		$groupPerms = array();
-		foreach ($model->group->groupPermissions as $gp) {
-			$groupPerms[] = $gp->permission_id;
-		}
+        if (!$model) {
+            $this->redirect($this->vars['backendUrl'] . 'user');
+            Yii::app()->end();
+        }
 
-		if (isset($_POST['Admin'])) {
-			$model->attributes = $_POST['Admin'];
-			$model->update_time = $tstamp;
-			$model->is_active = (isset($_POST['Admin']['is_active'])) ? 1 : 0;
+        // Permissions
+        $permissions = array();
+        $rawPermissions = Permission::model()->findAll();
+        foreach ($rawPermissions as $p) {
+            $ps = explode('.', $p->name);
+            switch ($ps[0]) {
+                case 'content':
+                    $key = 'Content';
+                    break;
+                case 'comment':
+                    $key = 'Comment';
+                    break;
+                case 'negara':
+                    $key = 'Negara';
+                    break;
+                case 'taxonomy':
+                case 'classification':
+                    $key = 'Category';
+                    break;
+                case 'media':
+                    $key = 'Media';
+                    break;
+                case 'user':
+                    $key = 'User';
+                    break;
+                case 'admin':
+                    $key = 'Admin';
+                    break;
+                default:
+                    $key = 'System';
+                    break;
+            }
+            $permissions[$key][] = $p;
+        }
 
-			$changePwd = true;
-			if (!isset($_POST['Admin']['change_password'])) {
-				$changePwd = false;
-			} else {
-				if ($_POST['Admin']['change_password'] !== '1') $changePwd = false;
-			}
+        $tstamp = date('Y-m-d H:i:s');
+        $groupPerms = array();
+        foreach ($model->group->groupPermissions as $gp) {
+            $groupPerms[] = $gp->permission_id;
+        }
 
-			if (!$changePwd) $model->password = $model->confirm_password = $userPwd;
+        if (isset($_POST['Admin'])) {
+            $model->attributes = $_POST['Admin'];
+            $model->update_time = $tstamp;
+            $model->is_active = (isset($_POST['Admin']['is_active'])) ? 1 : 0;
 
-			if ($model->validate()) {
-				if ($changePwd) $model->password = $model->confirm_password = Yii::app()->util->encryptPassword($model->password);
-				if ($model->save()) {
-					// Delete all permissions
-					$criteria = new CDbCriteria;
-					$criteria->condition = 'admin_id = :adminId';
-					$criteria->params = array(':adminId' => $model->id);
-					AdminPermission::model()->deleteAll($criteria);
+            $changePwd = true;
+            if (!isset($_POST['Admin']['change_password'])) {
+                $changePwd = false;
+            } else {
+                if ($_POST['Admin']['change_password'] !== '1')
+                    $changePwd = false;
+            }
 
-					// Override group permissions
-					$overrides = isset($_POST['Admin']['group_permissions']) ? $_POST['Admin']['group_permissions'] : array();
-					foreach ($groupPerms as $ogp) {
-						if (!in_array($ogp, $overrides)) {
-							$gp = new AdminPermission;
-							$gp->allow = 0;
-							$gp->admin_id = $model->id;
-							$gp->permission_id = $ogp;
-							$gp->save();
-						}
-					}
-					
-					// Save new permissions
-					if (isset($_POST['Admin']['permissions'])) {
-						foreach ($_POST['Admin']['permissions'] as $p) {
-							$gp = new AdminPermission;
-							$gp->admin_id = $model->id;
-							$gp->permission_id = $p;
-							$gp->save();
-						}
-					}
+            if (!$changePwd)
+                $model->password = $model->confirm_password = $userPwd;
 
-					// Redirect
-					Yii::app()->user->setFlash('success', 'Success!|' . 'Admin has been updated.');
-					$this->redirect($this->vars['backendUrl'] . 'admin');
-				} else {
-					Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed updating Admin, please try again.');
-				}
-			} else {
-				Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed updating Admin, please check below for errors.');
-			}
-		}
+            if ($model->validate()) {
+                if ($changePwd)
+                    $model->password = $model->confirm_password = Yii::app()->util->encryptPassword($model->password);
+                if ($model->save()) {
+                    // Delete all permissions
+                    $criteria = new CDbCriteria;
+                    $criteria->condition = 'admin_id = :adminId';
+                    $criteria->params = array(':adminId' => $model->id);
+                    AdminPermission::model()->deleteAll($criteria);
 
-		$vars = array(
-			'model' => $model,
-			'permissions' => $permissions,
-		);
+                    // Override group permissions
+                    $overrides = isset($_POST['Admin']['group_permissions']) ? $_POST['Admin']['group_permissions'] : array();
+                    foreach ($groupPerms as $ogp) {
+                        if (!in_array($ogp, $overrides)) {
+                            $gp = new AdminPermission;
+                            $gp->allow = 0;
+                            $gp->admin_id = $model->id;
+                            $gp->permission_id = $ogp;
+                            $gp->save();
+                        }
+                    }
 
-		$this->render('update', $vars);
-	}
+                    // Save new permissions
+                    if (isset($_POST['Admin']['permissions'])) {
+                        foreach ($_POST['Admin']['permissions'] as $p) {
+                            $gp = new AdminPermission;
+                            $gp->admin_id = $model->id;
+                            $gp->permission_id = $p;
+                            $gp->save();
+                        }
+                    }
 
-	public function actionDelete($id) {
-		$this->checkAccess('admin.delete');
+                    // Redirect
+                    Yii::app()->user->setFlash('success', 'Success!|' . 'Admin has been updated.');
+                    $this->redirect($this->vars['backendUrl'] . 'admin');
+                } else {
+                    Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed updating Admin, please try again.');
+                }
+            } else {
+                Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed updating Admin, please check below for errors.');
+            }
+        }
 
-		$model = Admin::model()->findByPk($id);
+        $vars = array(
+            'model' => $model,
+            'permissions' => $permissions,
+        );
 
-		if (!$model) {
-			$this->redirect($this->vars['backendUrl'] . 'admin');
-			Yii::app()->end();
-		}
+        $this->render('update', $vars);
+    }
 
-		$tstamp = date('Y-m-d H:i:s');
+    public function actionDelete($id) {
+        $this->checkAccess('admin.delete');
 
-		$admin = Yii::app()->user->getState('admin');
-		if ($model->id == $admin->id) {
-			Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed deleting Admin, you cannot delete your own account.');
-			$this->redirect($this->vars['backendUrl'] . 'admin');
-		}
+        $model = Admin::model()->findByPk($id);
 
-		if ($model->group->id == 1 && $admin->group->id != 1) {
-			Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed deleting Admin, you cannot delete this user.');
-			$this->redirect($this->vars['backendUrl'] . 'admin');
-		}
+        if (!$model) {
+            $this->redirect($this->vars['backendUrl'] . 'admin');
+            Yii::app()->end();
+        }
 
-		// Delete admin
-		$modelId = $model->id;
-		if ($model->delete()) {
-			// Delete all permissions
-			$criteria = new CDbCriteria;
-			$criteria->condition = 'admin_id = :adminId';
-			$criteria->params = array(':adminId' => $modelId);
-			AdminPermission::model()->deleteAll($criteria);
+        $tstamp = date('Y-m-d H:i:s');
 
-			Yii::app()->user->setFlash('success', 'Success!|' . 'Admin has been deleted.');
-			$this->redirect($this->vars['backendUrl'] . 'admin');
-		} else {
-			Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed deleting Admin, please try again.');
-			$this->redirect($this->vars['backendUrl'] . 'admin');
-		}
+        $admin = Yii::app()->user->getState('admin');
+        if ($model->id == $admin->id) {
+            Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed deleting Admin, you cannot delete your own account.');
+            $this->redirect($this->vars['backendUrl'] . 'admin');
+        }
 
-		Yii::app()->end();
-	}
+        if ($model->group->id == 1 && $admin->group->id != 1) {
+            Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed deleting Admin, you cannot delete this user.');
+            $this->redirect($this->vars['backendUrl'] . 'admin');
+        }
+
+        // Delete admin
+        $modelId = $model->id;
+        if ($model->delete()) {
+            // Delete all permissions
+            $criteria = new CDbCriteria;
+            $criteria->condition = 'admin_id = :adminId';
+            $criteria->params = array(':adminId' => $modelId);
+            AdminPermission::model()->deleteAll($criteria);
+
+            Yii::app()->user->setFlash('success', 'Success!|' . 'Admin has been deleted.');
+            $this->redirect($this->vars['backendUrl'] . 'admin');
+        } else {
+            Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed deleting Admin, please try again.');
+            $this->redirect($this->vars['backendUrl'] . 'admin');
+        }
+
+        Yii::app()->end();
+    }
+
 }

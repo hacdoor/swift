@@ -1140,7 +1140,7 @@ class UtilComponent extends CApplicationComponent {
                 foreach ($data_grid as $value) {
                     $str .= '<td>' . $this->purify($d->{$value}) . '</td>';
                 }
-                $str .= '<td class="list-actions">';
+                $str .= '<td class="list-actions customList">';
                 if ($admin->hasPermissions($actions['edit']['permission'])) {
                     $str .= ' <a href="' . $url_edit . $d->id . '" class="btn btn-xs btn-default bootip" title="Update"><span class="icon icon-pencil"></span></a>';
                 }
@@ -1177,6 +1177,7 @@ class UtilComponent extends CApplicationComponent {
         $sort = new CSort;
         $sort->modelClass = $model_name;
         $sort->attributes = array('*');
+        $sort->defaultOrder = 'id DESC';
         $sort->applyOrder($criteria);
 
         $data = $model_name::model()->findAll($criteria);
@@ -1259,13 +1260,13 @@ class UtilComponent extends CApplicationComponent {
         $str = '<div class="panel panel-default panel-backend">
                 <div class="panel-heading"><span class="glyphicon glyphicon-flag"></span> Summary</div>
                 <div class="panel-body">';
-        $str .= $pages->itemCount . 'record(s) found.<br>Showing page ' . $currentPage . ' of ' . $pages->pageCount;
+        $str .= $pages->itemCount . ' record(s) found.<br>Showing page ' . $currentPage . ' of ' . $pages->pageCount;
         $str .= '</div></div>';
 
         return $str;
     }
 
-    public function ahdaCreateGridForm($permission, $url, $label='Buat baru') {
+    public function ahdaCreateGridForm($permission, $url, $label = 'Buat baru') {
         $admin = Yii::app()->user->getState('admin');
         if ($admin->hasPermissions($permission)) {
             $url = Yii::app()->baseUrl . '/' . Yii::app()->controller->module->id . '/' . $url;
@@ -1276,17 +1277,17 @@ class UtilComponent extends CApplicationComponent {
     public function ahdaTitleGridForm($title) {
         return $str = '<h1 class="page-title"><span class="icon-user"></span> ' . $title . '</h1>';
     }
-    
+
     public function ahdaBreadcrumbGridForm($param) {
         $url = Yii::app()->baseUrl . '/' . Yii::app()->controller->module->id . '/';
         $str = '<ol class="breadcrumb">';
-        $str .= '<li><a href="'.$url.'">Dashboard</a></li>';
+        $str .= '<li><a href="' . $url . '">Dashboard</a></li>';
         foreach ($param as $value) {
-            $str .= ($value['url']) ? '<li><a href="'.$url.$value['url'].'">'.$value['label'].'</a></li>' : '<li class="active">'.$value['label'].'</li>';
+            $str .= ($value['url']) ? '<li><a href="' . $url . $value['url'] . '">' . $value['label'] . '</a></li>' : '<li class="active">' . $value['label'] . '</li>';
         }
-        
+
         $str .= '</ol>';
-        
+
         return $str;
     }
 

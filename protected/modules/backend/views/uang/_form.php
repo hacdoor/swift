@@ -2,8 +2,12 @@
 
     <?php
     $form = $this->beginWidget('CActiveForm', array(
-        'id' => 'user-_form-form',
+        'id' => 'mata-uang-form',
         'enableAjaxValidation' => false,
+        'enableClientValidation' => true,
+        'clientOptions' => array(
+            'validateOnSubmit' => true,
+        ),
         'errorMessageCssClass' => 'label label-danger',
         'htmlOptions' => array('class' => 'form-horizontal', 'role' => 'form')
             ));
@@ -15,17 +19,17 @@
 
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'nama', array('class' => 'col-md-2 control-label')); ?>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <?php echo $form->textField($model, 'nama', array('class' => 'form-control')); ?>
                     <?php echo $form->error($model, 'nama'); ?>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <?php $listData = Negara::model()->findAll(array('order' => 'nama ASC')); ?>
                 <?php echo $form->labelEx($model, 'negara_id', array('class' => 'col-md-2 control-label')); ?>
-                <div class="col-md-6">
-                    <?php echo $form->dropDownList($model, 'negara_id', CHtml::listData($listData, 'id', 'nama'), array('class' => 'form-control', 'empty' => '- Pilih Negara')); ?>
+                <div class="col-md-3">
+                    <?php echo $form->dropDownList($model, 'negara_id', CHtml::listData($listData, 'id', 'nama'), array('class' => 'form-control chzn-select', 'empty' => '- Pilih')); ?>
                     <?php echo $form->error($model, 'negara_id'); ?>
                 </div>
             </div>
@@ -37,7 +41,7 @@
                     <?php echo $form->error($model, 'simbol'); ?>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'kurs', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-2">

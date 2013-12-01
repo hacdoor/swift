@@ -2,8 +2,12 @@
 
     <?php
     $form = $this->beginWidget('CActiveForm', array(
-        'id' => 'user-_form-form',
+        'id' => 'negara-form',
         'enableAjaxValidation' => false,
+        'enableClientValidation' => true,
+        'clientOptions' => array(
+            'validateOnSubmit' => true,
+        ),
         'errorMessageCssClass' => 'label label-danger',
         'htmlOptions' => array('class' => 'form-horizontal', 'role' => 'form')
             ));

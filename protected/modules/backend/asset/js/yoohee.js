@@ -206,17 +206,24 @@ var yoohee = {
         $('<input type="hidden" id="check" value="" name="check"/>').appendTo($('.form-actions'));
         
         if($('.form-horizontal .form-control').length > 0) {
-            if(!$('.form-horizontal input[type=submit]').data('clicked')){
-                $('.form-horizontal .form-control').each(function(index, item){
-                    $(this).change(function(){
-                        $('.form-horizontal #check').val('1');
+            $('.form-horizontal .form-control').each(function(index, item){
+                $(this).change(function(){
+                    $('.form-horizontal #check').val('1');
+                    if(!$('.form-horizontal input[type=submit]').data('clicked')){
                         function closeEditorWarning(){
                             return 'It looks like you have been editing something -- if you leave before submitting your changes will be lost.'
                         }
                         window.onbeforeunload = closeEditorWarning;
-                    });
+                        $('.form-horizontal input[type=submit]').click(function(){
+                            window.onbeforeunload = null;
+                        });
+                    } else {
+                        $('.form-horizontal input[type=submit]').click(function(){
+                            window.onbeforeunload = null;
+                        });
+                    }
                 });
-            };
+            });
         };
         
         /* Add Form Input */
@@ -238,28 +245,30 @@ var yoohee = {
             });
         }
         
-        if(!$('.form-horizontal input[type=submit]').data('clicked')){
-            $('a').each(function(){
-                if (!this.hash) {
-                    $(this).on('click', function(e) {
-                        var check = $('.form-horizontal #check').val().trim();
-                        if(check.length){
-                            var o = $(this);
-                            var confirmText = 'Anda yakin meninggalkan halaman ini ?';
-                            var href = o.attr('href');
-                            bootbox.confirm(confirmText, function(result) {
-                                if (result) {
-                                    window.location.href = href;
-                                    window.onbeforeunload = null;
-                                }
-                            });
-                            return false;
-                        }
-                        return true;
-                    });
-                }
-            });
-        }
+        if(!$('a').hasClass('btn-delete')){
+            if(!$('.form-horizontal input[type=submit]').data('clicked')){
+                $('a').each(function(){
+                    if (!this.hash || !this.hasClass('btn-delete') || !$('.form-horizontal input[type=submit]')) {
+                        $(this).on('click', function(e) {
+                            var check = $('.form-horizontal #check').val().trim();
+                            if(check.length){
+                                var o = $(this);
+                                var text = 'Anda yakin meninggalkan halaman ini ?';
+                                var href = o.attr('href');
+                                bootbox.confirm(text, function(result) {
+                                    if (result) {
+                                        window.location.href = href;
+                                        window.onbeforeunload = null;
+                                    }
+                                });
+                                return false;
+                            }
+                            return true;
+                        });
+                    };
+                });
+            }
+        };
 
         /* Actived Dropdown */
 

@@ -39,11 +39,17 @@ class PropinsiController extends BackendController {
 
         $data = Propinsi::model()->findAll($criteria);
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Data Master'),
+            1 => array('url' => '', 'label' => 'Propinsi')
+        );
+
         $vars = array(
             'data' => $data,
             'pages' => $pages,
             'filters' => $filters,
-            'sort' => $sort
+            'sort' => $sort,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('index', $vars);
@@ -131,7 +137,7 @@ class PropinsiController extends BackendController {
 
         Yii::app()->end();
     }
-    
+
     public function actiongetPropinsi($id) {
         $this->layout = false;
 
@@ -148,4 +154,5 @@ class PropinsiController extends BackendController {
         echo $callback . '(' . CJSON::encode($response) . ')';
         Yii::app()->end();
     }
+
 }

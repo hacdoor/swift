@@ -2,6 +2,7 @@
 $admin = Yii::app()->user->getState('admin');
 $nameSort = (isset($_GET['sort'])) ? $_GET['sort'] : '';
 ?>
+<?php echo Yii::app()->util->ahdaBreadcrumbGridForm($breadcrumb) ?>
 <div class="row">
     <div class="col-md-12">
         <div id="content-inner">
@@ -57,7 +58,7 @@ $nameSort = (isset($_GET['sort'])) ? $_GET['sort'] : '';
                 <div class="col-md-2">
 
                     <?php if ($admin->hasPermissions('propinsi.create')): ?>
-                        <a href="<?php echo $this->vars['backendUrl']; ?>propinsi/create" class="btn btn-primary btn-lg btn-block"><span class="icon icon-plus"></span> Create new</a>
+                        <a href="<?php echo $this->vars['backendUrl']; ?>propinsi/create" class="btn btn-primary btn-lg btn-block"><span class="icon icon-plus"></span> Buat Baru</a>
                         <hr>
                     <?php endif; ?>
 
@@ -132,7 +133,7 @@ $nameSort = (isset($_GET['sort'])) ? $_GET['sort'] : '';
                                 </div>
                                 <div class="form-group">
                                     <?php $listData = Negara::model()->findAll(array('order' => 'nama ASC')); ?>
-                                    <select class="form-control" data-placeholder="Pilih Negara" id="search-by-negara" name="Filter[negara]">
+                                    <select class="form-control chzn-select" data-placeholder="Pilih Negara" id="search-by-negara" name="Filter[negara]">
                                         <option value="">Pilih</option>
                                         <?php foreach ($listData as $c): ?>
                                             <?php

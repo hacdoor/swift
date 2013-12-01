@@ -1,6 +1,4 @@
-<?php
-$admin = Yii::app()->user->getState('admin');
-?>
+<?php echo Yii::app()->util->ahdaBreadcrumbGridForm($breadcrumb) ?>
 <div class="row">
     <div class="col-md-12">
         <div id="content-inner">

@@ -137,5 +137,4 @@ class NasabahKorporasiController extends BackendController {
         Yii::app()->end();
     }
 
-
 }
