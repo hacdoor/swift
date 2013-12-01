@@ -33,7 +33,7 @@ class SwiftIncomingController extends BackendController {
         }
 
         $breadcrumb = array(
-            0 => array('url' => '', 'label' => 'Trasaksi'),
+            0 => array('url' => '', 'label' => 'Transaksi'),
             1 => array('url' => '', 'label' => 'Swift'),
             2 => array('url' => '', 'label' => 'Buat Baru Swift Incoming')
         );
@@ -65,7 +65,7 @@ class SwiftIncomingController extends BackendController {
         }
 
         $breadcrumb = array(
-            0 => array('url' => '', 'label' => 'Trasaksi'),
+            0 => array('url' => '', 'label' => 'Transaksi'),
             1 => array('url' => '', 'label' => 'Swift'),
             2 => array('url' => '', 'label' => 'Sunting Swift Incoming')
         );
@@ -118,11 +118,18 @@ class SwiftIncomingController extends BackendController {
                 }
             }
         }
+        
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Swift'),
+            2 => array('url' => '', 'label' => 'Identitas Penerima Nasabah Perorangan')
+        );
 
         $this->render('addNasabahPeroranganDn', array(
             'model' => $model,
             'nasabahPeroranganDn' => $nasabahPeroranganDn,
             'dataProvider' => $dataProvider,
+            'breadcrumb' => $breadcrumb
         ));
     }
 
@@ -229,10 +236,17 @@ class SwiftIncomingController extends BackendController {
                 Yii::app()->user->setFlash('success', 'Success!|' . 'NasabahPeroranganLn has been updated.');
             }
         }
+        
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Swift'),
+            2 => array('url' => '', 'label' => 'Identitas Pengirim Nasabah Perorangan')
+        );
 
         $this->render('addNasabahPeroranganLn', array(
             'model' => $model,
             'nasabahPeroranganLn' => $nasabahPeroranganLn,
+            'breadcrumb' => $breadcrumb
         ));
     }
 
@@ -301,9 +315,16 @@ class SwiftIncomingController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Swift'),
+            2 => array('url' => '', 'label' => 'Transaksi')
+        );
+
         $this->render('addTransaksi', array(
             'model' => $model,
             'transaksi' => $transaksi,
+            'breadcrumb' => $breadcrumb
         ));
     }
 

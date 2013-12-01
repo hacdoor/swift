@@ -124,6 +124,25 @@ body{
     width: 100% !important;
 }
 
+fieldset.well {
+    box-shadow: none;
+}
+
+fieldset.well legend {
+    border: 1px solid #ddd;
+    background: #fff;
+    width: auto;
+    padding: 0 20px 5px 20px;
+}
+
+.innerGrid {
+    margin-bottom: 20px;
+}
+
+.innerGrid .grid-view {
+    padding: 0;
+}
+
 /* NavTab Modif */
 
 .modifNavTab .nav-tabs {

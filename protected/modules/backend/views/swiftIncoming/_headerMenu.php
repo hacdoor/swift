@@ -47,7 +47,7 @@
                 <?php endif; ?>
             </ul>
         </li>
-        <li><a href="<?php echo $this->vars['backendUrl'] . 'swiftIncoming/addTransaksi/' . $model->id; ?>">Transaksi</a></li>
+        <li <?php if ($this->action->id == 'addTransaksi'): ?>class="active"<?php endif; ?>><a href="<?php echo $this->vars['backendUrl'] . 'swiftIncoming/addTransaksi/' . $model->id; ?>">Transaksi</a></li>
         <li><a href="<?php echo $this->vars['backendUrl'] . 'swiftIncoming/addInfoLain/' . $model->id; ?>">Informasi Lainnya</a></li>
     </ul>
 </div>

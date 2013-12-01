@@ -1,3 +1,5 @@
+<?php echo Yii::app()->util->ahdaBreadcrumbGridForm($breadcrumb) ?>
+
 <?php
 /* @var $this SwiftController */
 /* @var $model Swift */
@@ -48,34 +50,37 @@ $this->menu = array(
 );
 ?>
 
-<?php if (Yii::app()->user->hasFlash('success')): ?>
-    <div class="flash-success">
-        <?php echo Yii::app()->user->getFlash('success'); ?>
-    </div>
-<?php endif; ?>
-
-<?php echo CHtml::encode($model->getAttributeLabel('localId')); ?>:
-<b><?php echo CHtml::encode($model->localId); ?></b>
-
-<?php echo CHtml::encode($model->getAttributeLabel('noLtdln')); ?>:
-<b><?php echo CHtml::encode($model->noLtdln); ?></b>
 <?php
-$this->widget('ext.mbmenu.MbMenu', array(
-    'items' => $this->menu,
-));
+//$this->widget('ext.mbmenu.MbMenu', array(
+//    'items' => $this->menu,
+//));
 ?>
+
 <div class="row">
     <div class="col-md-12">
-        <div id="content-inner">
+
+        <div class="pull-right infoSwift">
+            <span class="itemSum btn btn-warning">
+                <?php echo CHtml::encode($model->getAttributeLabel('localId')); ?>:
+                <b><?php echo CHtml::encode($model->localId); ?></b>
+            </span>
+            <span class="itemSum btn btn-warning">
+                <?php echo CHtml::encode($model->getAttributeLabel('noLtdln')); ?>:
+                <b><?php echo CHtml::encode($model->noLtdln); ?></b>
+            </span>
+        </div>
+
+        <!-- Header Menu -->
+
+        <?php echo $this->renderPartial('_headerMenu', array('model' => $model)); ?>
+
+        <div id="content-inner" class="noBorderTop">
             <h1 class="page-title">
                 <span class="icon-plus"></span> <?php echo $nasabahPeroranganLn->isNewRecord ? 'Tambah' : 'Update'; ?> Identitas Pengirim Nasabah Perorangan Swift Incoming
                 <a href="<?php echo $this->createUrl('index'); ?>" class="btn btn-xs btn-primary pull-right"><span class="icon icon-chevron-left"></span> Back</a>
             </h1>
-
             <div class="row">
-
                 <?php echo $this->renderPartial('_formAddNasabahPeroranganLn', array('nasabahPeroranganLn' => $nasabahPeroranganLn)); ?>
-
             </div>
         </div>
     </div>

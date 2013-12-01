@@ -46,7 +46,7 @@ class AdminController extends BackendController {
         foreach ($allGroups as $ag) {
             $groups[] = $ag;
         }
-        
+
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'System'),
             1 => array('url' => '', 'label' => 'Daftar Pengguna')
@@ -123,10 +123,17 @@ class AdminController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'System'),
+            1 => array('url' => 'admin', 'label' => 'Daftar Pengguna'),
+            2 => array('url' => '', 'label' => 'Buat Baru Admin')
+        );
+
         $vars = array(
             'model' => $model,
             'groups' => $groups,
             'permissions' => $permissions,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('create', $vars);
@@ -230,9 +237,16 @@ class AdminController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'System'),
+            1 => array('url' => 'admin', 'label' => 'Daftar Pengguna'),
+            2 => array('url' => '', 'label' => 'Buat Baru Admin')
+        );
+
         $vars = array(
             'model' => $model,
             'permissions' => $permissions,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('update', $vars);

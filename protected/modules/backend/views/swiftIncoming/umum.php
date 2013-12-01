@@ -4,6 +4,12 @@
 /* @var $this SwiftController */
 /* @var $model Swift */
 
+$this->breadcrumbs = array(
+    'Swifts' => array('index'),
+    $model->id => array('view', 'id' => $model->id),
+    'Umum',
+);
+
 $this->menu = array(
     array('label' => 'Umum', 'url' => array('umum', 'id' => $model->id), 'itemOptions' => array('class' => 'active')),
     array('label' => 'Identitas Pengirim',
@@ -52,6 +58,7 @@ $this->menu = array(
 
 <div class="row">
     <div class="col-md-12">
+        
         <div class="pull-right infoSwift">
             <span class="itemSum btn btn-warning">
                 <?php echo CHtml::encode($model->getAttributeLabel('localId')); ?>:
