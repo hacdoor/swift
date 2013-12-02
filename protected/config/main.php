@@ -72,10 +72,10 @@ return array(
           // uncomment the following to use a MySQL database
          */
         'db' => array(
-            'connectionString' => 'mysql:host=localhost;dbname=swift',
+            'connectionString' => 'mysql:host=localhost;dbname=swift_ifti',
             'emulatePrepare' => true,
             'username' => 'root',
-            'password' => '',
+            'password' => 'darina',
             'charset' => 'utf8',
         ),
         'errorHandler' => array(

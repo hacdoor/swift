@@ -104,7 +104,7 @@ $isHome = ($this->id == 'default' && $this->action->id == 'dashboard' || $this->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="icon-cog"></span> System <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="#">System Parameter</a>
+                                <a href="<?php echo $this->vars['backendUrl']; ?>company">System Parameter</a>
                                 <a href="<?php echo $this->vars['backendUrl']; ?>admin">Daftar Pengguna</a>
                                 <a href="<?php echo $this->vars['backendUrl']; ?>group">Kelompok</a>
                                 <a href="<?php echo $this->vars['backendUrl']; ?>default/logout">Logout</a>

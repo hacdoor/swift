@@ -12,7 +12,6 @@ class UangController extends BackendController {
         $this->checkAccess('uang.view');
 
         $filters = (isset($_GET['Filter'])) ? $_GET['Filter'] : array('nama' => '', 'simbol' => '', 'negara_id|negara' => '');
-        $get = isset($_GET['Filter']) ? $_GET['Filter'] : '';
         $data = Yii::app()->util->ahdaGrid('MataUang', $filters);
         $actions = array(
             'edit' => array('permission' => 'uang.update', 'url' => 'mata-uang/update/'),

@@ -730,22 +730,46 @@ class UtilComponent extends CApplicationComponent {
 
 
         /* ============================ TRANSAKSI ================================= */
-        $trxCurrency = $this->getFormCurrencyInstructedAmountXml(array());
-        $trxDate = $this->getFormDateCurrencyAmountXml(array());
-        $transaksi = $this->getFormTransaksiXml(array(7 => $trxDate, 8 => $trxCurrency));
+        $trxCurrency = $this->getFormCurrencyInstructedAmountXml(array(
+            $this->getValue($transaksis, 'idCurrencyInstructedAmount'),
+            $this->getValue($transaksis, 'currencyLain'),
+            $this->getValue($transaksis, 'instructedAmount')
+                ));
+        $trxDate = $this->getFormDateCurrencyAmountXml(array(
+            $this->getValue($transaksis, 'valueDate'),
+            $this->getValue($transaksis, 'amount'),
+            $this->getValue($transaksis, 'idCurrency'),
+            $this->getValue($transaksis, 'currencyLain'),
+            $this->getValue($transaksis, 'amountDalamRupiah'),
+                ));
+        $transaksi = $this->getFormTransaksiXml(array(
+            $this->getValue($transaksis, 'tglTransaksi'),
+            $this->getValue($transaksis, 'timeIndication'),
+            $this->getValue($transaksis, 'sendersReference'),
+            $this->getValue($transaksis, 'bankOperationCode'),
+            $this->getValue($transaksis, 'instructionCode'),
+            $this->getValue($transaksis, 'kanCabPenyelenggaraPengirimAsal'),
+            $this->getValue($transaksis, 'typeTransactionCode'),
+            $trxDate,
+            $trxCurrency,
+            $this->getValue($transaksis, 'exchangeRate'),
+            $this->getValue($transaksis, 'sendingInstitution'),
+            $this->getValue($transaksis, 'tujuanTransaksi'),
+            $this->getValue($transaksis, 'sumberDana')
+                ));
         /* ============================ END TRANSAKSI ================================= */
 
 
         /* ============================ INFO LAINNYA ================================= */
         $infoLainnya = $this->getFormInfoLainXml(array(
-            $infolains->infSendersCorrespondent,
-            $infolains->infReceiverCorrespondent,
-            $infolains->infThirdReimbursementInstitution,
-            $infolains->infIntermediaryInstitution,
-            $infolains->remittanceInformation,
-            $infolains->senderToReceiverInformation,
-            $infolains->regulatoryReporting,
-            $infolains->envelopeContents
+            $this->getValue($infolains, 'infSendersCorrespondent'),
+            $this->getValue($infolains, 'infReceiverCorrespondent'),
+            $this->getValue($infolains, 'infThirdReimbursementInstitution'),
+            $this->getValue($infolains, 'infIntermediaryInstitution'),
+            $this->getValue($infolains, 'remittanceInformation'),
+            $this->getValue($infolains, 'senderToReceiverInformation'),
+            $this->getValue($infolains, 'regulatoryReporting'),
+            $this->getValue($infolains, 'envelopeContents')
                 ));
         /* ============================ END INFO LAINNYA ================================= */
 
@@ -1085,6 +1109,11 @@ class UtilComponent extends CApplicationComponent {
         return $data;
     }
 
+    public function getValue($param, $field) {
+        $data = ($param && count($param) > 1) ? $param->{$field} : '';
+        return $data;
+    }
+
     public function setArray($a, $b) {
         $data = array();
         foreach ($a as $key => $value) {
@@ -1126,8 +1155,7 @@ class UtilComponent extends CApplicationComponent {
             $admin = Yii::app()->user->getState('admin');
             $frist = current($data);
             $labels = $frist->attributeLabels();
-            $url_edit = Yii::app()->baseUrl . '/' . Yii::app()->controller->module->id . '/' . $actions['edit']['url'];
-            $url_delete = Yii::app()->baseUrl . '/' . Yii::app()->controller->module->id . '/' . $actions['delete']['url'];
+
             $str .=' <th class="list-number">#</th>';
             foreach ($data_grid as $value) {
                 if (is_array($value)) {
@@ -1169,13 +1197,19 @@ class UtilComponent extends CApplicationComponent {
                     }
                 }
                 $str .= '<td class="list-actions customList">';
-                if ($admin->hasPermissions($actions['edit']['permission'])) {
-                    $icon = key_exists('icon', $actions['edit']) ? $actions['edit']['icon'] : 'pencil';
-                    $str .= ' <a href="' . $url_edit . $d->id . '" class="btn btn-xs btn-default bootip" title="Update"><span class="icon icon-'.$icon.'"></span></a>';
+                if (key_exists('edit', $actions)) {
+                    if ($admin->hasPermissions($actions['edit']['permission'])) {
+                        $url_edit = Yii::app()->baseUrl . '/' . Yii::app()->controller->module->id . '/' . $actions['edit']['url'];
+                        $icon = key_exists('icon', $actions['edit']) ? $actions['edit']['icon'] : 'pencil';
+                        $str .= ' <a href="' . $url_edit . $d->id . '" class="btn btn-xs btn-default bootip" title="Update"><span class="icon icon-' . $icon . '"></span></a>';
+                    }
                 }
-                if ($admin->hasPermissions($actions['delete']['permission'])) {
-                    $icon = key_exists('icon', $actions['delete']) ? $actions['delete']['icon'] : 'trash';
-                    $str .= '<a href="' . $url_delete . $d->id . '" class="btn btn-xs btn-default btn-delete bootip" title="Delete" data-confirm="Are you sure want to delete this record?"><span class="icon icon-'.$icon.'"></span></a>';
+                if (key_exists('delete', $actions)) {
+                    if ($admin->hasPermissions($actions['delete']['permission'])) {
+                        $url_delete = Yii::app()->baseUrl . '/' . Yii::app()->controller->module->id . '/' . $actions['delete']['url'];
+                        $icon = key_exists('icon', $actions['delete']) ? $actions['delete']['icon'] : 'trash';
+                        $str .= '<a href="' . $url_delete . $d->id . '" class="btn btn-xs btn-default btn-delete bootip" title="Delete" data-confirm="Are you sure want to delete this record?"><span class="icon icon-' . $icon . '"></span></a>';
+                    }
                 }
                 $str .='</td></tr>';
             }
@@ -1196,8 +1230,10 @@ class UtilComponent extends CApplicationComponent {
                     if (substr_count($key, '|')) {
                         $exp = explode('|', $key);
                         $key = current($exp);
+                        $criteria->addInCondition($key, array($key => $value));
+                    } else {
+                        $criteria->addSearchCondition($key, $value);
                     }
-                    $criteria->addSearchCondition($key, $value);
                 }
             }
         }
