@@ -154,13 +154,16 @@ $nameSort = (isset($_GET['sort'])) ? $_GET['sort'] : '';
                                     <input class="form-control" type="text" name="Filter[noLtdln]" placeholder="No LTDLN contains ..." value="<?php echo $filters['noLtdln']; ?>">
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" type="text" name="Filter[tglLaporan]" placeholder="Tanggal Laporan contains ..." value="<?php echo $filters['tglLaporan']; ?>">
-                                </div>
-                                <div class="form-group">
                                     <?php echo Yii::app()->util->getKodeStandar(array('modul' => 'jenisLaporan', 'data' => array('name' => 'Filter[jenisLaporan]', 'value' => $filters['jenisLaporan']))) ?>
                                 </div>
                                 <div class="form-group">
                                     <input class="form-control" type="text" name="Filter[status]" placeholder="Status contains ..." value="<?php echo $filters['status']; ?>">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control datepicker" type="text" name="Filter[created_start]" placeholder="Created between ..." value="<?php echo $filters['created_start']; ?>" readonly="readonly" data-date-format="yyyy-mm-dd">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control datepicker" type="text" name="Filter[created_end]" placeholder="... until ..." value="<?php echo $filters['created_end']; ?>" readonly="readonly" data-date-format="yyyy-mm-dd">
                                 </div>
                                 <hr>
                                 <button class="btn btn-danger btn-lg btn-block"><span class="icon icon-filter"></span> Filter</button>

@@ -411,7 +411,8 @@ class SwiftIncomingController extends BackendController {
         $filters = array(
             'localId' => '',
             'noLtdln' => '',
-            'tglLaporan' => '',
+            'created_start' => '',
+            'created_end' => '',
             'jenisLaporan' => '',
             'status' => ''
         );
@@ -426,8 +427,8 @@ class SwiftIncomingController extends BackendController {
             $criteria->addSearchCondition('localId', $filters['localId']);
         if ($filters['noLtdln'])
             $criteria->addSearchCondition('noLtdln', $filters['noLtdln']);
-        if ($filters['tglLaporan'])
-            $criteria->addSearchCondition('tglLaporan', $filters['tglLaporan']);
+        if ($filters['created_start'] || $filters['created_end'])
+            $criteria->addBetweenCondition('tglLaporan', $filters['created_start'] . ' 00:00:00', $filters['created_end'] . ' 23:59:59');
         if ($filters['jenisLaporan'])
             $criteria->addSearchCondition('jenisLaporan', $filters['jenisLaporan']);
         if ($filters['status'])
