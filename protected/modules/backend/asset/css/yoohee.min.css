@@ -230,9 +230,9 @@ fieldset.well legend {
     z-index: 999999;
 }
 
-.dropdown-menu li:hover .sub-menu {
+.dropdown-menu li.dropdown:hover > .dropdown-menu.sub-menu {
     visibility: visible;
-    display: block;
+    display: block
 }
 
 .dropdown-toggle .caret-sub {
@@ -289,10 +289,6 @@ fieldset.well legend {
     border: 1px solid rgba(0,0,0,0.15);
     border-top: none;
     border-bottom: none;
-}
-
-.dropdown .dropdown-menu li:hover .sub-menu {
-    visibility: visible;
 }
 
 .navbar-nav.pull-right>li>.dropdown-menu {

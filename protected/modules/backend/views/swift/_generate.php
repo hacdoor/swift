@@ -31,7 +31,7 @@
 
     <div class="col-md-12 clear form-actions">
         <hr>
-        <a href="<?php echo $this->createUrl('index'); ?>" class="btn btn-lg btn-default">Cancel</a>
+        <a href="<?php echo $this->vars['backendUrl']; ?>" class="btn btn-lg btn-default">Cancel</a>
         <?php echo CHtml::submitButton('Generate Xml', array('class' => 'btn btn-lg btn-primary')); ?>
     </div>
 
