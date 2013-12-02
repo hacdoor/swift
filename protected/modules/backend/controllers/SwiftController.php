@@ -53,6 +53,17 @@ class SwiftController extends BackendController {
         $this->render('index', $vars);
     }
 
+    public function actionGenerate() {
+        $this->checkAccess('swift.generateXml');
+        
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Proses'),
+            1 => array('url' => '', 'label' => 'Generate XML')
+        );
+        
+        $this->render('generateXml', array('breadcrumb' => $breadcrumb));
+    }
+
     public function actionCreate() {
         $this->checkAccess('swift.create');
         $model = new Swift;

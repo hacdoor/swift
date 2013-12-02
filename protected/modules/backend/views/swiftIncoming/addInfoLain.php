@@ -1,3 +1,5 @@
+<?php echo Yii::app()->util->ahdaBreadcrumbGridForm($breadcrumb) ?>
+
 <?php
 /* @var $this SwiftController */
 /* @var $model Swift */
@@ -70,7 +72,7 @@ $this->menu = array(
 
         <!-- Header Menu -->
 
-        <?php echo $this->renderPartial('_headerMenu', array('model' => $model)); ?>
+        <?php echo $this->renderPartial('_headerMenu', array('model' => $model, 'pjkBankSebagai' => '1')); ?>
 
         <div id="content-inner" class="noBorderTop">
             <h1 class="page-title">

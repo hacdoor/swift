@@ -297,6 +297,7 @@ fieldset.well legend {
 
 .navbar-nav.pull-right>li>.dropdown-menu {
     right: -2px !important;
+    min-width: 200px;
 }
 
 .dropdown:hover .dropdown-menu {

@@ -19,132 +19,134 @@
             ));
     ?>
 
-    <div class="col-md-12">
+    <div class="row">
+        <div class="col-md-12">
 
-        <fieldset class="well">
-            <div class="form-group">
-                <?php echo $form->labelEx($nasabahKorporasiDn, 'noRekening', array('class' => 'col-md-2 control-label')); ?>
-                <div class="col-md-5">
-                    <?php echo $form->textField($nasabahKorporasiDn, 'noRekening', array('class' => 'form-control')); ?>
-                    <?php echo $form->error($nasabahKorporasiDn, 'noRekening'); ?>
+            <fieldset class="well">
+                <div class="form-group">
+                    <?php echo $form->labelEx($nasabahKorporasiDn, 'noRekening', array('class' => 'col-md-2 control-label')); ?>
+                    <div class="col-md-5">
+                        <?php echo $form->textField($nasabahKorporasiDn, 'noRekening', array('class' => 'form-control')); ?>
+                        <?php echo $form->error($nasabahKorporasiDn, 'noRekening'); ?>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <?php echo $form->labelEx($nasabahKorporasiDn, 'namaKorporasi', array('class' => 'col-md-2 control-label')); ?>
-                <div class="col-md-5">
-                    <?php echo $form->textField($nasabahKorporasiDn, 'namaKorporasi', array('class' => 'form-control')); ?>
-                    <?php echo $form->error($nasabahKorporasiDn, 'namaKorporasi'); ?>
+                <div class="form-group">
+                    <?php echo $form->labelEx($nasabahKorporasiDn, 'namaKorporasi', array('class' => 'col-md-2 control-label')); ?>
+                    <div class="col-md-5">
+                        <?php echo $form->textField($nasabahKorporasiDn, 'namaKorporasi', array('class' => 'form-control')); ?>
+                        <?php echo $form->error($nasabahKorporasiDn, 'namaKorporasi'); ?>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <?php echo $form->labelEx($nasabahKorporasiDn, 'bentukBadan', array('class' => 'col-md-2 control-label')); ?>
-                <div class="col-md-5">
-                    <?php echo $form->dropDownList($nasabahKorporasiDn, 'bentukBadan', Yii::app()->util->getKodeStandar(array('modul' => 'bentukBadanUsaha', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
-                    <?php echo $form->error($nasabahKorporasiDn, 'bentukBadan'); ?>
+                <div class="form-group">
+                    <?php echo $form->labelEx($nasabahKorporasiDn, 'bentukBadan', array('class' => 'col-md-2 control-label')); ?>
+                    <div class="col-md-5">
+                        <?php echo $form->dropDownList($nasabahKorporasiDn, 'bentukBadan', Yii::app()->util->getKodeStandar(array('modul' => 'bentukBadanUsaha', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
+                        <?php echo $form->error($nasabahKorporasiDn, 'bentukBadan'); ?>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <?php echo $form->labelEx($nasabahKorporasiDn, 'bentukBadanLain', array('class' => 'col-md-2 control-label')); ?>
-                <div class="col-md-5">
-                    <?php echo $form->textField($nasabahKorporasiDn, 'bentukBadanLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
-                    <?php echo $form->error($nasabahKorporasiDn, 'bentukBadanLain'); ?>
+                <div class="form-group">
+                    <?php echo $form->labelEx($nasabahKorporasiDn, 'bentukBadanLain', array('class' => 'col-md-2 control-label')); ?>
+                    <div class="col-md-5">
+                        <?php echo $form->textField($nasabahKorporasiDn, 'bentukBadanLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
+                        <?php echo $form->error($nasabahKorporasiDn, 'bentukBadanLain'); ?>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <?php echo $form->labelEx($nasabahKorporasiDn, 'bidangUsaha', array('class' => 'col-md-2 control-label')); ?>
-                <div class="col-md-5">
-                    <?php echo $form->dropDownList($nasabahKorporasiDn, 'bidangUsaha', Yii::app()->util->getKodeStandar(array('modul' => 'bidangUsaha', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
-                    <?php echo $form->error($nasabahKorporasiDn, 'bidangUsaha'); ?>
+                <div class="form-group">
+                    <?php echo $form->labelEx($nasabahKorporasiDn, 'bidangUsaha', array('class' => 'col-md-2 control-label')); ?>
+                    <div class="col-md-5">
+                        <?php echo $form->dropDownList($nasabahKorporasiDn, 'bidangUsaha', Yii::app()->util->getKodeStandar(array('modul' => 'bidangUsaha', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
+                        <?php echo $form->error($nasabahKorporasiDn, 'bidangUsaha'); ?>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <?php echo $form->labelEx($nasabahKorporasiDn, 'bidangUsahaLain', array('class' => 'col-md-2 control-label')); ?>
-                <div class="col-md-5">
-                    <?php echo $form->textField($nasabahKorporasiDn, 'bidangUsahaLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
-                    <?php echo $form->error($nasabahKorporasiDn, 'bidangUsahaLain'); ?>
+                <div class="form-group">
+                    <?php echo $form->labelEx($nasabahKorporasiDn, 'bidangUsahaLain', array('class' => 'col-md-2 control-label')); ?>
+                    <div class="col-md-5">
+                        <?php echo $form->textField($nasabahKorporasiDn, 'bidangUsahaLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
+                        <?php echo $form->error($nasabahKorporasiDn, 'bidangUsahaLain'); ?>
+                    </div>
                 </div>
-            </div>
-        </fieldset>
+            </fieldset>
 
-        <fieldset class="well">
-            <legend>Alamat Sesuai Voucher</legend>
-            <div class="form-group">
-                <?php echo $form->labelEx($nasabahKorporasiDn, 'alamat', array('class' => 'col-md-2 control-label')); ?>
-                <div class="col-md-5">
-                    <?php echo $form->textField($nasabahKorporasiDn, 'alamat', array('class' => 'form-control')); ?>
-                    <?php echo $form->error($nasabahKorporasiDn, 'alamat'); ?>
+            <fieldset class="well">
+                <legend>Alamat Sesuai Voucher</legend>
+                <div class="form-group">
+                    <?php echo $form->labelEx($nasabahKorporasiDn, 'alamat', array('class' => 'col-md-2 control-label')); ?>
+                    <div class="col-md-5">
+                        <?php echo $form->textField($nasabahKorporasiDn, 'alamat', array('class' => 'form-control')); ?>
+                        <?php echo $form->error($nasabahKorporasiDn, 'alamat'); ?>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <?php echo $form->labelEx($nasabahKorporasiDn, 'idPropinsi', array('class' => 'col-md-2 control-label')); ?>
-                <div class="col-md-5">
-                    <?php echo $form->dropDownList($nasabahKorporasiDn, 'idPropinsi', Yii::app()->util->getKodeStandar(array('modul' => 'propinsi', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
-                    <?php echo $form->error($nasabahKorporasiDn, 'idPropinsi'); ?>
+                <div class="form-group">
+                    <?php echo $form->labelEx($nasabahKorporasiDn, 'idPropinsi', array('class' => 'col-md-2 control-label')); ?>
+                    <div class="col-md-5">
+                        <?php echo $form->dropDownList($nasabahKorporasiDn, 'idPropinsi', Yii::app()->util->getKodeStandar(array('modul' => 'propinsi', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
+                        <?php echo $form->error($nasabahKorporasiDn, 'idPropinsi'); ?>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <?php echo $form->labelEx($nasabahKorporasiDn, 'propinsiLain', array('class' => 'col-md-2 control-label')); ?>
-                <div class="col-md-5">
-                    <?php echo $form->textField($nasabahKorporasiDn, 'propinsiLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
-                    <?php echo $form->error($nasabahKorporasiDn, 'propinsiLain'); ?>
+                <div class="form-group">
+                    <?php echo $form->labelEx($nasabahKorporasiDn, 'propinsiLain', array('class' => 'col-md-2 control-label')); ?>
+                    <div class="col-md-5">
+                        <?php echo $form->textField($nasabahKorporasiDn, 'propinsiLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
+                        <?php echo $form->error($nasabahKorporasiDn, 'propinsiLain'); ?>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <?php echo $form->labelEx($nasabahKorporasiDn, 'idKabKota', array('class' => 'col-md-2 control-label')); ?>
-                <div class="col-md-5">
-                    <?php echo $form->dropDownList($nasabahKorporasiDn, 'idKabKota', Yii::app()->util->getKodeStandar(array('modul' => 'kabupaten', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
-                    <?php echo $form->error($nasabahKorporasiDn, 'idKabKota'); ?>
+                <div class="form-group">
+                    <?php echo $form->labelEx($nasabahKorporasiDn, 'idKabKota', array('class' => 'col-md-2 control-label')); ?>
+                    <div class="col-md-5">
+                        <?php echo $form->dropDownList($nasabahKorporasiDn, 'idKabKota', Yii::app()->util->getKodeStandar(array('modul' => 'kabupaten', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
+                        <?php echo $form->error($nasabahKorporasiDn, 'idKabKota'); ?>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <?php echo $form->labelEx($nasabahKorporasiDn, 'kabKotaLain', array('class' => 'col-md-2 control-label')); ?>
-                <div class="col-md-5">
-                    <?php echo $form->textField($nasabahKorporasiDn, 'kabKotaLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
-                    <?php echo $form->error($nasabahKorporasiDn, 'kabKotaLain'); ?>
+                <div class="form-group">
+                    <?php echo $form->labelEx($nasabahKorporasiDn, 'kabKotaLain', array('class' => 'col-md-2 control-label')); ?>
+                    <div class="col-md-5">
+                        <?php echo $form->textField($nasabahKorporasiDn, 'kabKotaLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
+                        <?php echo $form->error($nasabahKorporasiDn, 'kabKotaLain'); ?>
+                    </div>
                 </div>
-            </div>
-        </fieldset>
+            </fieldset>
 
-        <fieldset class="well">
-            <div class="form-group">
-                <?php echo $form->labelEx($nasabahKorporasiDn, 'noTelp', array('class' => 'col-md-2 control-label')); ?>
-                <div class="col-md-5">
-                    <?php echo $form->textField($nasabahKorporasiDn, 'noTelp', array('class' => 'form-control')); ?>
-                    <?php echo $form->error($nasabahKorporasiDn, 'noTelp'); ?>
+            <fieldset class="well">
+                <div class="form-group">
+                    <?php echo $form->labelEx($nasabahKorporasiDn, 'noTelp', array('class' => 'col-md-2 control-label')); ?>
+                    <div class="col-md-5">
+                        <?php echo $form->textField($nasabahKorporasiDn, 'noTelp', array('class' => 'form-control')); ?>
+                        <?php echo $form->error($nasabahKorporasiDn, 'noTelp'); ?>
+                    </div>
                 </div>
-            </div>
-        </fieldset>
+            </fieldset>
 
-        <fieldset class="well">
-            <legend>Nilai Transaksi</legend>
-            <div class="form-group">
-                <?php echo $form->labelEx($nasabahKorporasiDn, 'nilaiTransaksiDalamRupiah', array('class' => 'col-md-2 control-label')); ?>
-                <div class="col-md-5">
-                    <?php echo $form->textField($nasabahKorporasiDn, 'nilaiTransaksiDalamRupiah', array('class' => 'form-control')); ?>
-                    <?php echo $form->error($nasabahKorporasiDn, 'nilaiTransaksiDalamRupiah'); ?>
+            <fieldset class="well">
+                <legend>Nilai Transaksi</legend>
+                <div class="form-group">
+                    <?php echo $form->labelEx($nasabahKorporasiDn, 'nilaiTransaksiDalamRupiah', array('class' => 'col-md-2 control-label')); ?>
+                    <div class="col-md-5">
+                        <?php echo $form->textField($nasabahKorporasiDn, 'nilaiTransaksiDalamRupiah', array('class' => 'form-control')); ?>
+                        <?php echo $form->error($nasabahKorporasiDn, 'nilaiTransaksiDalamRupiah'); ?>
+                    </div>
                 </div>
-            </div>
-        </fieldset>
+            </fieldset>
+
+        </div>
+
+        <div class="col-md-12 clear form-actions">
+            <hr>
+            <a href="<?php echo $this->createUrl('index'); ?>" class="btn btn-lg btn-default">Cancel</a>
+            <?php echo CHtml::submitButton($nasabahKorporasiDn->isNewRecord ? 'Tambah' : 'Simpan', array('class' => 'btn btn-lg btn-primary')); ?>
+        </div>
+
+        <?php $this->endWidget(); ?>
 
     </div>
-
-    <div class="col-md-12 clear form-actions">
-        <hr>
-        <a href="<?php echo $this->createUrl('index'); ?>" class="btn btn-lg btn-default">Cancel</a>
-        <?php echo CHtml::submitButton($nasabahKorporasiDn->isNewRecord ? 'Tambah' : 'Simpan', array('class' => 'btn btn-lg btn-primary')); ?>
-    </div>
-
-    <?php $this->endWidget(); ?>
-
 </div>
 
 <script>

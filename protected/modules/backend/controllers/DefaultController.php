@@ -69,7 +69,7 @@ class DefaultController extends BackendController {
         );
         $this->render('form', $vars);
     }
-    
+
     public function actionUpload() {
         $this->render('upload');
     }

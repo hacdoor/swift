@@ -50,14 +50,23 @@ $isHome = ($this->id == 'default' && $this->action->id == 'dashboard' || $this->
                             <li><a href="<?php echo $this->vars['backendUrl']; ?>mata-uang">Kode Mata Uang</a></li>
                             <li><a href="<?php echo $this->vars['backendUrl']; ?>propinsi">Kode Propinsi</a></li>
                             <li><a href="<?php echo $this->vars['backendUrl']; ?>kabupaten">Kode Kabupaten</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="icon-group"></span>  Master Nasabah <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="icon-caret-right caret-sub pull-right"></i>
-                                    Data Nasabah
-                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="<?php echo $this->vars['backendUrl']; ?>nasabahPerorangan"><i class="caret-sub icon-caret-right pull-right"></i>Nasabah Perorangan</a>
                                 <ul class="dropdown-menu sub-menu">
-                                    <li><a href="<?php echo $this->vars['backendUrl']; ?>nasabahPerorangan"> Nasabah Perorangan</a></li>
-                                    <li><a href="<?php echo $this->vars['backendUrl']; ?>nasabahKorporasi"> Nasabah Korporasi</a></li>
+                                    <li><a href="<?php echo $this->vars['backendUrl']; ?>importNasabahPerorangan"> Import Nasabah Perorangan</a></li>
+                                    <li><a href="<?php echo $this->vars['backendUrl']; ?>maintainNasabahPerorangan"> Maintain Nasabah Perorangan</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="<?php echo $this->vars['backendUrl']; ?>nasabahPerorangan"><i class="caret-sub icon-caret-right pull-right"></i>Nasabah Korporasi</a>
+                                <ul class="dropdown-menu sub-menu">
+                                    <li><a href="<?php echo $this->vars['backendUrl']; ?>importNasabahKorporasi"> Import Nasabah Korporasi</a></li>
+                                    <li><a href="<?php echo $this->vars['backendUrl']; ?>maintainNasabahKorporasi"> Maintain Nasabah Korporasi</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -95,7 +104,7 @@ $isHome = ($this->id == 'default' && $this->action->id == 'dashboard' || $this->
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="#">Konfirmasi Data Transaksi</a>
-                                <a href="<?php echo $this->vars['backendUrl']; ?>swift/generatexml">Generate XML File</a>
+                                <a href="<?php echo $this->vars['backendUrl']; ?>swift/generate">Generate XML File</a>
                             </li>
                         </ul>
                     </li>
