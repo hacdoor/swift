@@ -494,4 +494,15 @@ class SwiftIncomingController extends BackendController {
         }
     }
 
+    /**
+     * List all ajax action to generate 
+     */
+    public function actionExportToExcel($id) {
+        $model = Swift::model()->findByPk($id);
+        Yii::app()->request->sendFile('swift_' . date('dmY') . '.xls', $this->renderPartial('excelReport', array(
+                    'model' => $model
+                        ), true)
+        );
+    }
+
 }
