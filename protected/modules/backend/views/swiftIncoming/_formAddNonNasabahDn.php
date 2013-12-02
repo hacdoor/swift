@@ -9,17 +9,19 @@
     <?php
     $form = $this->beginWidget('CActiveForm', array(
         'id' => 'addNasabahKorporasiDn-form',
-        'enableAjaxValidation' => true,
+        'enableAjaxValidation' => false,
+        'enableClientValidation' => true,
+        'clientOptions' => array(
+            'validateOnSubmit' => true,
+        ),
         'errorMessageCssClass' => 'label label-danger',
         'htmlOptions' => array('class' => 'form-horizontal', 'role' => 'form')
-    ));
+            ));
     ?>
 
-
     <div class="col-md-12">
-        <p class="note">Fields with <span class="required">*</span> are required.</p>
 
-        <fieldset>
+        <fieldset class="well">
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahDn, 'kodeRahasia', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -52,7 +54,9 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset><legend>ALamat Sesuai Bukti Identitas</legend>
+
+        <fieldset class="well">
+            <legend>ALamat Sesuai Bukti Identitas</legend>
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahDn, 'alamat', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -72,7 +76,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahDn, 'idPropinsi', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($nonNasabahDn, 'idPropinsi', Yii::app()->util->getKodeStandar(array('modul' => 'propinsi', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php echo $form->dropDownList($nonNasabahDn, 'idPropinsi', Yii::app()->util->getKodeStandar(array('modul' => 'propinsi', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
                     <?php echo $form->error($nonNasabahDn, 'idPropinsi'); ?>
                 </div>
             </div>
@@ -88,7 +92,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahDn, 'idKabKota', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($nonNasabahDn, 'idKabKota', Yii::app()->util->getKodeStandar(array('modul' => 'kabupaten', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php echo $form->dropDownList($nonNasabahDn, 'idKabKota', Yii::app()->util->getKodeStandar(array('modul' => 'kabupaten', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
                     <?php echo $form->error($nonNasabahDn, 'idKabKota'); ?>
                 </div>
             </div>
@@ -101,7 +105,9 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset><legend>Bukti Identitas</legend>
+
+        <fieldset class="well">
+            <legend>Bukti Identitas</legend>
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahDn, 'ktp', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -141,25 +147,28 @@
                     <?php echo $form->error($nonNasabahDn, 'npwp'); ?>
                 </div>
             </div>
-            <fieldset><legend>Bukti Lain</legend>
-                <div class="form-group">
-                    <?php echo $form->labelEx($nonNasabahDn, 'jenisBuktiLain', array('class' => 'col-md-2 control-label')); ?>
-                    <div class="col-md-5">
-                        <?php echo $form->textField($nonNasabahDn, 'jenisBuktiLain', array('class' => 'form-control')); ?>
-                        <?php echo $form->error($nonNasabahDn, 'jenisBuktiLain'); ?>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <?php echo $form->labelEx($nonNasabahDn, 'noBuktiLain', array('class' => 'col-md-2 control-label')); ?>
-                    <div class="col-md-5">
-                        <?php echo $form->textField($nonNasabahDn, 'noBuktiLain', array('class' => 'form-control')); ?>
-                        <?php echo $form->error($nonNasabahDn, 'noBuktiLain'); ?>
-                    </div>
-                </div>
-            </fieldset>
         </fieldset>
-        <fieldset>
+
+        <fieldset class="well">
+            <legend>Bukti Lain</legend>
+            <div class="form-group">
+                <?php echo $form->labelEx($nonNasabahDn, 'jenisBuktiLain', array('class' => 'col-md-2 control-label')); ?>
+                <div class="col-md-5">
+                    <?php echo $form->textField($nonNasabahDn, 'jenisBuktiLain', array('class' => 'form-control')); ?>
+                    <?php echo $form->error($nonNasabahDn, 'jenisBuktiLain'); ?>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <?php echo $form->labelEx($nonNasabahDn, 'noBuktiLain', array('class' => 'col-md-2 control-label')); ?>
+                <div class="col-md-5">
+                    <?php echo $form->textField($nonNasabahDn, 'noBuktiLain', array('class' => 'form-control')); ?>
+                    <?php echo $form->error($nonNasabahDn, 'noBuktiLain'); ?>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="well">
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahDn, 'hubDgnPemilikDana', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -168,7 +177,9 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset><legend>Nilai Transaksi</legend>
+
+        <fieldset class="well">
+            <legend>Nilai Transaksi</legend>
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahDn, 'nilaiTransaksiDalamRupiah', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -187,7 +198,8 @@
 
     <?php $this->endWidget(); ?>
 
-</div><!-- form -->
+</div>
+
 <script>
     $('#NonNasabahDn_idPropinsi').on('change', function() {
         if ($(this).val() == 96) {

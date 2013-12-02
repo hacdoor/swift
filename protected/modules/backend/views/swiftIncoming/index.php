@@ -51,6 +51,9 @@ $nameSort = (isset($_GET['sort'])) ? $_GET['sort'] : '';
                                                 <?php if ($admin->hasPermissions('swift.update')): ?>
                                                     <a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming/umum/<?php echo $d->id; ?>" class="btn btn-xs btn-default bootip" title="Update"><span class="icon icon-pencil"></span></a>
                                                 <?php endif; ?>
+                                                <?php if ($admin->hasPermissions('swift.export')): ?>
+                                                    <a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming/exportToExcel/<?php echo $d->id; ?>" class="btn btn-xs btn-default bootip" title="Export"><span class="icon icon-download"></span></a>
+                                                <?php endif; ?>
                                                 <?php if ($admin->hasPermissions('swift.delete')): ?>
                                                     <a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming/delete/<?php echo $d->id; ?>" class="btn btn-xs btn-default btn-delete bootip" title="Delete" data-confirm="Are you sure want to delete this record?"><span class="icon icon-trash"></span></a>
                                                 <?php endif; ?>

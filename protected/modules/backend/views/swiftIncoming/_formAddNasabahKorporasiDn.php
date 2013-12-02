@@ -9,17 +9,19 @@
     <?php
     $form = $this->beginWidget('CActiveForm', array(
         'id' => 'addNasabahKorporasiDn-form',
-        'enableAjaxValidation' => true,
+        'enableAjaxValidation' => false,
+        'enableClientValidation' => true,
+        'clientOptions' => array(
+            'validateOnSubmit' => true,
+        ),
         'errorMessageCssClass' => 'label label-danger',
         'htmlOptions' => array('class' => 'form-horizontal', 'role' => 'form')
-    ));
+            ));
     ?>
 
-
     <div class="col-md-12">
-        <p class="note">Fields with <span class="required">*</span> are required.</p>
 
-        <fieldset>
+        <fieldset class="well">
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiDn, 'noRekening', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -39,7 +41,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiDn, 'bentukBadan', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($nasabahKorporasiDn, 'bentukBadan', Yii::app()->util->getKodeStandar(array('modul' => 'bentukBadanUsaha', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php echo $form->dropDownList($nasabahKorporasiDn, 'bentukBadan', Yii::app()->util->getKodeStandar(array('modul' => 'bentukBadanUsaha', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
                     <?php echo $form->error($nasabahKorporasiDn, 'bentukBadan'); ?>
                 </div>
             </div>
@@ -55,7 +57,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiDn, 'bidangUsaha', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($nasabahKorporasiDn, 'bidangUsaha', Yii::app()->util->getKodeStandar(array('modul' => 'bidangUsaha', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php echo $form->dropDownList($nasabahKorporasiDn, 'bidangUsaha', Yii::app()->util->getKodeStandar(array('modul' => 'bidangUsaha', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
                     <?php echo $form->error($nasabahKorporasiDn, 'bidangUsaha'); ?>
                 </div>
             </div>
@@ -68,7 +70,9 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset><legend>Alamat Sesuai Voucher</legend>
+
+        <fieldset class="well">
+            <legend>Alamat Sesuai Voucher</legend>
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiDn, 'alamat', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -80,7 +84,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiDn, 'idPropinsi', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($nasabahKorporasiDn, 'idPropinsi', Yii::app()->util->getKodeStandar(array('modul' => 'propinsi', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php echo $form->dropDownList($nasabahKorporasiDn, 'idPropinsi', Yii::app()->util->getKodeStandar(array('modul' => 'propinsi', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
                     <?php echo $form->error($nasabahKorporasiDn, 'idPropinsi'); ?>
                 </div>
             </div>
@@ -96,7 +100,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiDn, 'idKabKota', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($nasabahKorporasiDn, 'idKabKota', Yii::app()->util->getKodeStandar(array('modul' => 'kabupaten', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php echo $form->dropDownList($nasabahKorporasiDn, 'idKabKota', Yii::app()->util->getKodeStandar(array('modul' => 'kabupaten', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
                     <?php echo $form->error($nasabahKorporasiDn, 'idKabKota'); ?>
                 </div>
             </div>
@@ -109,7 +113,8 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset>
+
+        <fieldset class="well">
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiDn, 'noTelp', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -118,7 +123,9 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset><legend>Nilai Transaksi</legend>
+
+        <fieldset class="well">
+            <legend>Nilai Transaksi</legend>
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiDn, 'nilaiTransaksiDalamRupiah', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -127,6 +134,7 @@
                 </div>
             </div>
         </fieldset>
+
     </div>
 
     <div class="col-md-12 clear form-actions">
@@ -137,7 +145,7 @@
 
     <?php $this->endWidget(); ?>
 
-</div><!-- form -->
+</div>
 
 <script>
     $('#NasabahKorporasiDn_bentukBadan').on('change', function() {

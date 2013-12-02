@@ -8,7 +8,6 @@ $this->breadcrumbs = array(
     'Update',
 );
 
-
 $this->menu = array(
     array('label' => 'Umum', 'url' => array('umum', 'id' => $model->id)),
     array('label' => 'Identitas Pengirim',
@@ -48,37 +47,56 @@ $this->menu = array(
     array('label' => 'Informasi Lainnya', 'url' => array('addInfoLain', 'id' => $model->id)),
 );
 ?>
-<?php if (Yii::app()->user->hasFlash('success')): ?>
-    <div class="flash-success">
-        <?php echo Yii::app()->user->getFlash('success'); ?>
-    </div>
-<?php endif; ?>
 
-<?php echo CHtml::encode($model->getAttributeLabel('localId')); ?>:
-<b><?php echo CHtml::encode($model->localId); ?></b>
-
-<?php echo CHtml::encode($model->getAttributeLabel('noLtdln')); ?>:
-<b><?php echo CHtml::encode($model->noLtdln); ?></b>
 <?php
-$this->widget('ext.mbmenu.MbMenu', array(
-    'items' => $this->menu,
-));
+//$this->widget('ext.mbmenu.MbMenu', array(
+//    'items' => $this->menu,
+//));
 ?>
+
 <div class="row">
     <div class="col-md-12">
-        <div id="content-inner">
+
+        <div class="pull-right infoSwift">
+            <span class="itemSum btn btn-warning">
+                <?php echo CHtml::encode($model->getAttributeLabel('localId')); ?>:
+                <b><?php echo CHtml::encode($model->localId); ?></b>
+            </span>
+            <span class="itemSum btn btn-warning">
+                <?php echo CHtml::encode($model->getAttributeLabel('noLtdln')); ?>:
+                <b><?php echo CHtml::encode($model->noLtdln); ?></b>
+            </span>
+        </div>
+
+        <!-- Header Menu -->
+
+        <?php echo $this->renderPartial('_headerMenu', array('model' => $model)); ?>
+
+        <div id="content-inner" class="noBorderTop">
             <h1 class="page-title">
                 <span class="icon-plus"></span> <?php echo $nasabahKorporasiDn->isNewRecord ? 'Tambah' : 'Update'; ?> Identitas Penerima Nasabah Korporasi Swift Incoming
                 <a href="<?php echo $this->createUrl('index'); ?>" class="btn btn-xs btn-primary pull-right"><span class="icon icon-chevron-left"></span> Back</a>
             </h1>
-
-            <div class="row">
+            <div class="innerGrid">
                 <?php echo CHtml::beginForm(); ?>
+
+                <?php
+                echo CHtml::submitButton('Delete', array('name' => 'DeleteButton', 'class' => 'btn btn-delete btn-danger',
+                    'confirm' => 'Are you sure you want to permanently delete these comments?'));
+                ?>
+
+                <br/><br/>
+
                 <?php
                 $this->widget('zii.widgets.grid.CGridView', array(
                     'id' => 'nasabah-perorangan-dn-grid',
                     'dataProvider' => $dataProvider,
+                    'itemsCssClass' => 'table table-bordered table-striped list',
                     'selectableRows' => 2,
+                    'enablePagination' => FALSE,
+                    'enableSorting' => FALSE,
+                    'emptyText' => 'Tidak ada data',
+                    'template' => '{items}',
                     'columns' => array(
                         array(
                             'class' => 'CCheckBoxColumn',
@@ -106,16 +124,11 @@ $this->widget('ext.mbmenu.MbMenu', array(
                     ),
                 ));
                 ?>
-                <?php
-                echo CHtml::submitButton('Delete', array('name' => 'DeleteButton',
-                    'confirm' => 'Are you sure you want to permanently delete these comments?'));
-                ?>
+                <?php echo CHtml::endForm(); ?>
             </div>
 
-            <?php echo CHtml::endForm(); ?>
             <?php echo $this->renderPartial('_formAddNasabahKorporasiDn', array('nasabahKorporasiDn' => $nasabahKorporasiDn)); ?>
 
         </div>
     </div>
-</div>
 </div>

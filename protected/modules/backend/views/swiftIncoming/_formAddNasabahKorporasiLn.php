@@ -9,16 +9,21 @@
     <?php
     $form = $this->beginWidget('CActiveForm', array(
         'id' => 'addNasabahKorporasiLn-form',
-        'enableAjaxValidation' => true,
+        'enableAjaxValidation' => false,
+        'enableClientValidation' => true,
+        'clientOptions' => array(
+            'validateOnSubmit' => true,
+        ),
         'errorMessageCssClass' => 'label label-danger',
         'htmlOptions' => array('class' => 'form-horizontal', 'role' => 'form')
-    ));
+            ));
     ?>
 
-
     <div class="col-md-12">
-        <p class="note">Fields with <span class="required">*</span> are required.</p>
-        <fieldset>
+
+<!--        <p class="note">Fields with <span class="required">*</span> are required.</p>-->
+
+        <fieldset class="well">
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiLn, 'noRekening', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -38,7 +43,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiLn, 'bentukBadan', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($nasabahKorporasiLn, 'bentukBadan', Yii::app()->util->getKodeStandar(array('modul' => 'bentukBadanUsaha', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php echo $form->dropDownList($nasabahKorporasiLn, 'bentukBadan', Yii::app()->util->getKodeStandar(array('modul' => 'bentukBadanUsaha', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
                     <?php echo $form->error($nasabahKorporasiLn, 'bentukBadan'); ?>
                 </div>
             </div>
@@ -54,7 +59,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiLn, 'bidangUsaha', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($nasabahKorporasiLn, 'bidangUsaha', Yii::app()->util->getKodeStandar(array('modul' => 'bidangUsaha', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php echo $form->dropDownList($nasabahKorporasiLn, 'bidangUsaha', Yii::app()->util->getKodeStandar(array('modul' => 'bidangUsaha', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
                     <?php echo $form->error($nasabahKorporasiLn, 'bidangUsaha'); ?>
                 </div>
             </div>
@@ -67,7 +72,9 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset><legend>Alamat Sesuai Voucher</legend>
+
+        <fieldset class="well">
+            <legend>Alamat Sesuai Voucher</legend>
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiLn, 'alamat', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -87,7 +94,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiLn, 'idNegara', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($nasabahKorporasiLn, 'idNegara', Yii::app()->util->getKodeStandar(array('modul' => 'negara', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php echo $form->dropDownList($nasabahKorporasiLn, 'idNegara', Yii::app()->util->getKodeStandar(array('modul' => 'negara', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
                     <?php echo $form->error($nasabahKorporasiLn, 'idNegara'); ?>
                 </div>
             </div>
@@ -100,7 +107,8 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset>
+
+        <fieldset class="well">
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiLn, 'noTelp', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -109,6 +117,7 @@
                 </div>
             </div>
         </fieldset>
+
     </div>
 
     <div class="col-md-12 clear form-actions">
@@ -119,7 +128,7 @@
 
     <?php $this->endWidget(); ?>
 
-</div><!-- form -->
+</div>
 
 <script>
     $('#NasabahKorporasiLn_idNegara').on('change', function() {

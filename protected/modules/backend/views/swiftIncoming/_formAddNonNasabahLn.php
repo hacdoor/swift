@@ -9,16 +9,19 @@
     <?php
     $form = $this->beginWidget('CActiveForm', array(
         'id' => 'addNonNasabahLn-form',
-        'enableAjaxValidation' => true,
+        'enableAjaxValidation' => false,
+        'enableClientValidation' => true,
+        'clientOptions' => array(
+            'validateOnSubmit' => true,
+        ),
         'errorMessageCssClass' => 'label label-danger',
         'htmlOptions' => array('class' => 'form-horizontal', 'role' => 'form')
     ));
     ?>
 
-
     <div class="col-md-12">
-        <p class="note">Fields with <span class="required">*</span> are required.</p>
-        <fieldset>
+        
+        <fieldset class="well">
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahLn, 'kodeRahasia', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -51,7 +54,9 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset><legend>Alamat Sesuai Bukti Identitas</legend>
+        
+        <fieldset class="well">
+            <legend>Alamat Sesuai Bukti Identitas</legend>
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahLn, 'alamat', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -79,7 +84,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahLn, 'idNegara', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($nonNasabahLn, 'idNegara', Yii::app()->util->getKodeStandar(array('modul' => 'negara', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php echo $form->dropDownList($nonNasabahLn, 'idNegara', Yii::app()->util->getKodeStandar(array('modul' => 'negara', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
                     <?php echo $form->error($nonNasabahLn, 'idNegara'); ?>
                 </div>
             </div>
@@ -92,7 +97,9 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset><legend>Bukti Identitas</legend>
+        
+        <fieldset class="well">
+            <legend>Bukti Identitas</legend>
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahLn, 'ktp', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -133,7 +140,9 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset><legend>Bukti Lain</legend>
+        
+        <fieldset class="well">
+            <legend>Bukti Lain</legend>
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahLn, 'jenisBuktiLain', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -160,7 +169,7 @@
 
     <?php $this->endWidget(); ?>
 
-</div><!-- form -->
+</div>
 
 <script>
     $('#NonNasabahLn_idNegara').on('change', function() {

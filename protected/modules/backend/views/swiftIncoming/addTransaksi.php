@@ -58,7 +58,7 @@ $this->menu = array(
 
 <div class="row">
     <div class="col-md-12">
-        
+
         <div class="pull-right infoSwift">
             <span class="itemSum btn btn-warning">
                 <?php echo CHtml::encode($model->getAttributeLabel('localId')); ?>:

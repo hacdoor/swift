@@ -118,7 +118,7 @@ class SwiftIncomingController extends BackendController {
                 }
             }
         }
-        
+
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'Transaksi'),
             1 => array('url' => '', 'label' => 'Swift'),
@@ -169,10 +169,17 @@ class SwiftIncomingController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Swift'),
+            2 => array('url' => '', 'label' => 'Tambah Penerima Nasabah Korporasi')
+        );
+
         $this->render('addNasabahKorporasiDn', array(
             'model' => $model,
             'nasabahKorporasiDn' => $nasabahKorporasiDn,
             'dataProvider' => $dataProvider,
+            'breadcrumb' => $breadcrumb
         ));
     }
 
@@ -212,10 +219,17 @@ class SwiftIncomingController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Swift'),
+            2 => array('url' => '', 'label' => 'Tambah Penerima non-Nasabah')
+        );
+
         $this->render('addNonNasabahDn', array(
             'model' => $model,
             'nonNasabahDn' => $nonNasabahDn,
             'dataProvider' => $dataProvider,
+            'breadcrumb' => $breadcrumb
         ));
     }
 
@@ -236,7 +250,7 @@ class SwiftIncomingController extends BackendController {
                 Yii::app()->user->setFlash('success', 'Success!|' . 'NasabahPeroranganLn has been updated.');
             }
         }
-        
+
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'Transaksi'),
             1 => array('url' => '', 'label' => 'Swift'),
@@ -267,9 +281,16 @@ class SwiftIncomingController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Swift'),
+            2 => array('url' => '', 'label' => 'Tambah Pengirim Nasabah Korporasi')
+        );
+
         $this->render('addNasabahKorporasiLn', array(
             'model' => $model,
             'nasabahKorporasiLn' => $nasabahKorporasiLn,
+            'breadcrumb' => $breadcrumb
         ));
     }
 
@@ -290,9 +311,16 @@ class SwiftIncomingController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Swift'),
+            2 => array('url' => '', 'label' => 'Tambah Pengirim Nasabah')
+        );
+
         $this->render('addNonNasabahLn', array(
             'model' => $model,
             'nonNasabahLn' => $nonNasabahLn,
+            'breadcrumb' => $breadcrumb
         ));
     }
 
@@ -345,9 +373,16 @@ class SwiftIncomingController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Swift'),
+            2 => array('url' => '', 'label' => 'Tambah Info Lain')
+        );
+
         $this->render('addInfoLain', array(
             'model' => $model,
             'infoLain' => $infoLain,
+            'breadcrumb' => $breadcrumb
         ));
     }
 
@@ -361,7 +396,7 @@ class SwiftIncomingController extends BackendController {
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax']))
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('swift'));
     }
 
     /**
