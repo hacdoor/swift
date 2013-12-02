@@ -16,8 +16,8 @@
                 ?>
                 <tr>
                     <td><?php echo $i; ?></td>
-                    <td><?php echo $row->localId; ?></td>
-                    <td><?php echo $row->noLtdln; ?></td>
+                    <td><?php echo ($row->localId) ? $row->localId : ''; ?></td>
+                    <td><?php echo ($row->noLtdln) ? $row->noLtdln : ''; ?></td>
                     <td><?php echo Yii::app()->dateFormatter->formatDateTime($d->tglLaporan, 'long', null); ?></td>
                 </tr>
             <?php endforeach; ?>
