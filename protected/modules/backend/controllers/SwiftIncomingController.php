@@ -507,22 +507,12 @@ class SwiftIncomingController extends BackendController {
     }
 
     public function actionCreateExcel($id) {
-        Yii::import('ext.phpexcel.XPHPExcel');
 
+        // Find Single Data Swift
         $oneData = Swift::model()->findByPk($id);
 
-        $criteria = new CDbCriteria;
-        $criteria->order = 'id ASC';
-        $model = Swift::model()->findAll($criteria);
-
-        $findData = array();
-        foreach ($oneData->attributes as $key => $value) {
-            $findData[] = array(
-                'label' => $key,
-                'value' => $value
-            );
-        }
-
+        //Create Excel
+        Yii::import('ext.phpexcel.XPHPExcel');
         $objPHPExcel = XPHPExcel::createPHPExcel();
         $objPHPExcel->getProperties()->setCreator("Ahda Ridwan")
                 ->setLastModifiedBy("Ahda Ridwan")
@@ -531,6 +521,15 @@ class SwiftIncomingController extends BackendController {
                 ->setDescription("Production document for Office 2007 XLSX, generated using PHP classes.")
                 ->setKeywords("office 2007 openxml php")
                 ->setCategory("Production result file");
+
+        // Set AutoSize
+        PHPExcel_Shared_Font::setAutoSizeMethod(PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT);
+
+        // Set AutoSize to Column
+        foreach (range('A', 'E') as $columnID) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
+                    ->setAutoSize(true);
+        }
 
         // White Page Default
         $objPHPExcel->getDefaultStyle()->applyFromArray(
@@ -542,12 +541,8 @@ class SwiftIncomingController extends BackendController {
                 )
         );
 
+        // Set Bold & Center Font
         $styleArray = array(
-            'borders' => array(
-                'allborders' => array(
-                    'style' => PHPExcel_Style_Border::BORDER_THIN
-                )
-            ),
             'font' => array(
                 'bold' => true
             ),
@@ -556,124 +551,93 @@ class SwiftIncomingController extends BackendController {
             ),
         );
 
+        // Set Border
+        $styleArrayBord = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            )
+        );
+
+        // Set Bold
         $styleArrayOther = array(
             'font' => array(
                 'bold' => true
             )
         );
 
-        // Add some data
+        // Add Text Header
         $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A1', 'Hello')
-                ->setCellValue('B1', 'world!')
-                ->setCellValue('C1', 'Hello')
-                ->setCellValue('D1', 'world!')
-                ->setCellValue('A4', 'LAPORAN TRANSAKSI KEUANGAN TRANSFER DANA DARI DAN KE LUAR NEGERI');
+                ->setCellValue('A1', 'LAPORAN TRANSAKSI KEUANGAN TRANSFER DANA DARI DAN KE LUAR NEGERI');
 
-        $objPHPExcel->getActiveSheet()->mergeCells('A4:D4');
-        $objPHPExcel->getActiveSheet()->getStyle('A4')->applyFromArray($styleArrayOther);
+        // Merge Column
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:E1');
 
-        // Miscellaneous glyphs, UTF-8
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A2', 'Miscellaneous glyphs Title Artikel');
+        // Center Header
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray);
 
-        $sheet = array(
-            array(
-                '1' => 'No LTDLN',
-                '2' => 'No LTDLN Koreksi',
-                '3' => 'Nama PJK Bank Pelapor',
-                '4' => 'Nama Pejabat PJK Bank Pelapor',
-                '5' => 'Jenis Laporan',
-            ),
-            array(
-                '1' => $oneData->noLtdln,
-                '2' => $oneData->noLtdlnKoreksi,
-                '3' => $oneData->namaPjk,
-                '4' => $oneData->namaPejabatPjk,
-                '5' => $oneData->getJenisLaporanText(),
-            ),
+        // Data Umum
+        $dataUmum = array(
+            array('1' => 'I. Umum', '2' => '', '3' => ''),
+            array('1' => 'No LTKL', '2' => ':', '3' => $oneData->noLtdln),
+            array('1' => 'No LTDLN Koreksi', '2' => ':', '3' => $oneData->noLtdlnKoreksi),
+            array('1' => 'Tanggal Laporan', '2' => ':', '3' => Yii::app()->dateFormatter->format('d-MM-yyyy', $oneData->tglLaporan)),
+            array('1' => 'Nama PJK Bank Pelapor', '2' => ':', '3' => $oneData->namaPjk),
+            array('1' => 'Nama Pejabat PJK Bank Pelapor', '2' => ':', '3' => $oneData->namaPejabatPjk),
+            array('1' => 'Jenis Laporan', '2' => ':', '3' => $oneData->getJenisLaporanText()),
         );
 
-        $sheetAhda = array(
-            array(
-                '1' => 'No LTKL',
-                '2' => $oneData->noLtdln,
-            ),
-            array(
-                '1' => 'No LTDLN Koreksi',
-                '2' => $oneData->noLtdlnKoreksi,
-            ),
-            array(
-                '1' => 'Nama PJK Bank Pelapor',
-                '2' => $oneData->namaPjk,
-            ),
-            array(
-                '1' => 'Nama Pejabat PJK Bank Pelapor',
-                '2' => $oneData->namaPejabatPjk,
-            ),
-            array(
-                '1' => 'Jenis Laporan',
-                '2' => $oneData->getJenisLaporanText(),
-            ),
+        // Data Identitas Pengirim Nasabah Perorangan
+        $dataPengirimPerorangan = array(
+            array('1' => 'II. Identitas Pengirim Nasabah Perorangan', '2' => '', '3' => ''),
+            array('1' => 'No Rekening', '2' => ':', '3' => '-'),
+            array('1' => 'Nama Lengkap', '2' => ':', '3' => '-'),
+            array('1' => 'Tanggal Lahir', '2' => ':', '3' => '-'),
+            array('1' => 'Kewarganegaraan', '2' => ':', '3' => '-'),
+            array('1' => 'Negara', '2' => ':', '3' => '-'),
+            array('1' => 'Negara Lain', '2' => ':', '3' => '-'),
+            array('1' => '', '2' => '', '3' => ''),
         );
 
-        $myData = array(
-            '1' => 'Ahda',
-            '2' => 'Rudi',
-            '3' => 'Widarto'
+        // Array to Set Bold
+        $setBold = array(
+            '1' => 'A3',
+            '2' => 'A11',
+            '3' => 'A19',
+            '4' => 'A22',
         );
 
-        $worksheet = $objPHPExcel->getActiveSheet();
-        foreach ($sheet as $row => $columns) {
+        // Looping Bold
+        foreach ($setBold as $value) {
+            $objPHPExcel->getActiveSheet()->getStyle($value)->applyFromArray($styleArrayOther);
+        }
+
+        // Looping Data Umum
+        $sheetActive = $objPHPExcel->getActiveSheet();
+        foreach ($dataUmum as $row => $columns) {
             foreach ($columns as $column => $data) {
-                $worksheet->setCellValueByColumnAndRow($column, $row + 15, $data);
+                $sheetActive->setCellValueByColumnAndRow($column - 1, $row + 3, $data);
             }
         }
 
-        $objPHPExcel->getActiveSheet()->fromArray($myData, null, 'A15');
-
-        foreach ($model as $row => $columns) {
-            $worksheet->setCellValueByColumnAndRow(0, $row + 20, $columns->title);
-        }
-
-        //Start adding next sheets
-
-        foreach ($myData as $key => $value) {
-
-            // Add new sheet
-            $objWorkSheet = $objPHPExcel->createSheet($key); //Setting index when creating
-            //Write cells
-            $objWorkSheet->setCellValue('A1', 'Hello' . $value)
-                    ->setCellValue('B1', 'world!')
-                    ->setCellValue('C1', 'Hello')
-                    ->setCellValue('D1', 'world!');
-
-            // Rename sheet
-            $objWorkSheet->setTitle("$value");
-
-            $objPHPExcel->getSheetByName($value)->getStyle('A1:D2')->applyFromArray($styleArray);
-        }
-
-        $objPHPExcel->getSheetByName('Ahda')->fromArray($findData, null, 'A5');
-
+        // Looping Data Pengirim Nasabah Perorangan
         $sheetActive = $objPHPExcel->getActiveSheet();
-        foreach ($sheetAhda as $row => $columns) {
+        foreach ($dataPengirimPerorangan as $row => $columns) {
             foreach ($columns as $column => $data) {
-                $sheetActive->setCellValueByColumnAndRow($column, $row + 5, $data);
+                $sheetActive->setCellValueByColumnAndRow($column - 1, $row + 11, $data);
             }
         }
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objPHPExcel->setActiveSheetIndex(0);
 
-        $objPHPExcel->getActiveSheet()->getStyle('A1:D2')->applyFromArray($styleArray);
-
         // Rename worksheet
-        $objPHPExcel->getActiveSheet()->setTitle('Swift ' . date('Y'));
+        $objPHPExcel->getActiveSheet()->setTitle('Swift Incoming ' . date('d-m-Y'));
 
         // Redirect output to a client web browser (Excel5)
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="' . date('Y') . '.xls"');
+        header('Content-Disposition: attachment;filename="Swift Incoming ' . date('d-m-Y') . '.xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
