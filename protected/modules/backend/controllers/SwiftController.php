@@ -19,7 +19,7 @@ class SwiftController extends BackendController {
 
         $criteria = new CDbCriteria;
         $criteria->order = 'localId ASC';
-//$criteria->condition = '';
+        //$criteria->condition = '';
 
         if (isset($_GET['Filter']))
             $filters = $_GET['Filter'];
@@ -543,7 +543,7 @@ class SwiftController extends BackendController {
             }
             $identitasPengirimSwIn->delete();
         }
-// Delete admin
+        // Delete admin
         if ($model->delete()) {
             Yii::app()->util->setLog('Swift', $id, 'Hapus data');
             Yii::app()->user->setFlash('success', 'Success!|' . 'Swift has been deleted.');

@@ -506,4 +506,187 @@ class SwiftIncomingController extends BackendController {
         );
     }
 
+    public function actionCreateExcel($id) {
+        Yii::import('ext.phpexcel.XPHPExcel');
+
+        $oneData = Swift::model()->findByPk($id);
+
+        $criteria = new CDbCriteria;
+        $criteria->order = 'id ASC';
+        $model = Swift::model()->findAll($criteria);
+
+        $findData = array();
+        foreach ($oneData->attributes as $key => $value) {
+            $findData[] = array(
+                'label' => $key,
+                'value' => $value
+            );
+        }
+
+        $objPHPExcel = XPHPExcel::createPHPExcel();
+        $objPHPExcel->getProperties()->setCreator("Ahda Ridwan")
+                ->setLastModifiedBy("Ahda Ridwan")
+                ->setTitle("Office 2007 XLSX Production Document")
+                ->setSubject("Office 2007 XLSX Production Document")
+                ->setDescription("Production document for Office 2007 XLSX, generated using PHP classes.")
+                ->setKeywords("office 2007 openxml php")
+                ->setCategory("Production result file");
+
+        // White Page Default
+        $objPHPExcel->getDefaultStyle()->applyFromArray(
+                array(
+                    'fill' => array(
+                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                        'color' => array('argb' => 'FFFFFFFF')
+                    ),
+                )
+        );
+
+        $styleArray = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            ),
+            'font' => array(
+                'bold' => true
+            ),
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+            ),
+        );
+
+        $styleArrayOther = array(
+            'font' => array(
+                'bold' => true
+            )
+        );
+
+        // Add some data
+        $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A1', 'Hello')
+                ->setCellValue('B1', 'world!')
+                ->setCellValue('C1', 'Hello')
+                ->setCellValue('D1', 'world!')
+                ->setCellValue('A4', 'LAPORAN TRANSAKSI KEUANGAN TRANSFER DANA DARI DAN KE LUAR NEGERI');
+
+        $objPHPExcel->getActiveSheet()->mergeCells('A4:D4');
+        $objPHPExcel->getActiveSheet()->getStyle('A4')->applyFromArray($styleArrayOther);
+
+        // Miscellaneous glyphs, UTF-8
+        $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A2', 'Miscellaneous glyphs Title Artikel');
+
+        $sheet = array(
+            array(
+                '1' => 'No LTDLN',
+                '2' => 'No LTDLN Koreksi',
+                '3' => 'Nama PJK Bank Pelapor',
+                '4' => 'Nama Pejabat PJK Bank Pelapor',
+                '5' => 'Jenis Laporan',
+            ),
+            array(
+                '1' => $oneData->noLtdln,
+                '2' => $oneData->noLtdlnKoreksi,
+                '3' => $oneData->namaPjk,
+                '4' => $oneData->namaPejabatPjk,
+                '5' => $oneData->getJenisLaporanText(),
+            ),
+        );
+
+        $sheetAhda = array(
+            array(
+                '1' => 'No LTKL',
+                '2' => $oneData->noLtdln,
+            ),
+            array(
+                '1' => 'No LTDLN Koreksi',
+                '2' => $oneData->noLtdlnKoreksi,
+            ),
+            array(
+                '1' => 'Nama PJK Bank Pelapor',
+                '2' => $oneData->namaPjk,
+            ),
+            array(
+                '1' => 'Nama Pejabat PJK Bank Pelapor',
+                '2' => $oneData->namaPejabatPjk,
+            ),
+            array(
+                '1' => 'Jenis Laporan',
+                '2' => $oneData->getJenisLaporanText(),
+            ),
+        );
+
+        $myData = array(
+            '1' => 'Ahda',
+            '2' => 'Rudi',
+            '3' => 'Widarto'
+        );
+
+        $worksheet = $objPHPExcel->getActiveSheet();
+        foreach ($sheet as $row => $columns) {
+            foreach ($columns as $column => $data) {
+                $worksheet->setCellValueByColumnAndRow($column, $row + 15, $data);
+            }
+        }
+
+        $objPHPExcel->getActiveSheet()->fromArray($myData, null, 'A15');
+
+        foreach ($model as $row => $columns) {
+            $worksheet->setCellValueByColumnAndRow(0, $row + 20, $columns->title);
+        }
+
+        //Start adding next sheets
+
+        foreach ($myData as $key => $value) {
+
+            // Add new sheet
+            $objWorkSheet = $objPHPExcel->createSheet($key); //Setting index when creating
+            //Write cells
+            $objWorkSheet->setCellValue('A1', 'Hello' . $value)
+                    ->setCellValue('B1', 'world!')
+                    ->setCellValue('C1', 'Hello')
+                    ->setCellValue('D1', 'world!');
+
+            // Rename sheet
+            $objWorkSheet->setTitle("$value");
+
+            $objPHPExcel->getSheetByName($value)->getStyle('A1:D2')->applyFromArray($styleArray);
+        }
+
+        $objPHPExcel->getSheetByName('Ahda')->fromArray($findData, null, 'A5');
+
+        $sheetActive = $objPHPExcel->getActiveSheet();
+        foreach ($sheetAhda as $row => $columns) {
+            foreach ($columns as $column => $data) {
+                $sheetActive->setCellValueByColumnAndRow($column, $row + 5, $data);
+            }
+        }
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A1:D2')->applyFromArray($styleArray);
+
+        // Rename worksheet
+        $objPHPExcel->getActiveSheet()->setTitle('Swift ' . date('Y'));
+
+        // Redirect output to a client web browser (Excel5)
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . date('Y') . '.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        Yii::app()->end();
+    }
+
 }
