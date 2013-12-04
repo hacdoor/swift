@@ -591,4 +591,93 @@ class SwiftController extends BackendController {
         Yii::app()->util->actionCreatefile('SWIFTXML.zip', $dataFile);
     }
 
+    /**
+     * List all ajax action to get dinamic kabupaten kota 
+     */
+    public function actionDynamicNegaraNasabahPeroranganLnNegaraKewarganegaraan() {
+        if ((int) $_POST['NasabahPeroranganLn']['wargaNegara'] === 1)
+            $data = array(62 => 'Indonesia');
+        else {
+            $data = Negara::model()->findAll();
+            $data = CHtml::listData($data, 'id', 'nama');
+            $data = CMap::mergeArray(array('' => 'Pilih'), $data);
+        }
+        foreach ($data as $value => $name) {
+            echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);
+        }
+    }
+    
+    public function actionDynamicNegaraNasabahPeroranganDnNegaraKewarganegaraan() {
+        if ((int) $_POST['NasabahPeroranganDn']['wargaNegara'] === 1)
+            $data = array(62 => 'Indonesia');
+        else {
+            $data = Negara::model()->findAll();
+            $data = CHtml::listData($data, 'id', 'nama');
+            $data = CMap::mergeArray(array('' => 'Pilih'), $data);
+        }
+        foreach ($data as $value => $name) {
+            echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);
+        }
+    }
+
+    public function actionDynamicNegaraNasabahPeroranganDnDomisili() {
+        if ($_POST['NasabahPeroranganDn']['idPropinsiDomisili'] === '')
+            $data = Kabupaten::model()->findAll();
+        else
+            $data = Kabupaten::model()->findAll('propinsi_id=:propinsiId', array(':propinsiId' => (int) $_POST['NasabahPeroranganDn']['idPropinsiDomisili']));
+
+        $data = CHtml::listData($data, 'id', 'nama');
+        $data = CMap::mergeArray(array('' => 'Pilih'), $data);
+        foreach ($data as $value => $name) {
+            echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);
+        }
+        if ($_POST['NasabahPeroranganDn']['idPropinsiDomisili'] !== '')
+            echo CHtml::tag('option', array('value' => 440), CHtml::encode('Lain-lain'), true);
+    }
+
+    public function actionDynamicNegaraNasabahPeroranganDnIdentitas() {
+        if ($_POST['NasabahPeroranganDn']['idPropinsiIdentitas'] === '')
+            $data = Kabupaten::model()->findAll();
+        else
+            $data = Kabupaten::model()->findAll('propinsi_id=:propinsiId', array(':propinsiId' => (int) $_POST['NasabahPeroranganDn']['idPropinsiIdentitas']));
+
+        $data = CHtml::listData($data, 'id', 'nama');
+        $data = CMap::mergeArray(array('' => 'Pilih'), $data);
+        foreach ($data as $value => $name) {
+            echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);
+        }
+        if ($_POST['NasabahPeroranganDn']['idPropinsiIdentitas'] !== '')
+            echo CHtml::tag('option', array('value' => 440), CHtml::encode('Lain-lain'), true);
+    }
+
+    public function actionDynamicNegaraNasabahKorporasiDnPropinsi() {
+        if ($_POST['NasabahKorporasiDn']['idPropinsi'] === '')
+            $data = Kabupaten::model()->findAll();
+        else
+            $data = Kabupaten::model()->findAll('propinsi_id=:propinsiId', array(':propinsiId' => (int) $_POST['NasabahKorporasiDn']['idPropinsi']));
+
+        $data = CHtml::listData($data, 'id', 'nama');
+        $data = CMap::mergeArray(array('' => 'Pilih'), $data);
+        foreach ($data as $value => $name) {
+            echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);
+        }
+        if ($_POST['NasabahKorporasiDn']['idPropinsi'] !== '')
+            echo CHtml::tag('option', array('value' => 440), CHtml::encode('Lain-lain'), true);
+    }
+
+    public function actionDynamicNegaraNonNasabahDnPropinsi() {
+        if ($_POST['NonNasabahDn']['idPropinsi'] === '')
+            $data = Kabupaten::model()->findAll();
+        else
+            $data = Kabupaten::model()->findAll('propinsi_id=:propinsiId', array(':propinsiId' => (int) $_POST['NonNasabahDn']['idPropinsi']));
+
+        $data = CHtml::listData($data, 'id', 'nama');
+        $data = CMap::mergeArray(array('' => 'Pilih'), $data);
+        foreach ($data as $value => $name) {
+            echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);
+        }
+        if ($_POST['NonNasabahDn']['idPropinsi'] !== '')
+            echo CHtml::tag('option', array('value' => 440), CHtml::encode('Lain-lain'), true);
+    }
+
 }

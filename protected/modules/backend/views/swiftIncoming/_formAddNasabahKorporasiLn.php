@@ -39,7 +39,7 @@
                     <?php echo $form->error($nasabahKorporasiLn, 'namaKorporasi'); ?>
                 </div>
             </div>
-
+<!--
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiLn, 'bentukBadan', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -71,6 +71,7 @@
                     <?php echo $form->error($nasabahKorporasiLn, 'bidangUsahaLain'); ?>
                 </div>
             </div>
+-->
         </fieldset>
 
         <fieldset class="well">

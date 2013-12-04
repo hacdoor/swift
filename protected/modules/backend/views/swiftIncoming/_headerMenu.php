@@ -26,7 +26,7 @@
                 <?php if ($model->pjkBankSebagai == $pjkBankSebagai) : ?>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <span class="icon-caret-right caret-sub pull-right"></span> <?php echo Yii::app()->util->getKodeStandar(array('modul' => 'pjkBankSebagai', 'data' => $model->pjkBankSebagai)); ?>
+                            <span class="icon-caret-right caret-sub pull-right"></span> <?php echo Yii::app()->util->getKodeStandar(array('modul' => 'pjkBankSebagaiSwin', 'data' => $model->pjkBankSebagai)); ?>
                         </a>
                         <ul class="dropdown-menu sub-menu" role="menu">
                             <li><a href="<?php echo $this->vars['backendUrl'] . 'swiftIncoming/addPenerimaNasabahPerorangan/' . $model->id; ?>">Perorangan</a></li>
@@ -37,7 +37,7 @@
                 <?php else: ?>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <span class="icon-caret-right caret-sub pull-right"></span> <?php echo Yii::app()->util->getKodeStandar(array('modul' => 'pjkBankSebagai', 'data' => $model->pjkBankSebagai)); ?>
+                            <span class="icon-caret-right caret-sub pull-right"></span> <?php echo Yii::app()->util->getKodeStandar(array('modul' => 'pjkBankSebagaiSwin', 'data' => $model->pjkBankSebagai)); ?>
                         </a>
                         <ul class="dropdown-menu sub-menu" role="menu">
                             <li><a href="<?php echo $this->vars['backendUrl'] . 'swiftIncoming/addPenerimaNasabahPerorangan/' . $model->id; ?>">Perorangan</a></li>

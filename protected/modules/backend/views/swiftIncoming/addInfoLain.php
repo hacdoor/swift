@@ -4,10 +4,12 @@
 /* @var $this SwiftController */
 /* @var $model Swift */
 
+$title = $infoLain->isNewRecord ? 'Tambah' : 'Update';
+$title .= ' Informasi Lain';
+$this->pageTitle = $title;
 $this->breadcrumbs = array(
-    'Swifts' => array('index'),
-    $model->id => array('view', 'id' => $model->id),
-    'Update',
+    'Daftar Swift Incoming' => array('index'),
+    $title,
 );
 
 $this->menu = array(
@@ -26,7 +28,7 @@ $this->menu = array(
     array('label' => 'Identitas Penerima',
         'items' => array(
             ($model->pjkBankSebagai == 1) ?
-                    array('label' => Yii::app()->util->getKodeStandar(array('modul' => 'pjkBankSebagai', 'data' => $model->pjkBankSebagai)),
+                    array('label' => Yii::app()->util->getKodeStandar(array('modul' => 'pjkBankSebagaiSwin', 'data' => $model->pjkBankSebagai)),
                 'items' => array(
                     array('label' => 'Nasabah',
                         'items' => array(
@@ -37,7 +39,7 @@ $this->menu = array(
                     array('label' => 'Non Nasabah', 'url' => array('addPenerimaNonNasabah', 'id' => $model->id)),
                 ),
                     ) :
-                    array('label' => Yii::app()->util->getKodeStandar(array('modul' => 'pjkBankSebagai', 'data' => $model->pjkBankSebagai)),
+                    array('label' => Yii::app()->util->getKodeStandar(array('modul' => 'pjkBankSebagaiSwin', 'data' => $model->pjkBankSebagai)),
                 'items' => array(
                     array('label' => 'Perorangan', 'url' => array('addPenerimaNasabahPerorangan', 'id' => $model->id)),
                     array('label' => 'Korporasi', 'url' => array('addPenerimaNasabahKorporasi', 'id' => $model->id)),
@@ -49,6 +51,18 @@ $this->menu = array(
     array('label' => 'Informasi Lainnya', 'url' => array('addInfoLain', 'id' => $model->id)),
 );
 ?>
+<div class="breadcrumb">
+    <?php
+    $this->widget('zii.widgets.CBreadcrumbs', array(
+        'links' => $this->breadcrumbs,
+    ));
+    ?>
+</div>
+<?php if (Yii::app()->user->hasFlash('success')): ?>
+    <div class="flash-success">
+        <?php echo Yii::app()->user->getFlash('success'); ?>
+    </div>
+<?php endif; ?>
 
 <?php
 //$this->widget('ext.mbmenu.MbMenu', array(
@@ -76,7 +90,7 @@ $this->menu = array(
 
         <div id="content-inner" class="noBorderTop">
             <h1 class="page-title">
-                <span class="icon-plus"></span> <?php echo $infoLain->isNewRecord ? 'Tambah' : 'Update'; ?> Informasi Lain Swift Incoming
+                <span class="icon-plus"></span> <?php echo $title;?> 
                 <a href="<?php echo $this->createUrl('index'); ?>" class="btn btn-xs btn-primary pull-right"><span class="icon icon-chevron-left"></span> Back</a>
             </h1>
             <div class="row">

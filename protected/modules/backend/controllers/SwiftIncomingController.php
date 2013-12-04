@@ -84,6 +84,14 @@ class SwiftIncomingController extends BackendController {
     public function actionAddPenerimaNasabahPerorangan($id, $update_id = NULL) {
         $model = $this->loadModel($id);
 
+        /*
+         * validate swift
+         */
+        if (NasabahPeroranganLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NasabahKorporasiLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NonNasabahLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL) {
+            Yii::app()->user->setFlash('success', 'Warning!|' . 'Data Identitas Pengirim wajib di isi dulu.');
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('swiftIncoming/umum', 'id' => $model->id));
+        }
+
         if (NasabahPeroranganDn::model()->findByPk($update_id) === NULL) {
             $nasabahPeroranganDn = new NasabahPeroranganDn;
             $nasabahPeroranganDn->unsetAttributes();
@@ -136,6 +144,14 @@ class SwiftIncomingController extends BackendController {
     public function actionAddPenerimaNasabahKorporasi($id, $update_id = NULL) {
         $model = $this->loadModel($id);
 
+        /*
+         * validate swift
+         */
+        if (NasabahPeroranganLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NasabahKorporasiLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NonNasabahLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL) {
+            Yii::app()->user->setFlash('success', 'Warning!|' . 'Data Identitas Pengirim wajib di isi dulu.');
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('swiftIncoming/umum', 'id' => $model->id));
+        }
+
         if (NasabahKorporasiDn::model()->findByPk($update_id) === NULL) {
             $nasabahKorporasiDn = new NasabahKorporasiDn;
             $nasabahKorporasiDn->unsetAttributes();
@@ -185,6 +201,14 @@ class SwiftIncomingController extends BackendController {
 
     public function actionAddPenerimaNonNasabah($id, $update_id = NULL) {
         $model = $this->loadModel($id);
+
+        /*
+         * validate swift
+         */
+        if (NasabahPeroranganLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NasabahKorporasiLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NonNasabahLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL) {
+            Yii::app()->user->setFlash('success', 'Warning!|' . 'Data Identitas Pengirim wajib di isi dulu.');
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('swiftIncoming/umum', 'id' => $model->id));
+        }
 
         if (NonNasabahDn::model()->findByPk($update_id) === NULL) {
             $nonNasabahDn = new NonNasabahDn;
@@ -238,8 +262,10 @@ class SwiftIncomingController extends BackendController {
 
         if (NasabahPeroranganLn::model()->countByAttributes(array('swift_id' => $model->id)) != 0)
             $nasabahPeroranganLn = NasabahPeroranganLn::model()->findByAttributes(array('swift_id' => $model->id));
-        else
+        else {
             $nasabahPeroranganLn = new NasabahPeroranganLn;
+            $nasabahPeroranganLn->unsetAttributes();
+        }
 
         if (isset($_POST['NasabahPeroranganLn'])) {
             $nasabahPeroranganLn->attributes = $_POST['NasabahPeroranganLn'];
@@ -269,8 +295,10 @@ class SwiftIncomingController extends BackendController {
 
         if (NasabahKorporasiLn::model()->countByAttributes(array('swift_id' => $model->id)) != 0)
             $nasabahKorporasiLn = NasabahKorporasiLn::model()->findByAttributes(array('swift_id' => $model->id));
-        else
+        else {
             $nasabahKorporasiLn = new NasabahKorporasiLn;
+            $nasabahKorporasiLn->unsetAttributes();
+        }
 
         if (isset($_POST['NasabahKorporasiLn'])) {
             $nasabahKorporasiLn->attributes = $_POST['NasabahKorporasiLn'];
@@ -299,8 +327,10 @@ class SwiftIncomingController extends BackendController {
 
         if (NonNasabahLn::model()->countByAttributes(array('swift_id' => $model->id)) != 0)
             $nonNasabahLn = NonNasabahLn::model()->findByAttributes(array('swift_id' => $model->id));
-        else
+        else {
             $nonNasabahLn = new NonNasabahLn;
+            $nonNasabahLn->unsetAttributes();
+        }
 
         if (isset($_POST['NonNasabahLn'])) {
             $nonNasabahLn->attributes = $_POST['NonNasabahLn'];
@@ -327,11 +357,20 @@ class SwiftIncomingController extends BackendController {
     public function actionAddTransaksi($id) {
         $model = $this->loadModel($id);
 
+        /*
+         * validate swift
+         */
+        if (NasabahPeroranganDn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NasabahKorporasiDn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NonNasabahDn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL) {
+            Yii::app()->user->setFlash('success', 'Warning!|' . 'Data Identitas Penerima wajib di isi dulu.');
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('swiftIncoming/umum', 'id' => $model->id));
+        }
+
         if (Transaksi::model()->countByAttributes(array('swift_id' => $model->id)) != 0)
             $transaksi = Transaksi::model()->findByAttributes(array('swift_id' => $model->id));
-        else
+        else {
             $transaksi = new Transaksi;
-
+            $transaksi->unsetAttributes();
+        }
         if (isset($_POST['Transaksi'])) {
             $transaksi->attributes = $_POST['Transaksi'];
             $transaksi->swift_id = $model->id;
@@ -359,10 +398,20 @@ class SwiftIncomingController extends BackendController {
     public function actionAddInfoLain($id) {
         $model = $this->loadModel($id);
 
+        /*
+         * validate swift
+         */
+        if (Transaksi::model()->findByAttributes(array('swift_id' => $model->id)) == NULL) {
+            Yii::app()->user->setFlash('success', 'Warning!|' . 'Data Transaksi wajib di isi dulu.');
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('swiftIncoming/umum', 'id' => $model->id));
+        }
+
         if (InfoLain::model()->countByAttributes(array('swift_id' => $model->id)) != 0)
             $infoLain = InfoLain::model()->findByAttributes(array('swift_id' => $model->id));
-        else
+        else {
             $infoLain = new InfoLain;
+            $infoLain->unsetAttributes();
+        }
 
         if (isset($_POST['Infolain'])) {
             $infoLain->attributes = $_POST['Infolain'];
@@ -403,6 +452,19 @@ class SwiftIncomingController extends BackendController {
      * Lists all models.
      */
     public function actionIndex() {
+        $model = new Swift('search');
+        $model->unsetAttributes();  // clear any default values
+        $model->jenisSwift = Swift::TYPE_SWIN;
+
+        if (isset($_POST['FinalizeButton'])) {
+            if (isset($_POST['selectedIds'])) {
+                foreach ($_POST['selectedIds'] as $id) {
+                    $swift = Swift::model()->findByPk($id);
+                    $swift->status = Swift::STATUS_FINALIZE;
+                    $swift->save();
+                }
+            }
+        }
 
         $this->checkAccess('swift.view');
 
@@ -453,6 +515,7 @@ class SwiftIncomingController extends BackendController {
             'pages' => $pages,
             'filters' => $filters,
             'sort' => $sort,
+            'model' => $model,
         );
         $this->render('index', $vars);
     }
@@ -476,7 +539,7 @@ class SwiftIncomingController extends BackendController {
      * @param Swift $model the model to be validated
      */
     protected function performAjaxValidation($model) {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'swift-form') {
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'swiftIncoming-form') {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }

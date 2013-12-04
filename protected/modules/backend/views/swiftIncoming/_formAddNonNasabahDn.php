@@ -76,7 +76,13 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahDn, 'idPropinsi', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($nonNasabahDn, 'idPropinsi', Yii::app()->util->getKodeStandar(array('modul' => 'propinsi', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
+                    <?php echo $form->dropDownList($nonNasabahDn, 'idPropinsi', Yii::app()->util->getKodeStandar(array('modul' => 'propinsi', 'data' => 'all&blank')), array(
+                        'class' => 'form-control chzn-select',
+                        'ajax' => array(
+                            'type' => 'POST', //request type
+                            'url' => Yii::app()->createUrl('backend/swift/dynamicNegaraNonNasabahDnPropinsi'),
+                            'update' => '#NonNasabahDn_idKabKota',
+                    ))); ?>
                     <?php echo $form->error($nonNasabahDn, 'idPropinsi'); ?>
                 </div>
             </div>
@@ -92,7 +98,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahDn, 'idKabKota', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($nonNasabahDn, 'idKabKota', Yii::app()->util->getKodeStandar(array('modul' => 'kabupaten', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
+                    <?php echo $form->dropDownList($nonNasabahDn, 'idKabKota', Yii::app()->util->getKodeStandar(array('modul' => 'kabupaten', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
                     <?php echo $form->error($nonNasabahDn, 'idKabKota'); ?>
                 </div>
             </div>

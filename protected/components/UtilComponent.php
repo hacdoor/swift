@@ -301,7 +301,8 @@ class UtilComponent extends CApplicationComponent {
                 'jenisLaporan' => array(1 => 'Baru', 2 => 'Koreksi', 3 => 'Recall', 4 => 'Reject'),
                 'kewarganegaraan' => array(1 => 'WNI', 2 => 'WNA'),
                 'bentukBadanUsaha' => array(1 => 'CV', 2 => 'PT', 3 => 'Yayasan', 9 => 'Lainnya'),
-                'pjkBankSebagai' => array(1 => 'Penyelenggara Penerima Akhir', 2 => 'Penyelenggara Penerus'),
+                'pjkBankSebagaiSwin' => array(1 => 'Penyelenggara Penerima Akhir', 2 => 'Penyelenggara Penerus'),
+                'pjkBankSebagaiSwout' => array(1 => 'Penyelenggara Pengirim Akhir', 2 => 'Penyelenggara Penerus'),
                 'pekerjaan' => array(
                     1 => 'Pejabat Lembaga Legislatif dan Pemerintah',
                     2 => 'PNS (termasuk pensiunan)',

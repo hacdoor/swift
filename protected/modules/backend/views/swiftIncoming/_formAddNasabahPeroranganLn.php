@@ -16,7 +16,7 @@
         ),
         'errorMessageCssClass' => 'label label-danger',
         'htmlOptions' => array('class' => 'form-horizontal', 'role' => 'form')
-            ));
+    ));
     ?>
 
     <div class="col-md-12">
@@ -47,12 +47,19 @@
             </div>
         </fieldset>
 
-        <fieldset class="well">
-            <legend>Kewarganegaraan</legend>
+        <fieldset class="well"><legend>Kewarganegaraan</legend>
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganLn, 'wargaNegara', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($nasabahPeroranganLn, 'wargaNegara', Yii::app()->util->getKodeStandar(array('modul' => 'kewarganegaraan', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php
+                    echo $form->dropDownList($nasabahPeroranganLn, 'wargaNegara', Yii::app()->util->getKodeStandar(array('modul' => 'kewarganegaraan', 'data' => 'all&blank')), array(
+                        'class' => 'form-control chzn-select',
+                        'ajax' => array(
+                            'type' => 'POST', //request type
+                            'url' => Yii::app()->createUrl('backend/swift/dynamicNegaraNasabahPeroranganLnNegaraKewarganegaraan'),
+                            'update' => '#NasabahPeroranganLn_idNegaraKewarganegaraan',
+                    )));
+                    ?>
                     <?php echo $form->error($nasabahPeroranganLn, 'wargaNegara'); ?>
                 </div>
             </div>
@@ -60,7 +67,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganLn, 'idNegaraKewarganegaraan', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($nasabahPeroranganLn, 'idNegaraKewarganegaraan', Yii::app()->util->getKodeStandar(array('modul' => 'negara', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
+                    <?php echo $form->dropDownList($nasabahPeroranganLn, 'idNegaraKewarganegaraan', Yii::app()->util->getKodeStandar(array('modul' => 'negara', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
                     <?php echo $form->error($nasabahPeroranganLn, 'idNegaraKewarganegaraan'); ?>
                 </div>
             </div>
@@ -95,7 +102,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganLn, 'idNegaraVoucher', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($nasabahPeroranganLn, 'idNegaraVoucher', Yii::app()->util->getKodeStandar(array('modul' => 'negara', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php echo $form->dropDownList($nasabahPeroranganLn, 'idNegaraVoucher', Yii::app()->util->getKodeStandar(array('modul' => 'negara', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
                     <?php echo $form->error($nasabahPeroranganLn, 'idNegaraVoucher'); ?>
                 </div>
             </div>

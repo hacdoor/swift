@@ -16,7 +16,7 @@
         ),
         'errorMessageCssClass' => 'label label-danger',
         'htmlOptions' => array('class' => 'form-horizontal', 'role' => 'form')
-            ));
+    ));
     ?>
 
     <div class="row">
@@ -85,11 +85,18 @@
                 <div class="form-group">
                     <?php echo $form->labelEx($nasabahKorporasiDn, 'idPropinsi', array('class' => 'col-md-2 control-label')); ?>
                     <div class="col-md-5">
-                        <?php echo $form->dropDownList($nasabahKorporasiDn, 'idPropinsi', Yii::app()->util->getKodeStandar(array('modul' => 'propinsi', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
+                        <?php
+                        echo $form->dropDownList($nasabahKorporasiDn, 'idPropinsi', Yii::app()->util->getKodeStandar(array('modul' => 'propinsi', 'data' => 'all&blank')), array(
+                            'class' => 'form-control chzn-select',
+                            'ajax' => array(
+                                'type' => 'POST', //request type
+                                'url' => Yii::app()->createUrl('backend/swift/dynamicNegaraNasabahKorporasiDnPropinsi'),
+                                'update' => '#NasabahKorporasiDn_idKabKota',
+                        )));
+                        ?>
                         <?php echo $form->error($nasabahKorporasiDn, 'idPropinsi'); ?>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <?php echo $form->labelEx($nasabahKorporasiDn, 'propinsiLain', array('class' => 'col-md-2 control-label')); ?>
                     <div class="col-md-5">
@@ -101,11 +108,10 @@
                 <div class="form-group">
                     <?php echo $form->labelEx($nasabahKorporasiDn, 'idKabKota', array('class' => 'col-md-2 control-label')); ?>
                     <div class="col-md-5">
-                        <?php echo $form->dropDownList($nasabahKorporasiDn, 'idKabKota', Yii::app()->util->getKodeStandar(array('modul' => 'kabupaten', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
+                        <?php echo $form->dropDownList($nasabahKorporasiDn, 'idKabKota', Yii::app()->util->getKodeStandar(array('modul' => 'kabupaten', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
                         <?php echo $form->error($nasabahKorporasiDn, 'idKabKota'); ?>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <?php echo $form->labelEx($nasabahKorporasiDn, 'kabKotaLain', array('class' => 'col-md-2 control-label')); ?>
                     <div class="col-md-5">
@@ -133,9 +139,9 @@
                         <?php echo $form->textField($nasabahKorporasiDn, 'nilaiTransaksiDalamRupiah', array('class' => 'form-control')); ?>
                         <?php echo $form->error($nasabahKorporasiDn, 'nilaiTransaksiDalamRupiah'); ?>
                     </div>
+
                 </div>
             </fieldset>
-
         </div>
 
         <div class="col-md-12 clear form-actions">
@@ -143,7 +149,6 @@
             <a href="<?php echo $this->createUrl('index'); ?>" class="btn btn-lg btn-default">Cancel</a>
             <?php echo CHtml::submitButton($nasabahKorporasiDn->isNewRecord ? 'Tambah' : 'Simpan', array('class' => 'btn btn-lg btn-primary')); ?>
         </div>
-
         <?php $this->endWidget(); ?>
 
     </div>

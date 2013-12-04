@@ -1,0 +1,1 @@
+ALTER TABLE `swift`.`non_nasabah_dn` ADD COLUMN `isBesarDariSeratusJuta` INT(1) NULL DEFAULT NULL  AFTER `nilaiTransaksiDalamRupiah` , ADD COLUMN `beneficialOwnerType` INT(1) NULL DEFAULT NULL  AFTER `isBesarDariSeratusJuta` 
