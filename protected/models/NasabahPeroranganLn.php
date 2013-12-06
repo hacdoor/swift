@@ -56,7 +56,7 @@ class NasabahPeroranganLn extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('noRekening, namaLengkap, idNegaraKewarganegaraan, idNegaraVoucher, swift_id', 'required'),
+            array('namaLengkap, tglLahir, idNegaraKewarganegaraan, idNegaraVoucher, swift_id', 'required'),
             array('wargaNegara, idNegaraKewarganegaraan, idNegaraVoucher, swift_id', 'numerical', 'integerOnly' => true),
             array('nilaiTransaksiDalamRupiah', 'numerical'),
             array('noRekening, negaraLainKewarganegaraan, negaraBagianKota, negaraLainVoucher', 'length', 'max' => 50),
@@ -65,6 +65,7 @@ class NasabahPeroranganLn extends CActiveRecord {
             array('noTelp, ktp, sim, passport, kimsKitasKitap, npwp, jenisBuktiLain, noBuktiLain', 'length', 'max' => 30),
             array('tglLahir', 'safe'),
             array('ktp, sim, passport, kimsKitasKitap, npwp', 'oneOfFive'),
+            array('noRekening, alamat', 'oneOfTwo'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('id, noRekening, namaLengkap, tglLahir, wargaNegara, idNegaraKewarganegaraan, negaraLainKewarganegaraan, alamat, negaraBagianKota, idNegaraVoucher, negaraLainVoucher, noTelp, ktp, sim, passport, kimsKitasKitap, npwp, jenisBuktiLain, noBuktiLain, swift_id', 'safe', 'on' => 'search'),
@@ -73,7 +74,11 @@ class NasabahPeroranganLn extends CActiveRecord {
 
     public function oneOfFive($attribute, $params) {
         if (!$this->ktp && !$this->sim && !$this->passport && !$this->kimsKitasKitap && !$this->npwp)
-        // adding error for attribute "phone1" ONLY
+            $this->addError($attribute, $attribute . ' is required.');
+    }
+    
+    public function oneOfTwo($attribute, $params) {
+        if (!$this->noRekening && !$this->alamat)
             $this->addError($attribute, $attribute . ' is required.');
     }
 

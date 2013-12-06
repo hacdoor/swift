@@ -35,7 +35,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
+<!--            <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiLn, 'bentukBadan', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
                     <?php echo $form->dropDownList($nasabahKorporasiLn, 'bentukBadan', Yii::app()->util->getKodeStandar(array('modul' => 'bentukBadanUsaha', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
@@ -65,7 +65,7 @@
                     <?php echo $form->textField($nasabahKorporasiLn, 'bidangUsahaLain', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                     <?php echo $form->error($nasabahKorporasiLn, 'bidangUsahaLain'); ?>
                 </div>
-            </div>
+            </div>-->
         </fieldset>
         <fieldset><legend>Alamat Sesuai Voucher</legend>
             <div class="form-group">

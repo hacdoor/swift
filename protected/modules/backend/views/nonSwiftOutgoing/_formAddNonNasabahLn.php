@@ -60,7 +60,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
+<!--            <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahLn, 'noTelp', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
                     <?php echo $form->textField($nonNasabahLn, 'noTelp', array('class' => 'form-control')); ?>
@@ -74,7 +74,7 @@
                     <?php echo $form->textField($nonNasabahLn, 'negaraBagianKota', array('class' => 'form-control')); ?>
                     <?php echo $form->error($nonNasabahLn, 'negaraBagianKota'); ?>
                 </div>
-            </div>
+            </div>-->
 
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahLn, 'idNegara', array('class' => 'col-md-2 control-label')); ?>
@@ -92,7 +92,7 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset><legend>Bukti Identitas</legend>
+<!--        <fieldset><legend>Bukti Identitas</legend>
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahLn, 'ktp', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -149,7 +149,7 @@
                     <?php echo $form->error($nonNasabahLn, 'noBuktiLain'); ?>
                 </div>
             </div>
-        </fieldset>
+        </fieldset>-->
         <fieldset><legend>Nilai Transaksi</legend>
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahLn, 'nilaiTransaksiDalamRupiah', array('class' => 'col-md-2 control-label')); ?>

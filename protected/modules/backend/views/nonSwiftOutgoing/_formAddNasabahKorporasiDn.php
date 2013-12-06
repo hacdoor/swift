@@ -117,7 +117,7 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset>
+<!--        <fieldset>
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahKorporasiDn, 'noTelp', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -125,7 +125,7 @@
                     <?php echo $form->error($nasabahKorporasiDn, 'noTelp'); ?>
                 </div>
             </div>
-        </fieldset>
+        </fieldset>-->
     </div>
 
     <div class="col-md-12 clear form-actions">

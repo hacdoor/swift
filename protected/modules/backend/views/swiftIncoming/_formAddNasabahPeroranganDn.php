@@ -24,7 +24,7 @@
 
             <fieldset class="well">
                 <div class="form-group">
-                    <?php echo $form->labelEx($nasabahPeroranganDn, 'noRekening', array('class' => 'col-md-2 control-label')); ?>
+                    <?php echo $form->labelEx($nasabahPeroranganDn, 'noRekening', array('class' => 'col-md-2 control-label', 'required' => true)); ?>
                     <div class="col-md-5">
                         <?php echo $form->textField($nasabahPeroranganDn, 'noRekening', array('class' => 'form-control')); ?>
                         <?php echo $form->error($nasabahPeroranganDn, 'noRekening'); ?>

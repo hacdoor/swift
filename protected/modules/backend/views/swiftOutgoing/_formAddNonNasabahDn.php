@@ -20,7 +20,7 @@
         <p class="note">Fields with <span class="required">*</span> are required.</p>
 
         <fieldset>
-            <div class="form-group">
+<!--            <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahDn, 'kodeRahasia', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
                     <?php echo $form->textField($nonNasabahDn, 'kodeRahasia', array('class' => 'form-control')); ?>
@@ -34,7 +34,7 @@
                     <?php echo $form->textField($nonNasabahDn, 'noRekening', array('class' => 'form-control')); ?>
                     <?php echo $form->error($nonNasabahDn, 'noRekening'); ?>
                 </div>
-            </div>
+            </div>-->
 
             <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahDn, 'namaLengkap', array('class' => 'col-md-2 control-label')); ?>

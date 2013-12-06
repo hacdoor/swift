@@ -53,7 +53,7 @@ class NonNasabahLn extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('noRekening, namaLengkap, negaraBagianKota, idNegara, swift_id', 'required'),
+            array('namaLengkap, negaraBagianKota, idNegara, swift_id', 'required'),
             array('idNegara, swift_id', 'numerical', 'integerOnly' => true),
             array('nilaiTransaksiDalamRupiah', 'numerical'),
             array('kodeRahasia, noRekening, negaraLain', 'length', 'max' => 50),
@@ -62,6 +62,7 @@ class NonNasabahLn extends CActiveRecord {
             array('noTelp, negaraBagianKota, ktp, sim, passport, kimsKitasKitap, npwp, jenisBuktiLain, noBuktiLain', 'length', 'max' => 30),
             array('tglLahir', 'safe'),
             array('ktp, sim, passport, kimsKitasKitap, npwp', 'oneOfFive'),
+            array('noRekening, alamat', 'oneOfTwo'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('id, kodeRahasia, noRekening, namaLengkap, tglLahir, alamat, noTelp, negaraBagianKota, idNegara, negaraLain, ktp, sim, passport, kimsKitasKitap, npwp, jenisBuktiLain, noBuktiLain, swift_id', 'safe', 'on' => 'search'),
@@ -70,7 +71,11 @@ class NonNasabahLn extends CActiveRecord {
 
     public function oneOfFive($attribute, $params) {
         if (!$this->ktp && !$this->sim && !$this->passport && !$this->kimsKitasKitap && !$this->npwp)
-        // adding error for attribute "phone1" ONLY
+            $this->addError($attribute, $attribute . ' is required.');
+    }
+    
+    public function oneOfTwo($attribute, $params) {
+        if (!$this->noRekening && !$this->alamat)
             $this->addError($attribute, $attribute . ' is required.');
     }
 

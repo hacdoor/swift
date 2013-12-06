@@ -193,7 +193,7 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset>
+<!--        <fieldset>
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganDn, 'noTelp', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -201,7 +201,7 @@
                     <?php echo $form->error($nasabahPeroranganDn, 'noTelp'); ?>
                 </div>
             </div>
-        </fieldset>
+        </fieldset>-->
         <fieldset><legend>Bukti Identitas</legend>
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganDn, 'ktp', array('class' => 'col-md-2 control-label')); ?>

@@ -119,7 +119,7 @@ $this->menu = array(
                             'class' => 'CCheckBoxColumn',
                             'id' => 'selectedIds',
                         ),
-                        'noRekening',
+//                        'noRekening',
                         'namaLengkap',
                         array(
                             'name' => 'nilaiTransaksiDalamRupiah',

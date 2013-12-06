@@ -546,19 +546,6 @@ class SwiftIncomingController extends BackendController {
     }
 
     /**
-     * List all ajax action to get dinamic kabupaten kota 
-     */
-    public function actionDynamicKabKotaNasabahPeroranganDnDomisili() {
-        $data = Kabupaten::model()->findAll('propinsi_id=:propinsiId', array(':propinsiId' => (int) $_POST['NasabahPeroranganDn']['idPropinsiDomisili']));
-
-        $data = CHtml::listData($data, 'id', 'nama');
-        $data = CMap::mergeArray(array(440 => 'Lain-lain'), $data);
-        foreach ($data as $value => $name) {
-            echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);
-        }
-    }
-
-    /**
      * List all ajax action to generate 
      */
     public function actionExportToExcel($id) {

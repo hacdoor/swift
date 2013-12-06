@@ -28,6 +28,7 @@
                     <?php echo $form->textField($nasabahPeroranganLn, 'noRekening', array('class' => 'form-control')); ?>
                     <?php echo $form->error($nasabahPeroranganLn, 'noRekening'); ?>
                 </div>
+                <span class="hint">Wajib diisi apabila alamat belum diisi</span>
             </div>
 
             <div class="form-group">
@@ -89,6 +90,7 @@
                     <?php echo $form->textField($nasabahPeroranganLn, 'alamat', array('class' => 'form-control')); ?>
                     <?php echo $form->error($nasabahPeroranganLn, 'alamat'); ?>
                 </div>
+                <span class="hint">Wajib diisi apabila no rekening belum diisi</span>
             </div>
 
             <div class="form-group">

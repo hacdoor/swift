@@ -67,7 +67,7 @@ class NasabahPeroranganDn extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('noRekening, namaLengkap, idNegaraKewarganegaraan, idPropinsiDomisili, idKabKotaDomisili, idPropinsiIdentitas, idKabKotaIdentitas, swift_id', 'required'),
+            array('noRekening, tglLahir, namaLengkap, idNegaraKewarganegaraan, idPropinsiDomisili, idKabKotaDomisili, idPropinsiIdentitas, idKabKotaIdentitas, swift_id', 'required'),
             array('wargaNegara, idNegaraKewarganegaraan, pekerjaan, idPropinsiDomisili, idKabKotaDomisili, idPropinsiIdentitas, idKabKotaIdentitas, swift_id', 'numerical', 'integerOnly' => true),
             array('nilaiTransaksiDalamRupiah', 'numerical'),
             array('noRekening, negaraLainKewarganegaraan, pekerjaanLain, propinsiLainDomisili, kabKotaLain, propinsiLainIdentitas, kabKotaLainIdentitas', 'length', 'max' => 50),
@@ -84,7 +84,6 @@ class NasabahPeroranganDn extends CActiveRecord {
 
     public function oneOfFive($attribute, $params) {
         if (!$this->ktp && !$this->sim && !$this->passport && !$this->kimsKitasKitap && !$this->npwp)
-        // adding error for attribute "phone1" ONLY
             $this->addError($attribute, $attribute . ' is required.');
     }
 

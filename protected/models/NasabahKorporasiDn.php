@@ -57,12 +57,17 @@ class NasabahKorporasiDn extends CActiveRecord {
             array('namaKorporasi, bentukBadanLain', 'length', 'max' => 255),
             array('alamat', 'length', 'max' => 100),
             array('noTelp', 'length', 'max' => 30),
+            array('noRekening, alamat', 'oneOfTwo'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('id, noRekening, namaKorporasi, bentukBadan, bentukBadanLain, bidangUsaha, bidangUsahaLain, alamat, idPropinsi, propinsiLain, idKabKota, kabKotaLain, noTelp, swift_id', 'safe', 'on' => 'search'),
         );
     }
 
+    public function oneOfTwo($attribute, $params) {
+        if (!$this->noRekening && !$this->alamat)
+            $this->addError($attribute, $attribute . ' is required.');
+    }
     /**
      * @return array relational rules.
      */
