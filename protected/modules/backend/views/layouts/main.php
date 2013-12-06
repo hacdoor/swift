@@ -90,8 +90,8 @@ $isHome = ($this->id == 'default' && $this->action->id == 'dashboard' || $this->
                                     Non Swift
                                 </a>
                                 <ul class="dropdown-menu sub-menu">
-                                    <li><a href="<?php echo $this->vars['backendUrl']; ?>nonswiftIncoming"> Incoming</a></li>
-                                    <li><a href="<?php echo $this->vars['backendUrl']; ?>nonswiftOutgoing"> Outgoing</a></li>
+                                    <li><a href="<?php echo $this->vars['backendUrl']; ?>nonSwiftIncoming"> Incoming</a></li>
+                                    <li><a href="<?php echo $this->vars['backendUrl']; ?>nonSwiftOutgoing"> Outgoing</a></li>
                                 </ul>
                             </li>
                             <div class="divider"></div>
