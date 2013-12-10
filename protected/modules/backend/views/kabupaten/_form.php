@@ -14,9 +14,7 @@
     ?>
 
     <div class="col-md-12">
-
         <fieldset>
-
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'nama', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-4">
@@ -24,7 +22,6 @@
                     <?php echo $form->error($model, 'nama'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php $listData = Propinsi::model()->findAll(array('order' => 'nama ASC')); ?>
                 <?php echo $form->labelEx($model, 'propinsi_id', array('class' => 'col-md-2 control-label')); ?>
@@ -33,7 +30,6 @@
                     <?php echo $form->error($model, 'propinsi_id'); ?>
                 </div>
             </div>
-
         </fieldset>
     </div>
 

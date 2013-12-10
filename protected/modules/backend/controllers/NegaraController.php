@@ -138,6 +138,8 @@ class NegaraController extends BackendController {
     }
 
     public function actionGenerateExcel() {
+        $this->checkAccess('negara.generateExcel');
+
         $model = Negara::model()->findAll();
         Yii::app()->request->sendFile('nama_negara_' . date('dmY') . '.xls', $this->renderPartial('excelReport', array(
                     'model' => $model
@@ -146,6 +148,8 @@ class NegaraController extends BackendController {
     }
 
     public function actionGenerateXml() {
+        $this->checkAccess('negara.generateXml');
+
         $model = Negara::model()->findAll();
         Yii::app()->request->sendFile('nama_negara_' . date('dmY') . '.xml', $this->renderPartial('xmlReport', array(
                     'model' => $model
@@ -154,6 +158,8 @@ class NegaraController extends BackendController {
     }
 
     public function actionGenExcel() {
+        $this->checkAccess('negara.genExcel');
+
         $model = Negara::model()->findAll();
         $nama = array();
         foreach ($model as $d) {

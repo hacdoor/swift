@@ -1,9 +1,3 @@
-<?php
-/* @var $this SwiftController */
-/* @var $nasabahPeroranganLn Swift */
-/* @var $form CActiveForm */
-?>
-
 <div class="form-wrapper">
 
     <?php
@@ -16,11 +10,10 @@
         ),
         'errorMessageCssClass' => 'label label-danger',
         'htmlOptions' => array('class' => 'form-horizontal', 'role' => 'form')
-    ));
+            ));
     ?>
 
     <div class="col-md-12">
-
         <fieldset class="well">
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganLn, 'noRekening', array('class' => 'col-md-2 control-label')); ?>
@@ -28,9 +21,10 @@
                     <?php echo $form->textField($nasabahPeroranganLn, 'noRekening', array('class' => 'form-control')); ?>
                     <?php echo $form->error($nasabahPeroranganLn, 'noRekening'); ?>
                 </div>
-                <span class="hint">Wajib diisi apabila alamat belum diisi</span>
+                <div class="col-md-5">
+                    <div class="alert alert-danger customAlert">Wajib diisi apabila alamat belum diisi !</div>
+                </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganLn, 'namaLengkap', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -38,7 +32,6 @@
                     <?php echo $form->error($nasabahPeroranganLn, 'namaLengkap'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganLn, 'tglLahir', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -48,7 +41,8 @@
             </div>
         </fieldset>
 
-        <fieldset class="well"><legend>Kewarganegaraan</legend>
+        <fieldset class="well">
+            <legend>Kewarganegaraan</legend>
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganLn, 'wargaNegara', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -59,20 +53,18 @@
                             'type' => 'POST', //request type
                             'url' => Yii::app()->createUrl('backend/swift/dynamicNegaraNasabahPeroranganLnNegaraKewarganegaraan'),
                             'update' => '#NasabahPeroranganLn_idNegaraKewarganegaraan',
-                    )));
+                            )));
                     ?>
                     <?php echo $form->error($nasabahPeroranganLn, 'wargaNegara'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganLn, 'idNegaraKewarganegaraan', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($nasabahPeroranganLn, 'idNegaraKewarganegaraan', Yii::app()->util->getKodeStandar(array('modul' => 'negara', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
+                    <?php echo $form->dropDownList($nasabahPeroranganLn, 'idNegaraKewarganegaraan', Yii::app()->util->getKodeStandar(array('modul' => 'negara', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
                     <?php echo $form->error($nasabahPeroranganLn, 'idNegaraKewarganegaraan'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganLn, 'negaraLainKewarganegaraan', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -90,9 +82,10 @@
                     <?php echo $form->textField($nasabahPeroranganLn, 'alamat', array('class' => 'form-control')); ?>
                     <?php echo $form->error($nasabahPeroranganLn, 'alamat'); ?>
                 </div>
-                <span class="hint">Wajib diisi apabila no rekening belum diisi</span>
+                <div class="col-md-5">
+                    <div class="alert alert-danger customAlert">Wajib diisi apabila No. Rekening belum diisi !</div>
+                </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganLn, 'negaraBagianKota', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -100,7 +93,6 @@
                     <?php echo $form->error($nasabahPeroranganLn, 'negaraBagianKota'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganLn, 'idNegaraVoucher', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -108,7 +100,6 @@
                     <?php echo $form->error($nasabahPeroranganLn, 'idNegaraVoucher'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganLn, 'negaraLainVoucher', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -116,9 +107,6 @@
                     <?php echo $form->error($nasabahPeroranganLn, 'negaraLainVoucher'); ?>
                 </div>
             </div>
-        </fieldset>
-
-        <fieldset class="well">
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganLn, 'noTelp', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -137,7 +125,6 @@
                     <?php echo $form->error($nasabahPeroranganLn, 'ktp'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganLn, 'sim', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -145,7 +132,6 @@
                     <?php echo $form->error($nasabahPeroranganLn, 'sim'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganLn, 'passport', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -153,7 +139,6 @@
                     <?php echo $form->error($nasabahPeroranganLn, 'passport'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganLn, 'kimsKitasKitap', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -161,7 +146,6 @@
                     <?php echo $form->error($nasabahPeroranganLn, 'kimsKitasKitap'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganLn, 'npwp', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -180,7 +164,6 @@
                     <?php echo $form->error($nasabahPeroranganLn, 'jenisBuktiLain'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($nasabahPeroranganLn, 'noBuktiLain', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">

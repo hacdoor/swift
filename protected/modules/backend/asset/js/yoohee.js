@@ -1,14 +1,13 @@
 var yoohee = {
     registerEvents: function() {
         var self = this;
-
+        
         // Offcanvas
         $('[data-toggle=offcanvas]').click(function() {
             $('.row-offcanvas').toggleClass('active');
         });
-
+        
         // File upload
-        //$('.form-upload').bootstrapFileInput();
         $('.form-upload-file').on('change', function() {
             self.previewUpload(this, 'file-upload-preview');
         });
@@ -23,7 +22,7 @@ var yoohee = {
                 $('#file-upload-preview').hide();
             }
         });
-
+        
         // Change password
         $('#toggle-password').on('change', function() {
             if ($(this).is(':checked')) {
@@ -32,23 +31,31 @@ var yoohee = {
                 $('#form-password').hide();
             }
         });
-
+        
         // Datepicker
         $('.datepicker').datepicker({
-            format: 'yyyy-mm-dd'
+            format: 'yyyy-mm-dd',
+            autoclose : true
         });
-
+        
+        // DateRange Picker
+        $('.rangePicker').daterangepicker({
+            timePicker: false,
+            timePickerIncrement: 30,
+            format: 'YYYY-MM-DD'
+        });
+        
         // Datepicker
         $('.dateSwift').datepicker({
             format: 'dd-mm-yyyy'
         });
-
+        
         // Timepicker
         $('.dtpicker').datetimepicker({
             format: "yyyy-mm-dd hh:ii",
             autoclose: true
         });
-
+        
         // Timepicker
         $('.timepicker').datetimepicker({
             format: "hh:ii",
@@ -57,17 +64,17 @@ var yoohee = {
             minView: 0,
             startView: 0
         });
-
+        
         // Tooltip
         $('.bootip').tooltip({
             html: true
         });
-
+        
         // Bootbox
         bootbox.setDefaults({
             animate: false
         });
-
+        
         // Confirm delete
         $('.btn-delete').on('click', function(e) {
             var o = $(this);
@@ -78,25 +85,58 @@ var yoohee = {
                     window.location.href = href;
                 }
             });
-
             return false;
         });
-
+        
+        // Confirm Confirm
+        $('.btn-submit').click(function(e) {
+            e.preventDefault();
+            var o = $(this);
+            var confirmText = o.data('confirm');
+            bootbox.confirm(confirmText, function(result) {
+                if (result) {
+                    $('form').submit();
+                }
+            });
+            return false;
+        });
+        
+        $('.checkbox-column input:checkbox').change(function(){
+            if($(this).is(":checked")) {
+                $(this).parent().parent().addClass('selected');
+                $('.btn-action input').removeClass('disabled');
+                $('#DeleteButton').removeClass('disabled');
+            } else {
+                $(this).parent().parent().removeClass('selected');
+                $('.btn-action input').addClass('disabled');
+                $('#DeleteButton').removeClass('disabled');
+            }
+        });
+        
+        $('#selectedIds input:checkbox').change(function(){
+            if($(this).is(":checked")) {
+                $('.checkbox-column input:checkbox').parent().parent().addClass('selected');
+                $('.checkbox-column input:checkbox').prop('checked', true);
+                $('#DeleteButton').removeClass('disabled');
+            } else {
+                $('.checkbox-column input:checkbox').parent().parent().removeClass('selected');
+                $('.checkbox-column input:checkbox').prop('checked', false);
+                $('#DeleteButton').addClass('disabled');
+            }
+        });
+        
         // Table add row
         $('.add-row').btnAddRow();
         $('.del-row').btnDelRow();
-
-        // Select picker
-        //        if ($('select').length > 0) $('select').selectpicker();
-
+        
         // Colorbox
         $('.colorbox').colorbox({
             opacity: 0.5
         });
-
+        
         // Isotope
         $('.media-images').isotope();
-
+        
         // External link
         $('.external').on('click', function() {
             var href = $(this).attr('href');
@@ -105,12 +145,12 @@ var yoohee = {
             }
             return false;
         });
-
+        
         // Popover
         $('.ppv').popover({
             trigger: 'hover'
         });
-
+        
         // Toggle event end time
         $('#ContentEvent_show_end_time').on('change', function() {
             if ($(this).is(':checked'))
@@ -118,7 +158,7 @@ var yoohee = {
             else
                 $('#event-end-time').hide();
         });
-
+        
         // system.root permission
         $('.system-root').on('change', function() {
             if ($(this).is(':checked')) {
@@ -139,7 +179,7 @@ var yoohee = {
                 });
             }
         });
-
+        
         // Admin group
         if ($('.admin-group').length > 0) {
             $('.admin-group').on('change', function() {
@@ -161,13 +201,13 @@ var yoohee = {
     previewUpload: function(input, id) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
-
+            
             reader.onload = function(e) {
                 $('#' + id).attr('src', e.target.result);
                 $('#' + id).show();
                 $('[data-preview=' + id + ']').hide();
             }
-
+            
             reader.readAsDataURL(input.files[0]);
         }
     },
@@ -176,7 +216,7 @@ var yoohee = {
         var windowHeight = window.innerHeight;
         $('#content-inner').css('min-height', windowHeight - 310);
         $('#content').css('min-height', windowHeight - 310);
-
+        
         // Sidebar menu active state
         var path = window.location.pathname;
         $('.list-group-item').each(function() {
@@ -189,12 +229,20 @@ var yoohee = {
     },
     initialize: function() {
         
+        /* Toggle Advance Search */
+        
+        $(".toggleSeach").click(function(){
+            $(".advanceSearch").toggle();
+        });
+       
+        /* Active MouseEnter */
+        
         if($('.dropdown-menu li').hasClass('active')){
             $(this).parent().parent().addClass('active');
         }
         
         /* Auto Load Chosen */
-    
+        
         if ($('.chzn-select').length > 0) {
             $('.chzn-select').chosen();
         };
@@ -249,13 +297,15 @@ var yoohee = {
             });
         }
         
+        /* Leave Page Confirm */
+        
         if(!$('a').hasClass('btn-delete')){
             if(!$('.form-horizontal input[type=submit]').data('clicked')){
                 $('a').each(function(){
                     if (!this.hash || !$('a').hasClass('chzn-single') || !this.hasClass('btn-delete') || !$('.form-horizontal input[type=submit]')) {
                         $(this).on('click', function(e) {
                             if(!$(this).hasClass('chzn-single')){
-                                var check = $('.form-horizontal #check').val().trim();
+                                var check = $('.form-horizontal #check').val();
                                 if(check.length){
                                     var o = $(this);
                                     var text = 'Anda yakin meninggalkan halaman ini ?';
@@ -275,9 +325,9 @@ var yoohee = {
                 });
             };
         };
-
+        
         /* Actived Dropdown */
-
+        
         $('.dropdown').bind('mouseenter', function() {
             var $this = $(this);
             $this.addClass('selected');
@@ -285,9 +335,9 @@ var yoohee = {
             var $this = $(this);
             $this.removeClass('selected').children('div').css('z-index', '1');
         });
-
+        
         /* Form Swift */
-
+        
         $(".radio input[name$='optionsRadiosNasabah']").click(function() {
             var type = $(this).data('type');
             var t = (type == 1) ? 'formPerorangan' : 'formKorporasi'; 
@@ -295,23 +345,23 @@ var yoohee = {
             $("#" + t).show();
             $("#TypeForNasabah").val(type);
         });
-
+        
         $('.setValue').each(function() {
             $(".setValue").click(function() {
                 var type = $(this).data('type');
                 $("#TypeNasabah").val(type);
             });
         });
-
+        
         if ($(".radio input[name$='optionsRadiosNasabah']").is('checked')) {
             var type = $(this).data('type');
             $("#TypeForNasabah").val(type);
         }
         ;
-
+        
         var type = $("#myTab li.active").data('type');
         $("#TypeNasabah").val(type);
-
+        
         $('#kewarganegaraan').on('change', function() {
             var data = $(this).val();
             if (data == 1) {
@@ -320,12 +370,12 @@ var yoohee = {
                 $("#formNegara").show();
             }
         });
-
+        
         var self = this;
-
+        
         self.registerEvents();
         self.fixUI();
-
+        
         // Init change password
         if ($('#toggle-password').length > 0) {
             if ($('#toggle-password').is(':checked')) {
@@ -334,7 +384,7 @@ var yoohee = {
                 $('#form-password').hide();
             }
         }
-
+        
         // Init system-root permission
         if ($('.system-root').length > 0) {
             if ($('.system-root').is(':checked')) {

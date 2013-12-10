@@ -2,7 +2,7 @@
 
     <?php
     $form = $this->beginWidget('CActiveForm', array(
-        'id' => 'swift-form',
+        'id' => 'swiftIncoming-form',
         'enableAjaxValidation' => false,
         'enableClientValidation' => true,
         'clientOptions' => array(
@@ -14,9 +14,7 @@
     ?>
 
     <div class="col-md-12">
-
         <fieldset>
-
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'jenisLaporan', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-2">
@@ -24,7 +22,6 @@
                     <?php echo $form->error($model, 'jenisLaporan'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'localId', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-2">
@@ -32,7 +29,6 @@
                     <?php echo $form->error($model, 'localId'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'noLtdlnKoreksi', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-2">
@@ -40,7 +36,6 @@
                     <?php echo $form->error($model, 'noLtdlnKoreksi'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'tglLaporan', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-2">
@@ -48,7 +43,6 @@
                     <?php echo $form->error($model, 'tglLaporan'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'namaPjk', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -56,7 +50,6 @@
                     <?php echo $form->error($model, 'namaPjk'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'namaPejabatPjk', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -64,7 +57,6 @@
                     <?php echo $form->error($model, 'namaPejabatPjk'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'pjkBankSebagai', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -72,7 +64,6 @@
                     <?php echo $form->error($model, 'pjkBankSebagai'); ?>
                 </div>
             </div>
-
         </fieldset>
     </div>
 

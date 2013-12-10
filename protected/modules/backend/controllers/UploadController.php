@@ -8,6 +8,14 @@ class UploadController extends BackendController {
     }
 
     public function actionIndex() {
+
+        $type = Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' => 'upload', 'data' => $_GET['type'])));
+
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Upload Data ' . $type)
+        );
+
         if ((!empty($_FILES["fileUpload"]))) {
             if (($_FILES['fileUpload']['error'] == 0)) {
                 $fileName = CUploadedFile::getInstanceByName('fileUpload');
@@ -25,7 +33,7 @@ class UploadController extends BackendController {
                         if ($fileName->saveAs($newname)) {
                             $tmpFile = file_get_contents($newname);
                             $tmpFile = mb_convert_encoding($tmpFile, 'UTF-8');
-                            file_put_contents($newname, 'test'.$tmpFile);
+                            file_put_contents($newname, 'test' . $tmpFile);
                             $fp = fopen($newname, "r") or die("Couldn't open $newname");
                             $data = array();
                             $tmp = '';
@@ -35,7 +43,7 @@ class UploadController extends BackendController {
                                 $tmp .= $buffer;
                             }
 
-                            file_put_contents($newname, 'test'.$tmpFile);
+                            file_put_contents($newname, 'test' . $tmpFile);
                             $swData = Yii::app()->util->getSwiftData($data);
                             echo '<pre>';
                             print_r($swData);
@@ -58,7 +66,7 @@ class UploadController extends BackendController {
             }
         }
 
-        $this->render('index');
+        $this->render('index', array('breadcrumb' => $breadcrumb));
     }
 
 }

@@ -1,6 +1,7 @@
 <?php
 $admin = Yii::app()->user->getState('admin');
 $nameSort = (isset($_GET['sort'])) ? $_GET['sort'] : '';
+$showSort = '<i class="icon-sort sortIcon pull-right"></i> ';
 ?>
 <?php echo Yii::app()->util->ahdaBreadcrumbGridForm($breadcrumb) ?>
 <div class="row">
@@ -14,8 +15,8 @@ $nameSort = (isset($_GET['sort'])) ? $_GET['sort'] : '';
                             <thead>
                                 <tr>
                                     <th class="list-number">#</th>
-                                    <th>Nama Propinsi</th>
-                                    <th class="wrap">Negara</th>
+                                    <th><?php echo $sort->link('nama', $showSort . 'Propinsi') ?></th>
+                                    <th><?php echo $sort->link('negara_id', $showSort . 'Negara') ?></th>
                                     <th class="list-actions">Actions</th>
                                 </tr>
                             </thead>
@@ -115,7 +116,6 @@ $nameSort = (isset($_GET['sort'])) ? $_GET['sort'] : '';
                                     <span class="sr-only"></span>
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><?php echo $sort->link('id') ?></li>
                                     <li><?php echo $sort->link('nama') ?></li>
                                     <li><?php echo $sort->link('negara_id') ?></li>
                                 </ul>

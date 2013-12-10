@@ -1,54 +1,106 @@
 <?php
 $admin = Yii::app()->user->getState('admin');
 $nameSort = (isset($_GET['sort'])) ? $_GET['sort'] : '';
-?>
-
-<ol class="breadcrumb">
-    <li><a href="<?php echo $this->vars['backendUrl']; ?>">Dashbord</a></li>
-    <li class="active">Swift</li>
-    <li class="active">Swift Incoming</li>
-</ol>
-<?php
-/* @var $this SwiftController */
-/* @var $model Swift */
-
+$openSearch = (isset($_GET['Filter'])) ? 'style="display:block;"' : 'style="display:none;"';
+$showSort = '<i class="icon-sort sortIcon pull-right"></i> ';
 $title = 'Daftar Swift Incoming';
 $this->pageTitle = $title;
-$this->breadcrumbs = array(
-    'Daftar Swift Incoming' 
-);
-
-$this->menu = array(
-    array('label' => 'New', 'url' => array('create')),
-);
 ?>
 
-<div class="breadcrumb">
-    <?php
-    $this->widget('zii.widgets.CBreadcrumbs', array(
-        'links' => $this->breadcrumbs,
-    ));
-    ?>
-</div>
+<?php echo Yii::app()->util->ahdaBreadcrumbGridForm($breadcrumb) ?>
+
 <div class="row">
     <div class="col-md-12">
         <div id="content-inner">
-            <h1 class="page-title">
-                <span class="icon-plus"></span> <?php echo $title; ?>
-                <a href="<?php echo $this->createUrl('index'); ?>" class="btn btn-xs btn-primary pull-right"><span class="icon icon-chevron-left"></span> Back</a>
-            </h1>
+            <?php echo Yii::app()->util->ahdaTitleGridForm(array('icon' => 'list-alt', 'label' => $title)) ?>
             <div class="row">
+                <?php
+//                $this->widget('ext.EDateRangePicker.EDateRangePicker', array(
+//                    'id' => 'Filter_date',
+//                    'name' => 'Filter[date]',
+//                    'value' => date('d/m/Y'),
+//                    'options' => array('arrows' => true),
+//                    'htmlOptions' => array('class' => 'inputClass'),
+//                ));
+                ?>
                 <div class="col-md-10">
+                    <div class="advanceSearch hidden" <?php echo $openSearch; ?>>
+                        <form method="get" class="form-filter">
+                            <div class="row">
+                                <div class="col-md-3 col-sm-3">
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" name="Filter[localId]" placeholder="Local Id contains ..." value="<?php echo $filters['localId']; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-3">
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" name="Filter[noLtdln]" placeholder="No LTDLN contains ..." value="<?php echo $filters['noLtdln']; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-3">
+                                    <div class="form-group">
+                                        <?php echo Yii::app()->util->getKodeStandar(array('modul' => 'jenisLaporan', 'data' => array('name' => 'Filter[jenisLaporan]', 'value' => $filters['jenisLaporan']))) ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-3">
+                                    <div class="form-group">
+                                        <?php echo Yii::app()->util->getKodeStandar(array('modul' => 'swiftStatus', 'data' => array('name' => 'Filter[swiftStatus]', 'value' => $filters['swiftStatus']))) ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 col-sm-3">
+                                    <div class="form-group">
+                                        <input class="form-control datepicker" type="text" name="Filter[created_start]" placeholder="Created between ..." value="<?php echo $filters['created_start']; ?>" readonly="readonly" data-date-format="yyyy-mm-dd">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-3">
+                                    <div class="form-group">
+                                        <input class="form-control datepicker" type="text" name="Filter[created_end]" placeholder="... until ..." value="<?php // echo $filters['created_end'];                                                                                                                    ?>" readonly="readonly" data-date-format="yyyy-mm-dd">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-3">
+
+                                </div>
+                                <div class="col-md-3 col-sm-3">
+                                    <button class="btn btn-default btn-lg pull-right"><span class="icon icon-search"></span> Search</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <hr/>
+
+                    </div>
+
+                    <?php echo CHtml::beginForm(); ?>
+
+                    <div class="btn-group pull-right hidden">
+                        <?php if (isset($_GET['Filter']) || isset($_GET['sort'])): ?>
+                            <a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming" class="btn btn-default btn-lg"><span class="icon icon-refresh"></span> Reset</a>
+                        <?php endif; ?>
+                        <span class="btn btn-default btn-lg pull-right toggleSeach"><span class="icon icon-spinner"></span> Advance Search</span>
+                    </div>
+
+                    <div class="btn-action hidden">
+                        <?php echo CHtml::submitButton('Finalize', array('name' => 'FinalizeButton', 'confirm' => 'Are you sure want to finalize this record?', 'class' => 'btn btn-lg btn-default bootip disabled', 'title' => 'Set to Finalize')); ?>
+                        <?php echo CHtml::submitButton('Draft', array('name' => 'DraftButton', 'confirm' => 'Are you sure want to draft this record?', 'class' => 'btn btn-lg btn-default bootip disabled', 'title' => 'Set to Draft')); ?>
+                    </div>
+
+                    <hr class="hidden"/>
+
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped list">
                             <thead>
                                 <tr>
+                                    <th id="selectedIds" class="list-number checkbox-column hidden">
+                                        <input class="select-on-check-all" type="checkbox" value="1" name="selectedIds_all" id="selectedIds_all">
+                                    </th>
                                     <th class="list-number">#</th>
-                                    <th>Local Id</th>
-                                    <th>No. LTDLN</th>
-                                    <th>Tgl Laporan</th>
-                                    <th>Jenis Laporan</th>
-                                    <th>Status</th>
+                                    <th><?php echo $sort->link('localId', $showSort . 'Local ID') ?></th>
+                                    <th><?php echo $sort->link('noLtdln', $showSort . 'No LTDLN') ?></th>
+                                    <th><?php echo $sort->link('tglLaporan', $showSort . 'Tanggal Laporan') ?></th>
+                                    <th><?php echo $sort->link('jenisLaporan', $showSort . 'Jenis Laporan') ?></th>
+                                    <th><?php echo $sort->link('status', $showSort . 'Status') ?></th>
                                     <th class="list-actions">Actions</th>
                                 </tr>
                             </thead>
@@ -63,6 +115,9 @@ $this->menu = array(
                                         $i++;
                                         ?>
                                         <tr>
+                                            <td class="list-number checkbox-column hidden">
+                                                <input class="select-on-check" value="<?php echo $d->id; ?>" id="selectedIds_<?php echo $i - 1; ?>" type="checkbox" name="selectedIds[]">
+                                            </td>
                                             <td class="list-number"><?php echo $i; ?>.</td>
                                             <td><?php echo Yii::app()->util->purify($d->localId); ?></td>
                                             <td><?php echo Yii::app()->util->purify($d->noLtdln); ?></td>
@@ -75,9 +130,6 @@ $this->menu = array(
                                                 <?php endif; ?>
                                                 <?php if ($admin->hasPermissions('swift.export')): ?>
                                                     <a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming/createExcel/<?php echo $d->id; ?>" class="btn btn-xs btn-default bootip" title="Export to Excel"><span class="icon icon-file"></span></a>
-                                                <?php endif; ?>
-                                                <?php if ($admin->hasPermissions('swift.delete')): ?>
-                                                    <a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming/delete/<?php echo $d->id; ?>" class="btn btn-xs btn-default btn-delete bootip" title="Delete" data-confirm="Are you sure want to delete this record?"><span class="icon icon-trash"></span></a>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>
@@ -92,11 +144,14 @@ $this->menu = array(
                             </tbody>
                         </table>
                     </div>
+
+                    <?php echo CHtml::endForm(); ?>
+
                 </div>
                 <div class="col-md-2">
 
                     <?php if ($admin->hasPermissions('swift.create')): ?>
-                        <a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming/create" class="btn btn-primary btn-lg btn-block"><span class="icon icon-plus"></span> Create new</a>
+                        <a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming/create" class="btn btn-primary btn-lg btn-block"><span class="icon icon-plus"></span> Buat Baru</a>
                         <hr>
                     <?php endif; ?>
 
@@ -154,7 +209,6 @@ $this->menu = array(
                                     <span class="sr-only"></span>
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><?php echo $sort->link('id') ?></li>
                                     <li><?php echo $sort->link('localId') ?></li>
                                     <li><?php echo $sort->link('noLtdln') ?></li>
                                     <li><?php echo $sort->link('tglLaporan') ?></li>
@@ -176,10 +230,10 @@ $this->menu = array(
                                     <input class="form-control" type="text" name="Filter[noLtdln]" placeholder="No LTDLN contains ..." value="<?php echo $filters['noLtdln']; ?>">
                                 </div>
                                 <div class="form-group">
-                                    <?php echo Yii::app()->util->getKodeStandar(array('modul' => 'jenisLaporan', 'data' => array('name' => 'Filter[jenisLaporan]', 'value' => $filters['jenisLaporan']))) ?>
+                                    <?php echo Yii::app()->util->getKodeStandar(array('modul' => 'jenisLaporan', 'data' => array('name' => 'Filter[jenisLaporan]', 'value' => $filters['jenisLaporan'], 'class' => 'chzn-select'))) ?>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" type="text" name="Filter[status]" placeholder="Status contains ..." value="<?php echo $filters['status']; ?>">
+                                    <?php echo Yii::app()->util->getKodeStandar(array('modul' => 'swiftStatus', 'data' => array('name' => 'Filter[swiftStatus]', 'value' => $filters['swiftStatus'], 'class' => 'chzn-select'))) ?>
                                 </div>
                                 <div class="form-group">
                                     <input class="form-control datepicker" type="text" name="Filter[created_start]" placeholder="Created between ..." value="<?php echo $filters['created_start']; ?>" readonly="readonly" data-date-format="yyyy-mm-dd">
@@ -193,70 +247,6 @@ $this->menu = array(
                         </div>
                     </div>
                 </div>
-                <?php echo CHtml::beginForm(); ?>
-                <?php
-                $this->widget('zii.widgets.CMenu', array(
-                    'items' => $this->menu,
-                    'htmlOptions' => array('class' => 'operations'),
-                ));
-                echo CHtml::submitButton('Finalize', array('name' => 'FinalizeButton',
-                    'confirm' => 'Are you sure you want to finalize?'));
-                $this->widget('zii.widgets.grid.CGridView', array(
-                    'id' => 'swift-grid',
-                    'dataProvider' => $model->search(),
-                    'filter' => $model,
-                    'selectableRows' => 2,
-                    'columns' => array(
-                        array(
-                            'class' => 'CCheckBoxColumn',
-                            'id' => 'selectedIds',
-                        ),
-                        'localId',
-                        'noLtdln',
-                        array(
-                            'name' => 'tglLaporan',
-                            'filter' => FALSE,
-                            'value' => '$data->tglLaporan',
-                            'type' => 'raw',
-                        ),
-                        array(
-                            'name' => 'jenisLaporan',
-                            'filter' => $model->getJenisLaporanOptions(),
-                            'value' => '$data->getJenisLaporanText()',
-                            'type' => 'raw',
-                        ),
-                        array(
-                            'name' => 'status',
-                            'filter' => $model->getStatusOptions(),
-                            'value' => '$data->getStatusText()',
-                            'type' => 'raw',
-                        ),
-                        /*
-                          'namaPejabatPjk',
-                          'jenisLaporan',
-                          'pjkBankSebagai',
-                          'jenisSwift',
-                         */
-                        array(
-                            'class' => 'CButtonColumn',
-                            'template' => '{update} | {cetak}',
-                            'buttons' => array(
-                                'update' => array(
-                                    'label' => 'Edit',
-                                    'url' => 'array("umum", "id"=>$data->id)',
-                                ),
-                                'cetak' => array(
-                                    'label' => 'Cetak',
-                                    'imageUrl' => $this->vars['assetsUrl'] . 'img/excel_icon.png',
-                                    'url' => 'Yii::app()->createUrl("cetak", array("id"=>$data->id))',
-                                ),
-                            ),
-                        ),
-                    ),
-                ));
-                ?>
-
-                <?php echo CHtml::endForm(); ?>
             </div>
         </div>
     </div>

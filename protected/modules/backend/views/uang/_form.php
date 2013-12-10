@@ -14,9 +14,7 @@
     ?>
 
     <div class="col-md-12">
-
         <fieldset>
-
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'nama', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-3">
@@ -24,7 +22,6 @@
                     <?php echo $form->error($model, 'nama'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php $listData = Negara::model()->findAll(array('order' => 'nama ASC')); ?>
                 <?php echo $form->labelEx($model, 'negara_id', array('class' => 'col-md-2 control-label')); ?>
@@ -33,7 +30,6 @@
                     <?php echo $form->error($model, 'negara_id'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'simbol', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-2">
@@ -41,7 +37,6 @@
                     <?php echo $form->error($model, 'simbol'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'kurs', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-2">
@@ -49,7 +44,6 @@
                     <?php echo $form->error($model, 'kurs'); ?>
                 </div>
             </div>
-
         </fieldset>
     </div>
 

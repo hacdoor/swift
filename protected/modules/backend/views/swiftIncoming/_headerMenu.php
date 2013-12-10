@@ -1,7 +1,7 @@
 <div class="modifNavTab">
     <ul class="nav nav-tabs">
         <li <?php if ($this->action->id == 'umum'): ?>class="active"<?php endif; ?>><a href="<?php echo $this->vars['backendUrl'] . 'swiftIncoming/umum/' . $model->id; ?>">Umum</a></li>
-        <li class="dropdown <?php if ($this->action->id == 'addPengirimNasabahPerorangan' || $this->action->id == 'addPengirimNasabahKorporasi' || $this->action->id == 'addPengirimNonNasabah' ): ?>active<?php endif; ?>">
+        <li class="dropdown <?php if ($this->action->id == 'addPengirimNasabahPerorangan' || $this->action->id == 'addPengirimNasabahKorporasi' || $this->action->id == 'addPengirimNonNasabah'): ?>active<?php endif; ?>">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 Identitas Pengirim <span class="caret"></span>
             </a>
@@ -18,7 +18,7 @@
                 <li><a href="<?php echo $this->vars['backendUrl'] . 'swiftIncoming/addPengirimNonNasabah/' . $model->id; ?>">Non Nasabah</a></li>
             </ul>
         </li>
-        <li class="dropdown <?php if ($this->action->id == 'addPenerimaNasabahPerorangan' || $this->action->id == 'addPenerimaNasabahKorporasi' || $this->action->id == 'addPenerimaNasabahKorporasi' ): ?>active<?php endif; ?>">
+        <li class="dropdown <?php if ($this->action->id == 'addPenerimaNasabahPerorangan' || $this->action->id == 'addPenerimaNasabahKorporasi' || $this->action->id == 'addPenerimaNasabahKorporasi'): ?>active<?php endif; ?>">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 Identitas Penerima <span class="caret"></span>
             </a>

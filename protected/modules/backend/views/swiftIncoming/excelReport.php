@@ -2,9 +2,9 @@
     <table>
         <thead>
             <tr>
-                <th width="80px">localId</th>
-                <th width="80px">noLtdln</th>
-                <th width="80px">tglLaporan</th>
+                <th width="80px">Local Id</th>
+                <th width="80px">No Ltdln</th>
+                <th width="80px">Tgl. Laporan</th>
             </tr>
         </thead>
         <tbody>

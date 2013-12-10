@@ -20,7 +20,7 @@
 
         <fieldset>
             <div class="form-group">
-                <label class="col-md-2 control-label required" for="Input_1">Upload Data Customer <span class="required">*</span></label>                
+                <label class="col-md-2 control-label required" for="Input_1">Upload Data <?php echo $type; ?> <span class="required">*</span></label>                
                 <div class="col-md-10">
                     <div class="col-md-2">
                         <div class="aUpload">
@@ -42,7 +42,7 @@
 
     <div class="col-md-12 clear form-actions">
         <hr>
-        <a href="<?php echo Yii::app()->request->baseUrl; ?>/backend/swift" class="btn btn-lg btn-default">Cancel</a>
+        <a href="<?php echo $this->vars['backendUrl']; ?>" class="btn btn-lg btn-default">Cancel</a>
         <?php echo CHtml::submitButton('Submit', array('class' => 'btn btn-lg btn-primary')); ?>
     </div>
 

@@ -17,7 +17,7 @@ class NasabahKorporasiController extends BackendController {
             'edit' => array('permission' => 'nasabahKorporasi.update', 'url' => 'nasabahKorporasi/update/'),
             'delete' => array('permission' => 'nasabahKorporasi.delete', 'url' => 'nasabahKorporasi/delete/')
         );
-        $data_grid = array('noRekening', 'namaKorporasi', 'idBentukBadan', 'noTelp');
+        $data_grid = array('noRekening', 'namaKorporasi', array('relasi' => 'idBentukBadan&modul[bentukBadanUsaha]'), 'noTelp');
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'Data Master'),
             1 => array('url' => '', 'label' => 'Nasabah'),

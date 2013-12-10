@@ -61,7 +61,7 @@ class NonNasabahLn extends CActiveRecord {
             array('alamat', 'length', 'max' => 100),
             array('noTelp, negaraBagianKota, ktp, sim, passport, kimsKitasKitap, npwp, jenisBuktiLain, noBuktiLain', 'length', 'max' => 30),
             array('tglLahir', 'safe'),
-            array('ktp, sim, passport, kimsKitasKitap, npwp', 'oneOfFive'),
+            array('ktp, sim, passport, kimsKitasKitap, npwp', 'oneOfFive', 'on' => 'other'),
             array('noRekening, alamat', 'oneOfTwo'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.

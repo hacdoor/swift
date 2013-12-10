@@ -5,4 +5,3 @@ echo $xml;
  * and open the template in the editor.
  */
 ?>
-

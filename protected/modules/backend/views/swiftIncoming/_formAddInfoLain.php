@@ -1,9 +1,3 @@
-<?php
-/* @var $this SwiftController */
-/* @var $model Swift */
-/* @var $form CActiveForm */
-?>
-
 <div class="form-wrapper">
 
     <?php
@@ -20,7 +14,6 @@
     ?>
 
     <div class="col-md-12">
-
         <fieldset>
             <div class="form-group">
                 <?php echo $form->labelEx($infoLain, 'infSendersCorrespondent', array('class' => 'col-md-2 control-label')); ?>
@@ -29,7 +22,6 @@
                     <?php echo $form->error($infoLain, 'infSendersCorrespondent'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($infoLain, 'infReceiverCorrespondent', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -37,7 +29,6 @@
                     <?php echo $form->error($infoLain, 'infReceiverCorrespondent'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($infoLain, 'infThirdReimbursementInstitution', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -45,7 +36,6 @@
                     <?php echo $form->error($infoLain, 'infThirdReimbursementInstitution'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($infoLain, 'infIntermediaryInstitution', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -53,7 +43,6 @@
                     <?php echo $form->error($infoLain, 'infIntermediaryInstitution'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($infoLain, 'infBeneficiaryCustomerAccountInstitution', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -61,7 +50,6 @@
                     <?php echo $form->error($infoLain, 'infBeneficiaryCustomerAccountInstitution'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($infoLain, 'remittanceInformation', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -69,7 +57,6 @@
                     <?php echo $form->error($infoLain, 'remittanceInformation'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($infoLain, 'senderToReceiverInformation', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -77,7 +64,6 @@
                     <?php echo $form->error($infoLain, 'senderToReceiverInformation'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($infoLain, 'regulatoryReporting', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -85,7 +71,6 @@
                     <?php echo $form->error($infoLain, 'regulatoryReporting'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($infoLain, 'envelopeContents', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">

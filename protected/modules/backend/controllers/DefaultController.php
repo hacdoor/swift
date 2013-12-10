@@ -1,23 +1,6 @@
 <?php
 
 class DefaultController extends BackendController {
-    /* public function filters() {
-      return array('accessControl');
-      }
-
-      public function accessRules() {
-      return array(
-      array('allow',
-      'actions' => array('index', 'logout', 'test'),
-      'users' => array('*')
-      ),
-      array('allow',
-      'users' => array('@'),
-      'actions' => array('dashboard'),
-      'deniedCallback' => array($this, 'redirectDenied')
-      ),
-      );
-      } */
 
     protected function beforeAction($action) {
 
@@ -54,9 +37,44 @@ class DefaultController extends BackendController {
     }
 
     public function actionDashboard() {
-        $this->checkAccess();
+        $this->checkAccess('dashbord.view');
 
-        $vars = array();
+        // Find Swift Incoming
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_SWIN;
+        $swiftIn = Swift::model()->findAll($criteria);
+
+        // Find Swift Outgoing
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_SWOUT;
+        $swiftOut = Swift::model()->findAll($criteria);
+
+        $jsItems = array(
+            array(
+                'name' => 'Swift Incoming',
+                'data' => array(count($swiftIn)),
+            ),
+            array(
+                'name' => 'Swift Outgoing',
+                'data' => array(5),
+            ),
+            array(
+                'name' => 'Non Swift Incoming',
+                'data' => array(count($swiftOut)),
+            ),
+            array(
+                'name' => 'Non Swift Outgoing',
+                'data' => array(7),
+            )
+        );
+
+        $jsItems = json_encode($jsItems);
+
+        $vars = array(
+            'siwftIn' => $swiftIn,
+            'swiftOut' => $swiftOut,
+            'jsItems' => $jsItems
+        );
 
         $this->render('dashboard', $vars);
     }

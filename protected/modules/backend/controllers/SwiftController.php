@@ -53,14 +53,104 @@ class SwiftController extends BackendController {
         $this->render('index', $vars);
     }
 
+    public function actionKonfirmasiDataTransaksi() {
+
+        if (isset($_POST['ConfirmButton'])) {
+            if (isset($_POST['selectedIds'])) {
+                foreach ($_POST['selectedIds'] as $id) {
+                    $swift = Swift::model()->findByPk($id);
+                    $swift->status = Swift::STATUS_FINALIZE;
+                    $swift->save();
+                }
+            }
+        }
+
+        if (isset($_POST['UnconfirmButton'])) {
+            if (isset($_POST['selectedIds'])) {
+                foreach ($_POST['selectedIds'] as $id) {
+                    $swift = Swift::model()->findByPk($id);
+                    $swift->status = Swift::STATUS_DRAFT;
+                    $swift->save();
+                }
+            }
+        }
+
+        $this->checkAccess('swift.view');
+
+        $data = null;
+        $pages = null;
+        $dataRange = (isset($_GET['date_range'])) ? $_GET['date_range'] : '';
+        $filters = array(
+            'localId' => '',
+            'noLtdln' => '',
+            'created_start' => '',
+            'created_end' => '',
+            'jenisLaporan' => '',
+            'swiftStatus' => '',
+            'date_range' => ''
+        );
+
+        $criteria = new CDbCriteria;
+
+        if (isset($_GET['Filter']))
+            $filters = $_GET['Filter'];
+        if ($filters['localId'])
+            $criteria->addSearchCondition('localId', $filters['localId']);
+        if ($filters['noLtdln'])
+            $criteria->addSearchCondition('noLtdln', $filters['noLtdln']);
+        if ($filters['created_start'] || $filters['created_end'])
+            $criteria->addBetweenCondition('tglLaporan', $filters['created_start'] . ' 00:00:00', $filters['created_end'] . ' 23:59:59');
+        if (isset($_GET['date_range']) && $_GET['date_range'] != '') {
+            $dateRange = explode(' - ', $_GET['date_range']);
+            $startDate = $dateRange[0];
+            $endDate = $dateRange[1];
+            $criteria->addBetweenCondition('tglLaporan', $startDate . ' 00:00:00', $endDate . ' 23:59:59');
+        }
+        if ($filters['jenisLaporan'])
+            $criteria->addInCondition('jenisLaporan', array('jenisLaporan' => $filters['jenisLaporan']));
+        if ($filters['swiftStatus'])
+            $criteria->addInCondition('status', array('status' => $filters['swiftStatus']));
+
+        $dataCount = Swift::model()->count($criteria);
+
+        $pages = new CPagination($dataCount);
+        $pages->setPageSize(Yii::app()->setting->get('list_size'));
+        $pages->applyLimit($criteria);
+
+        $sort = new CSort;
+        $sort->modelClass = 'Swift';
+        $sort->attributes = array('*');
+        $sort->defaultOrder = 'id DESC';
+        $sort->applyOrder($criteria);
+
+        $data = Swift::model()->findAll($criteria);
+
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Proses'),
+            2 => array('url' => '', 'label' => 'Konfirmasi Data Transaksi')
+        );
+
+        $vars = array(
+            'data' => $data,
+            'pages' => $pages,
+            'filters' => $filters,
+            'sort' => $sort,
+            'breadcrumb' => $breadcrumb,
+            'dateRange' => $dataRange
+        );
+
+        $this->render('konfirmasi', $vars);
+    }
+
     public function actionGenerate() {
         $this->checkAccess('swift.generateXml');
-        
+
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'Proses'),
             1 => array('url' => '', 'label' => 'Generate XML')
         );
-        
+
         $this->render('generateXml', array('breadcrumb' => $breadcrumb));
     }
 
@@ -606,7 +696,7 @@ class SwiftController extends BackendController {
             echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);
         }
     }
-    
+
     public function actionDynamicNegaraNasabahPeroranganDnNegaraKewarganegaraan() {
         if ((int) $_POST['NasabahPeroranganDn']['wargaNegara'] === 1)
             $data = array(62 => 'Indonesia');

@@ -23,6 +23,7 @@ $isHome = ($this->id == 'default' && $this->action->id == 'dashboard' || $this->
         <link type="text/css" rel="stylesheet" href="<?php echo $this->vars['assetsUrl']; ?>css/bootstrap-select.min.css">
         <link type="text/css" rel="stylesheet" href="<?php echo $this->vars['assetsUrl']; ?>css/colorbox.css">
         <link type="text/css" rel="stylesheet" href="<?php echo $this->vars['assetsUrl']; ?>css/chosen.css">
+        <link type="text/css" rel="stylesheet" href="<?php echo $this->vars['assetsUrl']; ?>css/daterangepicker.css">
         <link type="text/css" rel="stylesheet" href="<?php echo $this->vars['assetsUrl']; ?>css/yoohee.min.css">
 
     </head>
@@ -43,7 +44,15 @@ $isHome = ($this->id == 'default' && $this->action->id == 'dashboard' || $this->
                 </a>
                 <ul class="nav navbar-nav pull-right">
                     <li <?php if ($this->action->id === 'dashboard') : ?>class="active"<?php endif; ?>><a href="<?php echo $this->vars['backendUrl']; ?>"><span class="icon-th-large"></span> Dashboard</a></li>
-                    <li class="dropdown">
+                    <li class="dropdown 
+                    <?php
+                    if ($this->id == 'negara' ||
+                            $this->id == 'propinsi' ||
+                            $this->id == 'kabupaten' ||
+                            $this->id == 'uang' ||
+                            $this->id == 'nasabahPerorangan' ||
+                            $this->id == 'nasabahKorporasi') :
+                        ?>active<?php endif; ?>">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="icon-book"></span> Data Master <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a href="<?php echo $this->vars['backendUrl']; ?>negara">Kode Negara</a></li>
@@ -103,13 +112,21 @@ $isHome = ($this->id == 'default' && $this->action->id == 'dashboard' || $this->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="icon-external-link-sign"></span> Proses <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="#">Konfirmasi Data Transaksi</a>
+                                <a href="<?php echo $this->vars['backendUrl']; ?>swift/konfirmasiDataTransaksi">Konfirmasi Data Transaksi</a>
                                 <a href="<?php echo $this->vars['backendUrl']; ?>swift/generate">Generate XML File</a>
                             </li>
                         </ul>
                     </li>
-                    <li><a href="<?php echo $this->vars['backendUrl']; ?>"><span class="icon-bullhorn"></span> Report</a></li>
                     <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="icon-bullhorn"></span> Report <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="<?php echo $this->vars['backendUrl']; ?>swift/incompleteTransaksi">Incomplete Transaksi</a>
+                                <a href="<?php echo $this->vars['backendUrl']; ?>swift/incompleteNasbahPerorangan">Incomplete Nasabah Perorangan</a>
+                                <a href="<?php echo $this->vars['backendUrl']; ?>swift/incompleteNasbahKorporasi">Incomplete Nasabah Korporasi</a>
+                            </li>
+                        </ul>
+                    </li><li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="icon-cog"></span> System <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li>
@@ -121,7 +138,7 @@ $isHome = ($this->id == 'default' && $this->action->id == 'dashboard' || $this->
                                 <div class="divider"></div>
 
                                 <a href="<?php echo $this->vars['backendUrl']; ?>me"><?php echo ($admin->username) ? ucwords($admin->username) : 'Me'; ?></a>
-                                <a href="#">About System</a>
+                                <a href="">About System</a>
                             </li>
                         </ul>
                     </li>
@@ -173,6 +190,8 @@ $isHome = ($this->id == 'default' && $this->action->id == 'dashboard' || $this->
         <script type="text/javascript" src="<?php echo $this->vars['assetsUrl']; ?>js/jquery.isotope.min.js"></script>
         <script type="text/javascript" src="<?php echo $this->vars['assetsUrl']; ?>js/jquery.table.addrow.js"></script>
         <script type="text/javascript" src="<?php echo $this->vars['assetsUrl']; ?>js/chosen.jquery.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->vars['assetsUrl']; ?>js/moment.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->vars['assetsUrl']; ?>js/daterangepicker.js"></script>
         <script type="text/javascript" src="<?php echo $this->vars['assetsUrl']; ?>js/yoohee.js"></script>
 
     </body>

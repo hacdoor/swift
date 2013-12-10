@@ -33,8 +33,8 @@ class Swift extends CActiveRecord {
     const TYPE_SWOUT = 2;
     const TYPE_NONSWIN = 3;
     const TYPE_NONSWOUT = 4;
-    const STATUS_DRAFT = 0;
-    const STATUS_FINALIZE = 1;
+    const STATUS_DRAFT = 1;
+    const STATUS_FINALIZE = 2;
     const JENIS_LAPORAN_BARU = 1;
     const JENIS_LAPORAN_KOREKSI = 2;
     const JENIS_LAPORAN_RECALL = 3;
@@ -175,7 +175,7 @@ class Swift extends CActiveRecord {
             'nasabahPeroranganLns' => array(self::HAS_MANY, 'NasabahPeroranganLn', 'swift_id'),
             'nonNasabahDns' => array(self::HAS_MANY, 'NonNasabahDn', 'swift_id'),
             'nonNasabahLns' => array(self::HAS_MANY, 'NonNasabahLn', 'swift_id'),
-            'transaksis' => array(self::HAS_MANY, 'Transaksi', 'swift_id'),
+            'transaksis' => array(self::HAS_ONE, 'Transaksi', 'swift_id'),
         );
     }
 

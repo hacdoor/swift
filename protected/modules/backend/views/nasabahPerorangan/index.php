@@ -4,7 +4,7 @@
         <div id="content-inner">
             <?php echo Yii::app()->util->ahdaTitleGridForm(array('icon' => 'user', 'label' => $title)) ?>
             <div class="row">
-                <?php echo Yii::app()->util->ahdaGridForm($data, $pages, $actions, $data_grid) ?>
+                <?php echo Yii::app()->util->ahdaGridForm($data, $pages, $actions, $data_grid, $sort) ?>
                 <div class="col-md-2">
                     <?php echo Yii::app()->util->ahdaCreateGridForm('nasabahPerorangan.create', 'nasabahPerorangan/create') ?>
                     <hr>

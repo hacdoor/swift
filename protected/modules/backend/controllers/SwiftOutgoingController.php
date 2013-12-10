@@ -204,7 +204,7 @@ class SwiftOutgoingController extends BackendController {
 
             if ($nonNasabahDn->save()) {
                 Yii::app()->util->setLog('NonNasabahDn', $nonNasabahDn->id, 'Update data');
-                Yii::app()->user->setFlash('success', 'Success!|' . 'NonNasabahDn has been updated.');
+                Yii::app()->user->setFlash('info', 'Success!|' . 'NonNasabahDn has been updated.');
             }
         }
 

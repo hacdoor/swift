@@ -19,6 +19,7 @@ class UangController extends BackendController {
         );
         $data_grid = array('nama', 'simbol', array('relasi' => 'negara_id&negara', 'field' => 'nama'));
         //$data_grid = array('nama', 'simbol', array('relasi' => 'negara_id&modul[negara]'));
+        
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'Data Master'),
             1 => array('url' => '', 'label' => 'Mata Uang')

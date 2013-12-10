@@ -88,7 +88,7 @@ class SwiftIncomingController extends BackendController {
          * validate swift
          */
         if (NasabahPeroranganLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NasabahKorporasiLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NonNasabahLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL) {
-            Yii::app()->user->setFlash('success', 'Warning!|' . 'Data Identitas Pengirim wajib di isi dulu.');
+            Yii::app()->user->setFlash('warning', 'Warning!|' . 'Data Identitas Pengirim wajib di isi dulu.');
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('swiftIncoming/umum', 'id' => $model->id));
         }
 
@@ -148,7 +148,7 @@ class SwiftIncomingController extends BackendController {
          * validate swift
          */
         if (NasabahPeroranganLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NasabahKorporasiLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NonNasabahLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL) {
-            Yii::app()->user->setFlash('success', 'Warning!|' . 'Data Identitas Pengirim wajib di isi dulu.');
+            Yii::app()->user->setFlash('warning', 'Warning!|' . 'Data Identitas Pengirim wajib di isi dulu.');
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('swiftIncoming/umum', 'id' => $model->id));
         }
 
@@ -206,7 +206,7 @@ class SwiftIncomingController extends BackendController {
          * validate swift
          */
         if (NasabahPeroranganLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NasabahKorporasiLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NonNasabahLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL) {
-            Yii::app()->user->setFlash('success', 'Warning!|' . 'Data Identitas Pengirim wajib di isi dulu.');
+            Yii::app()->user->setFlash('warning', 'Warning!|' . 'Data Identitas Pengirim wajib di isi dulu.');
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('swiftIncoming/umum', 'id' => $model->id));
         }
 
@@ -361,7 +361,7 @@ class SwiftIncomingController extends BackendController {
          * validate swift
          */
         if (NasabahPeroranganDn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NasabahKorporasiDn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NonNasabahDn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL) {
-            Yii::app()->user->setFlash('success', 'Warning!|' . 'Data Identitas Penerima wajib di isi dulu.');
+            Yii::app()->user->setFlash('warning', 'Warning!|' . 'Data Identitas Penerima wajib di isi dulu.');
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('swiftIncoming/umum', 'id' => $model->id));
         }
 
@@ -402,7 +402,7 @@ class SwiftIncomingController extends BackendController {
          * validate swift
          */
         if (Transaksi::model()->findByAttributes(array('swift_id' => $model->id)) == NULL) {
-            Yii::app()->user->setFlash('success', 'Warning!|' . 'Data Transaksi wajib di isi dulu.');
+            Yii::app()->user->setFlash('warning', 'Warning!|' . 'Data Transaksi wajib di isi dulu.');
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('swiftIncoming/umum', 'id' => $model->id));
         }
 
@@ -466,6 +466,16 @@ class SwiftIncomingController extends BackendController {
             }
         }
 
+        if (isset($_POST['DraftButton'])) {
+            if (isset($_POST['selectedIds'])) {
+                foreach ($_POST['selectedIds'] as $id) {
+                    $swift = Swift::model()->findByPk($id);
+                    $swift->status = Swift::STATUS_DRAFT;
+                    $swift->save();
+                }
+            }
+        }
+
         $this->checkAccess('swift.view');
 
         $data = null;
@@ -476,7 +486,7 @@ class SwiftIncomingController extends BackendController {
             'created_start' => '',
             'created_end' => '',
             'jenisLaporan' => '',
-            'status' => ''
+            'swiftStatus' => ''
         );
 
         $criteria = new CDbCriteria;
@@ -492,9 +502,9 @@ class SwiftIncomingController extends BackendController {
         if ($filters['created_start'] || $filters['created_end'])
             $criteria->addBetweenCondition('tglLaporan', $filters['created_start'] . ' 00:00:00', $filters['created_end'] . ' 23:59:59');
         if ($filters['jenisLaporan'])
-            $criteria->addSearchCondition('jenisLaporan', $filters['jenisLaporan']);
-        if ($filters['status'])
-            $criteria->addSearchCondition('status', $filters['status']);
+            $criteria->addInCondition('jenisLaporan', array('jenisLaporan' => $filters['jenisLaporan']));
+        if ($filters['swiftStatus'])
+            $criteria->addInCondition('status', array('status' => $filters['swiftStatus']));
 
         $dataCount = Swift::model()->count($criteria);
 
@@ -510,13 +520,21 @@ class SwiftIncomingController extends BackendController {
 
         $data = Swift::model()->findAll($criteria);
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Swift'),
+            2 => array('url' => '', 'label' => 'Swift Incoming')
+        );
+
         $vars = array(
             'data' => $data,
             'pages' => $pages,
             'filters' => $filters,
             'sort' => $sort,
             'model' => $model,
+            'breadcrumb' => $breadcrumb
         );
+
         $this->render('index', $vars);
     }
 
@@ -629,25 +647,25 @@ class SwiftIncomingController extends BackendController {
 
         // Data Umum
         $dataUmum = array(
-            array('1' => 'I. Umum', '2' => '', '3' => ''),
-            array('1' => 'No LTKL', '2' => ':', '3' => $oneData->noLtdln),
-            array('1' => 'No LTDLN Koreksi', '2' => ':', '3' => $oneData->noLtdlnKoreksi),
-            array('1' => 'Tanggal Laporan', '2' => ':', '3' => Yii::app()->dateFormatter->format('d-MM-yyyy', $oneData->tglLaporan)),
-            array('1' => 'Nama PJK Bank Pelapor', '2' => ':', '3' => $oneData->namaPjk),
-            array('1' => 'Nama Pejabat PJK Bank Pelapor', '2' => ':', '3' => $oneData->namaPejabatPjk),
-            array('1' => 'Jenis Laporan', '2' => ':', '3' => $oneData->getJenisLaporanText()),
+            array('1' => 'I. Umum', '2' => ''),
+            array('1' => 'No LTKL', '2' => ': ' . $oneData->noLtdln),
+            array('1' => 'No LTDLN Koreksi', '2' => ': ' . $oneData->noLtdlnKoreksi),
+            array('1' => 'Tanggal Laporan', '2' => ': ' . Yii::app()->dateFormatter->format('d-MM-yyyy', $oneData->tglLaporan)),
+            array('1' => 'Nama PJK Bank Pelapor', '2' => ': ' . $oneData->namaPjk),
+            array('1' => 'Nama Pejabat PJK Bank Pelapor', '2' => ': ' . $oneData->namaPejabatPjk),
+            array('1' => 'Jenis Laporan', '2' => ': ' . $oneData->getJenisLaporanText()),
         );
 
         // Data Identitas Pengirim Nasabah Perorangan
         $dataPengirimPerorangan = array(
-            array('1' => 'II. Identitas Pengirim Nasabah Perorangan', '2' => '', '3' => ''),
-            array('1' => 'No Rekening', '2' => ':', '3' => '-'),
-            array('1' => 'Nama Lengkap', '2' => ':', '3' => '-'),
-            array('1' => 'Tanggal Lahir', '2' => ':', '3' => '-'),
-            array('1' => 'Kewarganegaraan', '2' => ':', '3' => '-'),
-            array('1' => 'Negara', '2' => ':', '3' => '-'),
-            array('1' => 'Negara Lain', '2' => ':', '3' => '-'),
-            array('1' => '', '2' => '', '3' => ''),
+            array('1' => 'II. Identitas Pengirim Nasabah Perorangan', '2' => ''),
+            array('1' => 'No Rekening', '2' => ': '),
+            array('1' => 'Nama Lengkap', '2' => ': '),
+            array('1' => 'Tanggal Lahir', '2' => ': '),
+            array('1' => 'Kewarganegaraan', '2' => ': '),
+            array('1' => 'Negara', '2' => ': '),
+            array('1' => 'Negara Lain', '2' => ': '),
+            array('1' => '', '2' => ': '),
         );
 
         // Array to Set Bold

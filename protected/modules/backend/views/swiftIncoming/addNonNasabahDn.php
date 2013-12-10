@@ -1,74 +1,10 @@
-<?php echo Yii::app()->util->ahdaBreadcrumbGridForm($breadcrumb) ?>
-
 <?php
-/* @var $this SwiftController */
-/* @var $model Swift */
-
-$title = $nonNasabahDn->isNewRecord ? 'Tambah' : 'Update';
+$title = $nonNasabahDn->isNewRecord ? '<span class="icon-plus"></span> Tambah' : '<span class="icon-pencil"></span> Update';
 $title .= ' Identitas Penerima Non Nasabah';
 $this->pageTitle = $title;
-$this->breadcrumbs = array(
-    'Daftar Swift Incoming' => array('index'),
-    Yii::app()->util->getKodeStandar(array('modul' => 'pjkBankSebagaiSwin', 'data' => $model->pjkBankSebagai)),
-    $title,
-);
+?>
 
-$this->menu = array(
-    array('label' => 'Umum', 'url' => array('umum', 'id' => $model->id)),
-    array('label' => 'Identitas Pengirim',
-        'items' => array(
-            array('label' => 'Nasabah',
-                'items' => array(
-                    array('label' => 'Perorangan', 'url' => array('addPengirimNasabahPerorangan', 'id' => $model->id)),
-                    array('label' => 'Korporasi', 'url' => array('addPengirimNasabahKorporasi', 'id' => $model->id)),
-                ),
-            ),
-            array('label' => 'Non Nasabah', 'url' => array('addPengirimNonNasabah', 'id' => $model->id)),
-        ),
-    ),
-    array('label' => 'Identitas Penerima',
-        'items' => array(
-            ($model->pjkBankSebagai == 1) ?
-                    array('label' => Yii::app()->util->getKodeStandar(array('modul' => 'pjkBankSebagaiSwin', 'data' => $model->pjkBankSebagai)),
-                'items' => array(
-                    array('label' => 'Nasabah',
-                        'items' => array(
-                            array('label' => 'Perorangan', 'url' => array('addPenerimaNasabahPerorangan', 'id' => $model->id)),
-                            array('label' => 'Korporasi', 'url' => array('addPenerimaNasabahKorporasi', 'id' => $model->id)),
-                        ),
-                    ),
-                    array('label' => 'Non Nasabah', 'url' => array('addPenerimaNonNasabah', 'id' => $model->id)),
-                ),
-                    ) :
-                    array('label' => Yii::app()->util->getKodeStandar(array('modul' => 'pjkBankSebagaiSwin', 'data' => $model->pjkBankSebagai)),
-                'items' => array(
-                    array('label' => 'Perorangan', 'url' => array('addPenerimaNasabahPerorangan', 'id' => $model->id)),
-                    array('label' => 'Korporasi', 'url' => array('addPenerimaNasabahKorporasi', 'id' => $model->id)),
-                ),
-                    ),
-        ),
-    ),
-    array('label' => 'Transaksi', 'url' => array('addTransaksi', 'id' => $model->id)),
-    array('label' => 'Informasi Lainnya', 'url' => array('addInfoLain', 'id' => $model->id)),
-);
-?>
-<div class="breadcrumb">
-    <?php
-    $this->widget('zii.widgets.CBreadcrumbs', array(
-        'links' => $this->breadcrumbs,
-    ));
-    ?>
-</div>
-<?php if (Yii::app()->user->hasFlash('success')): ?>
-    <div class="flash-success">
-        <?php echo Yii::app()->user->getFlash('success'); ?>
-    </div>
-<?php endif; ?>
-<?php
-//$this->widget('ext.mbmenu.MbMenu', array(
-//    'items' => $this->menu,
-//));
-?>
+<?php echo Yii::app()->util->ahdaBreadcrumbGridForm($breadcrumb) ?>
 
 <div class="row">
     <div class="col-md-12">
@@ -90,7 +26,7 @@ $this->menu = array(
 
         <div id="content-inner" class="noBorderTop">
             <h1 class="page-title">
-                <span class="icon-plus"></span> <?php echo $title; ?>
+                <?php echo $title; ?>
                 <a href="<?php echo $this->createUrl('index'); ?>" class="btn btn-xs btn-primary pull-right"><span class="icon icon-chevron-left"></span> Back</a>
             </h1>
 
@@ -98,9 +34,13 @@ $this->menu = array(
                 <?php echo CHtml::beginForm(); ?>
 
                 <?php
-                echo CHtml::submitButton('Delete', array('name' => 'DeleteButton', 'class' => 'btn btn-delete btn-danger',
-                    'confirm' => 'Are you sure you want to permanently delete these comments?'));
+                echo CHtml::submitButton('Delete', array('name' => 'DeleteButton', 'class' => 'btn btn-delete btn-danger disabled',
+                    'confirm' => 'Are you sure want to permanently delete this record ?'));
                 ?>
+
+                <?php if (isset($_GET['update_id'])) : ?>
+                    <a href="<?php echo $this->vars['backendUrl'] . 'swiftIncoming/addPenerimaNonNasabah/' . $model->id; ?>" type="text" class="btn btn-default"><i class="icon-plus"></i> Tambah Penerima</a>
+                <?php endif; ?>
 
                 <br/><br/>
 
@@ -110,8 +50,8 @@ $this->menu = array(
                     'dataProvider' => $dataProvider,
                     'selectableRows' => 2,
                     'itemsCssClass' => 'table table-bordered table-striped list',
-                    'enablePagination' => FALSE,
-                    'enableSorting' => FALSE,
+                    'enablePagination' => TRUE,
+                    'enableSorting' => TRUE,
                     'emptyText' => 'Tidak ada data',
                     'template' => '{items}',
                     'columns' => array(
@@ -119,7 +59,6 @@ $this->menu = array(
                             'class' => 'CCheckBoxColumn',
                             'id' => 'selectedIds',
                         ),
-//                        'noRekening',
                         'namaLengkap',
                         array(
                             'name' => 'nilaiTransaksiDalamRupiah',
@@ -146,8 +85,12 @@ $this->menu = array(
                     ),
                 ));
                 ?>
+
                 <?php echo CHtml::endForm(); ?>
+
             </div>
+
+            <hr/>
 
             <?php echo $this->renderPartial('_formAddNonNasabahDn', array('nonNasabahDn' => $nonNasabahDn)); ?>
 

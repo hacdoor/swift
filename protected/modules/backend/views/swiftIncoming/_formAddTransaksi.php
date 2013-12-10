@@ -1,9 +1,3 @@
-<?php
-/* @var $this SwiftController */
-/* @var $model Swift */
-/* @var $form CActiveForm */
-?>
-
 <div class="form-wrapper">
 
     <?php
@@ -29,7 +23,6 @@
                     <?php echo $form->error($transaksi, 'tglTransaksi'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($transaksi, 'timeIndication', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -37,7 +30,6 @@
                     <?php echo $form->error($transaksi, 'timeIndication'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($transaksi, 'sendersReference', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -45,7 +37,6 @@
                     <?php echo $form->error($transaksi, 'sendersReference'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($transaksi, 'relatedReference', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -53,7 +44,6 @@
                     <?php echo $form->error($transaksi, 'relatedReference'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($transaksi, 'bankOperationCode', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -61,7 +51,6 @@
                     <?php echo $form->error($transaksi, 'bankOperationCode'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($transaksi, 'instructionCode', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -69,7 +58,6 @@
                     <?php echo $form->error($transaksi, 'instructionCode'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($transaksi, 'kanCabPenyelenggaraPengirimAsal', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -77,7 +65,6 @@
                     <?php echo $form->error($transaksi, 'kanCabPenyelenggaraPengirimAsal'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($transaksi, 'typeTransactionCode', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -96,7 +83,6 @@
                     <?php echo $form->error($transaksi, 'valueDate'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($transaksi, 'amount', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -104,7 +90,6 @@
                     <?php echo $form->error($transaksi, 'amount'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($transaksi, 'idCurrency', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -112,7 +97,6 @@
                     <?php echo $form->error($transaksi, 'idCurrency'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($transaksi, 'amountDalamRupiah', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -131,7 +115,6 @@
                     <?php echo $form->error($transaksi, 'idCurrencyInstructedAmount'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($transaksi, 'instructedAmount', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -149,7 +132,6 @@
                     <?php echo $form->error($transaksi, 'exchangeRate'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($transaksi, 'sendingInstitution', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -157,7 +139,6 @@
                     <?php echo $form->error($transaksi, 'sendingInstitution'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($transaksi, 'beneficiaryInstitution', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -165,7 +146,6 @@
                     <?php echo $form->error($transaksi, 'beneficiaryInstitution'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($transaksi, 'tujuanTransaksi', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -173,7 +153,6 @@
                     <?php echo $form->error($transaksi, 'tujuanTransaksi'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($transaksi, 'sumberDana', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">

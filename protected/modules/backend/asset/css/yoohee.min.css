@@ -143,6 +143,44 @@ fieldset.well legend {
     padding: 0;
 }
 
+.list tr.selected td {
+    background-color: #fefcea !important;
+}
+
+.list th a {
+    display: block;
+}
+
+.list th a:hover {
+    color: #ED9C28;
+    text-decoration: none;
+}
+
+.sortIcon {
+    margin-top: 4px;
+}
+
+.customAlert {
+    padding: 7px 10px;
+    margin-bottom: 0;
+    background: none;
+    border: none;
+}
+
+.filterRange .form-group {
+    margin-bottom: 0;
+}
+
+.confirmList {
+    position: relative;
+}
+
+.confirmList .btn-action {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
 /* NavTab Modif */
 
 .modifNavTab .nav-tabs {
@@ -157,9 +195,12 @@ fieldset.well legend {
 }
 
 .modifNavTab .nav-tabs > li > a {
-    background: #F5F5F5;
+    background: whitesmoke;
     color: #999;
     text-shadow: 0 1px #eee;
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
 }
 
 .modifNavTab .nav-tabs > li .caret {
@@ -319,11 +360,11 @@ fieldset.well legend {
 }
 
 .addPadding {
-    padding-top: 55px;
+    padding-top: 65px;
 }
 
 .minPadding {
-    padding-top: 20px;
+    padding-top: 30px;
 }
 
 .sortLimit {

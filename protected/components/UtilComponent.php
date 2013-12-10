@@ -250,7 +250,13 @@ class UtilComponent extends CApplicationComponent {
     public function buildDropDownSelect($param, $data) {
         $id = str_replace('[', '_', $data['name']);
         $id = str_replace(']', '', $id);
-        $str = '<select class="form-control chzn-select"  id="' . $id . '" name="' . $data['name'] . '">';
+
+        $class = '';
+        if (isset($data['class'])):
+            $class = $data['class'];
+        endif;
+
+        $str = '<select class="form-control ' . $class . '"  id="' . $id . '" name="' . $data['name'] . '">';
         $str .= '<option value="">Pilih</option>';
         foreach ($param as $key => $value) {
             $data[$key] = $value;
@@ -1144,14 +1150,12 @@ class UtilComponent extends CApplicationComponent {
         return $xml->saveXML();
     }
 
-    public function ahdaGridForm($data, $pages, $actions, $data_grid) {
-
+    public function ahdaGridForm($data, $pages, $actions, $data_grid, $sort) {
         $str = '<div class="col-md-10">
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped list">
                             <thead>
                                 <tr>';
-
         if ($data) {
             $admin = Yii::app()->user->getState('admin');
             $frist = current($data);
@@ -1161,9 +1165,9 @@ class UtilComponent extends CApplicationComponent {
             foreach ($data_grid as $value) {
                 if (is_array($value)) {
                     $exp = explode('&', $value['relasi']);
-                    $str.= '<th>' . $labels[$exp[0]] . '</th>';
+                    $str.= '<th>' . $sort->link($exp[0], '<i class="icon-sort sortIcon pull-right"></i> ' . $labels[$exp[0]]) . '</th>';
                 } else {
-                    $str.= '<th>' . $labels[$value] . '</th>';
+                    $str.= '<th>' . $sort->link($value, '<i class="icon-sort sortIcon pull-right"></i> ' . $labels[$value]) . '</th>';
                 }
             }
             $str .= '<th class="list-actions">Actions</th></tr></thead><tbody>';
@@ -1223,7 +1227,6 @@ class UtilComponent extends CApplicationComponent {
 
     public function ahdaGrid($model_name, $filters) {
         $criteria = new CDbCriteria;
-
         if (isset($_GET['Filter'])) {
             $filters_x = $_GET['Filter'];
             foreach ($filters as $key => $value) {
@@ -1256,7 +1259,7 @@ class UtilComponent extends CApplicationComponent {
         return array('data' => $data, 'pages' => $pages, 'sort' => $sort);
     }
 
-    public function ahdaFilterGridForm($filters) {
+    public function ahdaFilterGridForm($filters, $class = null) {
         $str = '<div class="panel panel-default panel-backend">
                 <div class="panel-heading"><span class="glyphicon glyphicon-filter"></span> Filter</div>
                 <div class="panel-body">
@@ -1266,7 +1269,7 @@ class UtilComponent extends CApplicationComponent {
             if (substr_count($key, '|')) {
                 $exp = explode('|', $key);
                 $modul = $exp[1];
-                $str .= Yii::app()->util->getKodeStandar(array('modul' => $modul, 'data' => array('name' => 'Filter[' . $key . ']', 'value' => $value)));
+                $str .= Yii::app()->util->getKodeStandar(array('modul' => $modul, 'data' => array('name' => 'Filter[' . $key . ']', 'value' => $value, 'class' => ($class != null) ? $class : null)));
             } else {
                 $str .= '<input class="form-control" type="text" name="Filter[' . $key . ']" placeholder="' . ucfirst($key) . ' contains ..." value="' . $value . '">';
             }
@@ -1277,7 +1280,6 @@ class UtilComponent extends CApplicationComponent {
                  </form>
                  </div>
                  </div>';
-
         return $str;
     }
 

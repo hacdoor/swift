@@ -8,16 +8,16 @@ class NasabahPeroranganController extends BackendController {
     }
 
     public function actionIndex() {
-        
+
         $this->checkAccess('nasabahPerorangan.view');
 
-        $filters = (isset($_GET['Filter'])) ? $_GET['Filter'] : array('namaLengkap' => '', 'noRekening' => '',);
+        $filters = (isset($_GET['Filter'])) ? $_GET['Filter'] : array('namaLengkap' => '', 'noRekening' => '');
         $data = Yii::app()->util->ahdaGrid('NasabahPerorangan', $filters);
         $actions = array(
             'edit' => array('permission' => 'nasabahPerorangan.update', 'url' => 'nasabahPerorangan/update/'),
             'delete' => array('permission' => 'nasabahPerorangan.delete', 'url' => 'nasabahPerorangan/delete/')
         );
-        $data_grid = array('noRekening', 'namaLengkap', 'tglLahir', 'kewarganegaraan');
+        $data_grid = array('noRekening', 'namaLengkap', 'tglLahir', array('relasi' => 'kewarganegaraan&modul[kewarganegaraan]'));
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'Data Master'),
             1 => array('url' => '', 'label' => 'Nasabah'),
@@ -59,7 +59,7 @@ class NasabahPeroranganController extends BackendController {
                 Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed creating NasabahPerorangan, please check below for errors.');
             }
         }
-        
+
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'Data Master'),
             1 => array('url' => '', 'label' => 'Nasabah'),

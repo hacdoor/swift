@@ -4,7 +4,7 @@
         <div id="content-inner">
             <?php echo Yii::app()->util->ahdaTitleGridForm(array('icon' => 'flag', 'label' => $title)) ?>
             <div class="row">
-                <?php echo Yii::app()->util->ahdaGridForm($data, $pages, $actions, $data_grid) ?>
+                <?php echo Yii::app()->util->ahdaGridForm($data, $pages, $actions, $data_grid, $sort) ?>
                 <div class="col-md-2">
                     <?php echo Yii::app()->util->ahdaPagesGridForm('company', $pages, $filters) ?>
                     <?php echo Yii::app()->util->ahdaSortGridForm($sort, array('namaPjk', 'namaPejabatPjk')) ?>

@@ -1,9 +1,3 @@
-<?php
-/* @var $this SwiftController */
-/* @var $nasabahKorporasiLn Swift */
-/* @var $form CActiveForm */
-?>
-
 <div class="form-wrapper">
 
     <?php
@@ -16,7 +10,7 @@
         ),
         'errorMessageCssClass' => 'label label-danger',
         'htmlOptions' => array('class' => 'form-horizontal', 'role' => 'form')
-    ));
+            ));
     ?>
 
     <div class="row">
@@ -30,7 +24,6 @@
                         <?php echo $form->error($nasabahKorporasiDn, 'noRekening'); ?>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <?php echo $form->labelEx($nasabahKorporasiDn, 'namaKorporasi', array('class' => 'col-md-2 control-label')); ?>
                     <div class="col-md-5">
@@ -38,7 +31,6 @@
                         <?php echo $form->error($nasabahKorporasiDn, 'namaKorporasi'); ?>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <?php echo $form->labelEx($nasabahKorporasiDn, 'bentukBadan', array('class' => 'col-md-2 control-label')); ?>
                     <div class="col-md-5">
@@ -46,7 +38,6 @@
                         <?php echo $form->error($nasabahKorporasiDn, 'bentukBadan'); ?>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <?php echo $form->labelEx($nasabahKorporasiDn, 'bentukBadanLain', array('class' => 'col-md-2 control-label')); ?>
                     <div class="col-md-5">
@@ -54,7 +45,6 @@
                         <?php echo $form->error($nasabahKorporasiDn, 'bentukBadanLain'); ?>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <?php echo $form->labelEx($nasabahKorporasiDn, 'bidangUsaha', array('class' => 'col-md-2 control-label')); ?>
                     <div class="col-md-5">
@@ -62,7 +52,6 @@
                         <?php echo $form->error($nasabahKorporasiDn, 'bidangUsaha'); ?>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <?php echo $form->labelEx($nasabahKorporasiDn, 'bidangUsahaLain', array('class' => 'col-md-2 control-label')); ?>
                     <div class="col-md-5">
@@ -81,7 +70,6 @@
                         <?php echo $form->error($nasabahKorporasiDn, 'alamat'); ?>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <?php echo $form->labelEx($nasabahKorporasiDn, 'idPropinsi', array('class' => 'col-md-2 control-label')); ?>
                     <div class="col-md-5">
@@ -89,10 +77,10 @@
                         echo $form->dropDownList($nasabahKorporasiDn, 'idPropinsi', Yii::app()->util->getKodeStandar(array('modul' => 'propinsi', 'data' => 'all&blank')), array(
                             'class' => 'form-control chzn-select',
                             'ajax' => array(
-                                'type' => 'POST', //request type
+                                'type' => 'POST',
                                 'url' => Yii::app()->createUrl('backend/swift/dynamicNegaraNasabahKorporasiDnPropinsi'),
                                 'update' => '#NasabahKorporasiDn_idKabKota',
-                        )));
+                                )));
                         ?>
                         <?php echo $form->error($nasabahKorporasiDn, 'idPropinsi'); ?>
                     </div>
@@ -104,7 +92,6 @@
                         <?php echo $form->error($nasabahKorporasiDn, 'propinsiLain'); ?>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <?php echo $form->labelEx($nasabahKorporasiDn, 'idKabKota', array('class' => 'col-md-2 control-label')); ?>
                     <div class="col-md-5">
@@ -119,9 +106,6 @@
                         <?php echo $form->error($nasabahKorporasiDn, 'kabKotaLain'); ?>
                     </div>
                 </div>
-            </fieldset>
-
-            <fieldset class="well">
                 <div class="form-group">
                     <?php echo $form->labelEx($nasabahKorporasiDn, 'noTelp', array('class' => 'col-md-2 control-label')); ?>
                     <div class="col-md-5">
@@ -149,9 +133,10 @@
             <a href="<?php echo $this->createUrl('index'); ?>" class="btn btn-lg btn-default">Cancel</a>
             <?php echo CHtml::submitButton($nasabahKorporasiDn->isNewRecord ? 'Tambah' : 'Simpan', array('class' => 'btn btn-lg btn-primary')); ?>
         </div>
-        <?php $this->endWidget(); ?>
-
     </div>
+
+    <?php $this->endWidget(); ?>
+
 </div>
 
 <script>

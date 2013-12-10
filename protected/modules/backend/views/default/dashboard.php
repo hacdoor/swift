@@ -8,7 +8,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div id="container" style="width: 100%; height: 280px; margin: 0 auto;"></div>
-                        <?php echo $this->renderPartial('_highchart'); ?>
+                        <?php echo $this->renderPartial('_highchart', array('jsItems' => $jsItems)); ?>
                     </div>
                     <div class="col-md-8">
 
