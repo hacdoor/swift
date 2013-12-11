@@ -368,7 +368,7 @@ class UtilComponent extends CApplicationComponent {
                     '1' => 'Draft',
                     '2' => 'Finalize',
                 ),
-                'upload' => array('cus' => 'Customer', 'trx' => 'Transaksi')
+                'upload' => array('person' => 'Nasabah Perorangan', 'trx' => 'Transaksi', 'kyc' => 'Nasabah Korporasi')
             );
             $data = $modul[$param['modul']];
         }
@@ -445,6 +445,32 @@ class UtilComponent extends CApplicationComponent {
                 }
             }
         }
+        return $data;
+    }
+
+    public function getPersonData($param) {
+        $data = array();
+        $temp = array();
+        $data['info'] = 0;
+        foreach ($param as $key => $value) {
+            if (preg_match_all('`"([^"]*)"`', $value, $result)) {
+                foreach ($result[1] as $r) {
+                    $replace = '';
+                    if (substr_count($r, '.00')) {
+                        $replace = (int) preg_replace("/([^0-9\\.])/i", "", $r);
+                    } else {
+                        $replace = str_replace(',', $replace, $r);
+                    }
+                    $value = str_replace($r, $replace, $value);
+                }
+            }
+            $exp = explode(',', $value);
+            $temp[$key] = $exp;
+        }
+        $data['label'] = $temp[0];
+        array_shift($temp);
+        $data['info'] = count($temp);
+        $data['data'] = $temp;
         return $data;
     }
 

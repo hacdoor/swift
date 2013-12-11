@@ -65,14 +65,14 @@ $isHome = ($this->id == 'default' && $this->action->id == 'dashboard' || $this->
                                     <li class="dropdown">
                                         <a class="dropdown-toggle" data-toggle="dropdown" href="<?php echo $this->vars['backendUrl']; ?>nasabahPerorangan"><i class="caret-sub icon-caret-right pull-right"></i>Nasabah Perorangan</a>
                                         <ul class="dropdown-menu sub-menu">
-                                            <li><a href="<?php echo $this->vars['backendUrl']; ?>importNasabahPerorangan"> Import Nasabah Perorangan</a></li>
+                                            <li><a href="<?php echo $this->vars['backendUrl']; ?>upload?type=person"> Import Nasabah Perorangan</a></li>
                                             <li><a href="<?php echo $this->vars['backendUrl']; ?>nasabahPerorangan"> Maintain Nasabah Perorangan</a></li>
                                         </ul>
                                     </li>
                                     <li class="dropdown">
                                         <a class="dropdown-toggle" data-toggle="dropdown" href="<?php echo $this->vars['backendUrl']; ?>nasabahPerorangan"><i class="caret-sub icon-caret-right pull-right"></i>Nasabah Korporasi</a>
                                         <ul class="dropdown-menu sub-menu">
-                                            <li><a href="<?php echo $this->vars['backendUrl']; ?>importNasabahKorporasi"> Import Nasabah Korporasi</a></li>
+                                            <li><a href="<?php echo $this->vars['backendUrl']; ?>upload?type=kyc"> Import Nasabah Korporasi</a></li>
                                             <li><a href="<?php echo $this->vars['backendUrl']; ?>nasabahKorporasi"> Maintain Nasabah Korporasi</a></li>
                                         </ul>
                                     </li>
@@ -104,7 +104,6 @@ $isHome = ($this->id == 'default' && $this->action->id == 'dashboard' || $this->
                                 </ul>
                             </li>
                             <div class="divider"></div>
-                            <li><a href="<?php echo $this->vars['backendUrl']; ?>upload?type=cus">Upload data Customer</a></li>
                             <li><a href="<?php echo $this->vars['backendUrl']; ?>upload?type=trx">Upload Transaksi</a></li>
                         </ul>
                     </li>

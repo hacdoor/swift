@@ -8,9 +8,12 @@ $type = Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' 
     <div class="col-md-12">
         <div id="content-inner">
             <h1 class="page-title">
-                <span class="icon-plus"></span> Upload data <?php echo $type; ?></h1>
+                <span class="icon-plus"></span> Import data
+                <?php echo Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' => 'upload', 'data' => $type))); ?>
+            </h1>
             <div class="row">
-                <?php $this->renderPartial('/upload/_upload', array('type' => $type)); ?>
+                <?php $this->renderPartial('/upload/_upload', array('type' => $type, 'src' => $src)); ?>
+
             </div>
         </div>
     </div>

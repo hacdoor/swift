@@ -20,18 +20,18 @@
 
         <fieldset>
             <div class="form-group">
-                <label class="col-md-2 control-label required" for="Input_1">Upload Data <?php echo $type; ?> <span class="required">*</span></label>                
+                <label class="col-md-2 control-label required" for="Input_1">Import Data <span class="required">*</span></label>                
                 <div class="col-md-10">
                     <div class="col-md-2">
                         <div class="aUpload">
                             <a class='btn btn-primary' href='javascript:;'>
-                                Choose File... <input type="file" class="inputUpload" name="fileUpload" size="40"  onchange='$("#upload-file-info").val($(this).val())'>
+                                Choose File... <input type="file" class="inputUpload" name="fileUpload" value="<?php echo $src?>" size="40"  onchange='$("#upload-file-info").val($(this).val())'>
                             </a>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="wrapperUpload">
-                            <input class="form-control" id="upload-file-info" value="No File Choosen..." type="text" maxlength="255" disabled="disable">
+                            <input class="form-control" id="upload-file-info" value="<?php echo $src?>" type="text" maxlength="255" disabled="disable">
                         </div>
                     </div>
                 </div>

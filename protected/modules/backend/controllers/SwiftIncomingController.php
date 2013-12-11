@@ -15,6 +15,9 @@ class SwiftIncomingController extends BackendController {
 
         $this->checkAccess('swift.create');
         $model = new Swift;
+        $company = Company::model()->findByPk(1);
+        $model->namaPjk = $company->namaPjk;
+        $model->namaPejabatPjk = $company->namaPejabatPjk;
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);

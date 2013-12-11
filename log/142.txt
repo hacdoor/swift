@@ -1,3 +1,0 @@
-localId : 1
-namaPjk : Bank Mandiri
-namaPejabatPjk : Ibu Dian

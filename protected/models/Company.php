@@ -12,6 +12,8 @@
  * @property string $trxSource
  * @property string $kycSource
  * @property string $personSource
+ * @property string $tglAwalData
+ * @property string $tglAkhirData
  */
 class Company extends CActiveRecord
 {
@@ -41,13 +43,13 @@ class Company extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('bankId, namaPjk, namaPejabatPjk, trxSource, kycSource, personSource', 'required'),
+			array('bankId, namaPjk, namaPejabatPjk, trxSource, kycSource, personSource, tglAwalData, tglAkhirData', 'required'),
 			array('bankId', 'length', 'max'=>32),
 			array('namaPjk, namaPejabatPjk', 'length', 'max'=>100),
 			array('trxSource, kycSource, personSource', 'length', 'max'=>200),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, bankId, namaPjk, namaPejabatPjk, trxSource, kycSource, personSource', 'safe', 'on'=>'search'),
+			array('id, bankId, namaPjk, namaPejabatPjk, trxSource, kycSource, personSource, tglAwalData, tglAkhirData', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -84,6 +86,8 @@ class Company extends CActiveRecord
 			'trxSource' => 'Trx Source',
 			'kycSource' => 'Kyc Source',
 			'personSource' => 'Person Source',
+			'tglAwalData' => 'Tgl Awal Data',
+			'tglAkhirData' => 'Tgl Akhir Data',
 		);
 	}
 
@@ -105,6 +109,8 @@ class Company extends CActiveRecord
 		$criteria->compare('trxSource',$this->trxSource,true);
 		$criteria->compare('kycSource',$this->kycSource,true);
 		$criteria->compare('personSource',$this->personSource,true);
+		$criteria->compare('tglAwalData',$this->tglAwalData,true);
+		$criteria->compare('tglAkhirData',$this->tglAkhirData,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

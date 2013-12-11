@@ -15,7 +15,7 @@ class CompanyController extends BackendController {
         $actions = array(
             'edit' => array('permission' => 'company.update', 'url' => 'company/update/', 'icon' => 'pencil')
         );
-        $data_grid = array('namaPjk', 'namaPejabatPjk','trxSource','kycSource','personSource');
+        $data_grid = array('namaPjk', 'namaPejabatPjk','trxSource','kycSource','personSource','tglAkhirData');
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'System'),
             1 => array('url' => '', 'label' => 'System Parameter')
@@ -49,6 +49,7 @@ class CompanyController extends BackendController {
         if (isset($_POST['Company'])) {
             $model->attributes = $_POST['Company'];
             if ($model->validate()) {
+                $model->tglAkhirData = date('Y-m-d H:i:s');
                 if ($model->save()) {
                     // Redirect
                     $label = $model->attributeLabels();
