@@ -124,8 +124,18 @@ class UploadController extends BackendController {
                 $src = $source->trxSource;
 
                 break;
+            case 'person':
+                $src = $source->personSource;
+
+                break;
+            case 'kyc':
+                $src = $source->kycSource;
+
+                break;
+            
 
             default:
+                $src = $source->trxSource;
                 break;
         }
         $vars = array(
