@@ -3,7 +3,7 @@ $admin = Yii::app()->user->getState('admin');
 $nameSort = (isset($_GET['sort'])) ? $_GET['sort'] : '';
 $openSearch = (isset($_GET['Filter'])) ? 'style="display:block;"' : 'style="display:none;"';
 $showSort = '<i class="icon-sort sortIcon pull-right"></i> ';
-$title = 'Daftar Swift Incoming';
+$title = 'Incomplete Transaksi';
 $this->pageTitle = $title;
 ?>
 
@@ -16,7 +16,7 @@ $this->pageTitle = $title;
             <div class="row">
                 <div class="col-md-10">
                     <div class="confirmList">
-                        
+
                         <form method="get" class="form-filter">
                             <div class="row">
                                 <div class="col-md-4">
@@ -32,30 +32,20 @@ $this->pageTitle = $title;
                             </div>
                         </form>
 
-                        <?php echo CHtml::beginForm(); ?>
-
-                        <div class="btn-action">
-                            <?php echo CHtml::submitButton('Confirm', array('name' => 'ConfirmButton', 'confirm' => 'Are you sure want to confirm this record?', 'class' => 'btn btn-lg btn-default bootip disabled', 'title' => 'Set to Confirm')); ?>
-                            <?php echo CHtml::submitButton('Unconfirm', array('name' => 'UnconfirmButton', 'confirm' => 'Are you sure want to uncofirm this record?', 'class' => 'btn btn-lg btn-default bootip disabled', 'title' => 'Set to Unconfirm')); ?>
-                        </div>
-
                         <hr/>
 
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped list">
                                 <thead>
                                     <tr>
-                                        <th id="selectedIds" class="list-number checkbox-column">
-                                            <input class="select-on-check-all" type="checkbox" value="1" name="selectedIds_all" id="selectedIds_all">
-                                        </th>
+                                        <th><?php echo $sort->link('localId', $showSort . 'Local ID') ?></th>
                                         <th><?php echo $sort->link('jenisSwift', $showSort . 'Jenis Transaksi') ?></th>
                                         <th><?php echo $sort->link('tglLaporan', $showSort . 'Tanggal Transaksi') ?></th>
                                         <th>Pengirim</th>
                                         <th>Penerima</th>
                                         <th>Mata Uang</th>
                                         <th>Nilai Transaksi</th>
-                                        <th><?php echo $sort->link('status', $showSort . 'Status') ?></th>
-                                        <th class="list-actions">Actions</th>
+                                        <th class="list-actions">Incomplete Info</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -69,9 +59,7 @@ $this->pageTitle = $title;
                                             $i++;
                                             ?>
                                             <tr>
-                                                <td class="list-number checkbox-column">
-                                                    <input class="select-on-check" value="<?php echo $d->id; ?>" id="selectedIds_<?php echo $i - 1; ?>" type="checkbox" name="selectedIds[]">
-                                                </td>
+                                                <td><?php echo Yii::app()->util->purify($d->localId); ?></td>
                                                 <td><?php echo Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $d->jenisSwift))); ?></td>
                                                 <td><?php echo ($d->tglLaporan) ? Yii::app()->dateFormatter->format('dd-MM-yyyy', $d->tglLaporan) : ''; ?></td>
                                                 <td>
@@ -98,20 +86,14 @@ $this->pageTitle = $title;
                                                 </td>
                                                 <td></td>
                                                 <td><?php echo ($d->transaksis) ? Yii::app()->numberFormatter->formatCurrency($d->transaksis->amountDalamRupiah, 'IDR') : ''; ?></td>
-                                                <td><?php echo Yii::app()->util->purify($d->getStatusText()); ?></td>
                                                 <td class="list-actions">
-                                                    <?php if ($admin->hasPermissions('swift.update')): ?>
-                                                        <a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming/umum/<?php echo $d->id; ?>" class="btn btn-xs btn-default bootip" title="Update"><span class="icon icon-pencil"></span></a>
-                                                    <?php endif; ?>
-                                                    <?php if ($admin->hasPermissions('swift.export')): ?>
-                                                        <a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming/createExcel/<?php echo $d->id; ?>" class="btn btn-xs btn-default bootip" title="Export to Excel"><span class="icon icon-file"></span></a>
-                                                    <?php endif; ?>
+                                                    <span class="label label-warning">-</span>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <tr>
-                                            <td colspan="9">
+                                            <td colspan="8">
                                                 <div class="alert alert-warning">No record found.</div>
                                             </td>
                                         </tr>
@@ -120,15 +102,13 @@ $this->pageTitle = $title;
                             </table>
                         </div>
 
-                        <?php echo CHtml::endForm(); ?>
-
                     </div>
                 </div>
-                
+
                 <div class="col-md-2">
 
                     <?php if ($admin->hasPermissions('swift.create')): ?>
-                        <a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming/create" class="btn btn-primary btn-lg btn-block"><span class="icon icon-plus"></span> Buat Baru</a>
+                        <a href="<?php echo $this->vars['backendUrl']; ?>incompleteTransaksi/create" class="btn btn-primary btn-lg btn-block"><span class="icon icon-plus"></span> Buat Baru</a>
                         <hr>
                     <?php endif; ?>
 
@@ -149,7 +129,7 @@ $this->pageTitle = $title;
                                     if ($currentPage > 1)
                                         $disabled = '';
                                     ?>
-                                    <a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming?page=<?php echo $goto; ?>&<?php echo $qs; ?>" class="btn btn-warning btn-sm btn-block <?php echo $disabled; ?> bootip" title="Previous page"><span class="icon icon-chevron-left"></span></a>
+                                    <a href="<?php echo $this->vars['backendUrl']; ?>incompleteTransaksi?page=<?php echo $goto; ?>&<?php echo $qs; ?>" class="btn btn-warning btn-sm btn-block <?php echo $disabled; ?> bootip" title="Previous page"><span class="icon icon-chevron-left"></span></a>
                                 </div>
                                 <div class="col-md-4 col-sm-4 col-xs-4 input">
                                     <input type="text" class="form-control input-sm" name="page" value="<?php echo $currentPage; ?>">
@@ -161,7 +141,7 @@ $this->pageTitle = $title;
                                     if ($currentPage < $pages->pageCount)
                                         $disabled = '';
                                     ?>
-                                    <a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming?page=<?php echo $goto; ?>&<?php echo $qs; ?>" class="btn btn-warning btn-sm btn-block <?php echo $disabled; ?> bootip" title="Next page"><span class="icon icon-chevron-right"></span></a>
+                                    <a href="<?php echo $this->vars['backendUrl']; ?>incompleteTransaksi?page=<?php echo $goto; ?>&<?php echo $qs; ?>" class="btn btn-warning btn-sm btn-block <?php echo $disabled; ?> bootip" title="Next page"><span class="icon icon-chevron-right"></span></a>
                                 </div>
                                 <input type="hidden" name="Filter[localId]" value="<?php echo $filters['localId']; ?>">
                                 <input type="hidden" name="Filter[noLtdln]" value="<?php echo $filters['noLtdln']; ?>">
@@ -190,7 +170,6 @@ $this->pageTitle = $title;
                                     <li><?php echo $sort->link('noLtdln') ?></li>
                                     <li><?php echo $sort->link('tglLaporan') ?></li>
                                     <li><?php echo $sort->link('jenisLaporan') ?></li>
-                                    <li><?php echo $sort->link('status') ?></li>
                                 </ul>
                             </div>
                         </div>

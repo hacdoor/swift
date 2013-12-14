@@ -75,7 +75,7 @@ class PropinsiController extends BackendController {
                 Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed creating Propinsi, please check below for errors.');
             }
         }
-        
+
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'Data Master'),
             1 => array('url' => 'propinsi', 'label' => 'Propinsi'),
@@ -114,7 +114,7 @@ class PropinsiController extends BackendController {
                 Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed updating Propinsi, please check below for errors.');
             }
         }
-        
+
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'Data Master'),
             1 => array('url' => 'propinsi', 'label' => 'Propinsi'),

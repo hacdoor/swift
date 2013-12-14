@@ -3,6 +3,7 @@
 $admin = Yii::app()->user->getState('admin');
 $isHome = ($this->id == 'default' && $this->action->id == 'dashboard' || $this->action->id == 'error') ? true : false;
 ?>
+
 <html>
     <head>
 
@@ -43,7 +44,10 @@ $isHome = ($this->id == 'default' && $this->action->id == 'dashboard' || $this->
                     <div class="linkHead pull-left"></div>
                 </a>
                 <ul class="nav navbar-nav pull-right">
-                    <li <?php if ($this->action->id === 'dashboard') : ?>class="active"<?php endif; ?>><a href="<?php echo $this->vars['backendUrl']; ?>"><span class="icon-th-large"></span> Dashboard</a></li>
+                    <?php if ($admin->hasPermissions('dashbord.view')): ?>
+                        <li <?php if ($this->action->id === 'dashboard') : ?>class="active"<?php endif; ?>><a href="<?php echo $this->vars['backendUrl']; ?>"><span class="icon-th-large"></span> Dashboard</a></li>
+                    <?php endif; ?>
+
                     <li class="dropdown 
                     <?php
                     if ($this->id == 'negara' ||
@@ -55,32 +59,55 @@ $isHome = ($this->id == 'default' && $this->action->id == 'dashboard' || $this->
                         ?>active<?php endif; ?>">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="icon-book"></span> Data Master <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="<?php echo $this->vars['backendUrl']; ?>negara">Kode Negara</a></li>
-                            <li><a href="<?php echo $this->vars['backendUrl']; ?>mata-uang">Kode Mata Uang</a></li>
-                            <li><a href="<?php echo $this->vars['backendUrl']; ?>propinsi">Kode Propinsi</a></li>
-                            <li><a href="<?php echo $this->vars['backendUrl']; ?>kabupaten">Kode Kabupaten</a></li>
+                            <?php if ($admin->hasPermissions('negara.view')): ?>
+                                <li><a href="<?php echo $this->vars['backendUrl']; ?>negara">Kode Negara</a></li>
+                            <?php endif; ?>
+                            <?php if ($admin->hasPermissions('uang.view')): ?>
+                                <li><a href="<?php echo $this->vars['backendUrl']; ?>mata-uang">Kode Mata Uang</a></li>
+                            <?php endif; ?>
+                            <?php if ($admin->hasPermissions('propinsi.view')): ?>
+                                <li><a href="<?php echo $this->vars['backendUrl']; ?>propinsi">Kode Propinsi</a></li>
+                            <?php endif; ?>
+                            <?php if ($admin->hasPermissions('kabupaten.view')): ?>
+                                <li><a href="<?php echo $this->vars['backendUrl']; ?>kabupaten">Kode Kabupaten</a></li>
+                            <?php endif; ?>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-caret-right caret-sub pull-right"></i>Master Nasabah</a>
                                 <ul class="dropdown-menu sub-menu">
                                     <li class="dropdown">
                                         <a class="dropdown-toggle" data-toggle="dropdown" href="<?php echo $this->vars['backendUrl']; ?>nasabahPerorangan"><i class="caret-sub icon-caret-right pull-right"></i>Nasabah Perorangan</a>
                                         <ul class="dropdown-menu sub-menu">
-                                            <li><a href="<?php echo $this->vars['backendUrl']; ?>upload?type=person"> Import Nasabah Perorangan</a></li>
-                                            <li><a href="<?php echo $this->vars['backendUrl']; ?>nasabahPerorangan"> Maintain Nasabah Perorangan</a></li>
+                                            <?php if ($admin->hasPermissions('upload.person')): ?>
+                                                <li><a href="<?php echo $this->vars['backendUrl']; ?>upload?type=person"> Import Nasabah Perorangan</a></li>
+                                            <?php endif; ?>
+                                            <?php if ($admin->hasPermissions('nasabahPerorangan.view')): ?>
+                                                <li><a href="<?php echo $this->vars['backendUrl']; ?>nasabahPerorangan"> Maintain Nasabah Perorangan</a></li>
+                                            <?php endif; ?>
                                         </ul>
                                     </li>
                                     <li class="dropdown">
                                         <a class="dropdown-toggle" data-toggle="dropdown" href="<?php echo $this->vars['backendUrl']; ?>nasabahPerorangan"><i class="caret-sub icon-caret-right pull-right"></i>Nasabah Korporasi</a>
                                         <ul class="dropdown-menu sub-menu">
-                                            <li><a href="<?php echo $this->vars['backendUrl']; ?>upload?type=kyc"> Import Nasabah Korporasi</a></li>
-                                            <li><a href="<?php echo $this->vars['backendUrl']; ?>nasabahKorporasi"> Maintain Nasabah Korporasi</a></li>
+                                            <?php if ($admin->hasPermissions('upload.kyc')): ?>
+                                                <li><a href="<?php echo $this->vars['backendUrl']; ?>upload?type=kyc"> Import Nasabah Korporasi</a></li>
+                                            <?php endif; ?>
+                                            <?php if ($admin->hasPermissions('nasabahKorporasi.view')): ?>
+                                                <li><a href="<?php echo $this->vars['backendUrl']; ?>nasabahKorporasi"> Maintain Nasabah Korporasi</a></li>
+                                            <?php endif; ?>
                                         </ul>
                                     </li>
                                 </ul>
                             </li>
                         </ul>
                     </li>
-                    <li class="dropdown">
+                    <li class="dropdown 
+                    <?php
+                    if ($this->id == 'swiftIncoming' ||
+                            $this->id == 'swiftOutgoing' ||
+                            $this->id == 'nonSwiftIncoming' ||
+                            $this->id == 'nonSwiftOutgoing' ||
+                            $this->id == 'upload') :
+                        ?>active<?php endif; ?>">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="icon-exchange"></span> Transaksi <b class="caret"></b></a>
                         <ul class="dropdown-menu">                            
                             <li class="dropdown">
@@ -89,8 +116,12 @@ $isHome = ($this->id == 'default' && $this->action->id == 'dashboard' || $this->
                                     Swift
                                 </a>
                                 <ul class="dropdown-menu sub-menu">
-                                    <li><a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming"> Incoming</a></li>
-                                    <li><a href="<?php echo $this->vars['backendUrl']; ?>swiftOutgoing"> Outgoing</a></li>
+                                    <?php if ($admin->hasPermissions('swiftIncoming.view')): ?>
+                                        <li><a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming"> Incoming</a></li>
+                                    <?php endif; ?>
+                                    <?php if ($admin->hasPermissions('swiftOutgoing.view')): ?>
+                                        <li><a href="<?php echo $this->vars['backendUrl']; ?>swiftOutgoing"> Outgoing</a></li>
+                                    <?php endif; ?>
                                 </ul>
                             </li>                          
                             <li class="dropdown">
@@ -99,45 +130,83 @@ $isHome = ($this->id == 'default' && $this->action->id == 'dashboard' || $this->
                                     Non Swift
                                 </a>
                                 <ul class="dropdown-menu sub-menu">
-                                    <li><a href="<?php echo $this->vars['backendUrl']; ?>nonSwiftIncoming"> Incoming</a></li>
-                                    <li><a href="<?php echo $this->vars['backendUrl']; ?>nonSwiftOutgoing"> Outgoing</a></li>
+                                    <?php if ($admin->hasPermissions('nonSwiftIncoming.view')): ?>
+                                        <li><a href="<?php echo $this->vars['backendUrl']; ?>nonSwiftIncoming"> Incoming</a></li>
+                                    <?php endif; ?>
+                                    <?php if ($admin->hasPermissions('nonSwiftOutgoing.view')): ?>
+                                        <li><a href="<?php echo $this->vars['backendUrl']; ?>nonSwiftOutgoing"> Outgoing</a></li>
+                                    <?php endif; ?>
                                 </ul>
                             </li>
                             <div class="divider"></div>
-                            <li><a href="<?php echo $this->vars['backendUrl']; ?>upload?type=trx">Upload Transaksi</a></li>
+                            <?php if ($admin->hasPermissions('upload.trx')): ?>
+                                <li><a href="<?php echo $this->vars['backendUrl']; ?>upload?type=trx">Upload Transaksi</a></li>
+                            <?php endif; ?>
                         </ul>
                     </li>
-                    <li class="dropdown">
+                    <li class="dropdown 
+                    <?php
+                    if ($this->action->id == 'konfirmasiDataTransaksi' ||
+                            $this->action->id == 'generate') :
+                        ?>active<?php endif; ?>">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="icon-external-link-sign"></span> Proses <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="<?php echo $this->vars['backendUrl']; ?>swift/konfirmasiDataTransaksi">Konfirmasi Data Transaksi</a>
-                                <a href="<?php echo $this->vars['backendUrl']; ?>swift/generate">Generate XML File</a>
+                                <?php if ($admin->hasPermissions('konfirmasiDataTransaksi.view')): ?>
+                                    <a href="<?php echo $this->vars['backendUrl']; ?>swift/konfirmasiDataTransaksi">Konfirmasi Data Transaksi</a>
+                                <?php endif; ?>
+                                <?php if ($admin->hasPermissions('generate.view')): ?>
+                                    <a href="<?php echo $this->vars['backendUrl']; ?>swift/generate">Generate XML File</a>
+                                <?php endif; ?>
                             </li>
                         </ul>
                     </li>
-                    <li class="dropdown">
+                    <li class="dropdown 
+                    <?php
+                    if ($this->action->id == 'incompleteTransaksi' ||
+                            $this->action->id == 'incompleteNasabahPerorangan' ||
+                            $this->action->id == 'incompleteNasabahKorporasi') :
+                        ?>active<?php endif; ?>">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="icon-bullhorn"></span> Report <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="<?php echo $this->vars['backendUrl']; ?>swift/incompleteTransaksi">Incomplete Transaksi</a>
-                                <a href="<?php echo $this->vars['backendUrl']; ?>swift/incompleteNasbahPerorangan">Incomplete Nasabah Perorangan</a>
-                                <a href="<?php echo $this->vars['backendUrl']; ?>swift/incompleteNasbahKorporasi">Incomplete Nasabah Korporasi</a>
+                                <?php if ($admin->hasPermissions('incompleteTransaksi.view')): ?>
+                                    <a href="<?php echo $this->vars['backendUrl']; ?>swift/incompleteTransaksi">Incomplete Transaksi</a>
+                                <?php endif; ?>
+                                <?php if ($admin->hasPermissions('incompleteNasabahPerorangan.view')): ?>
+                                    <a href="<?php echo $this->vars['backendUrl']; ?>swift/incompleteNasabahPerorangan">Incomplete Nasabah Perorangan</a>
+                                <?php endif; ?>
+                                <?php if ($admin->hasPermissions('incompleteNasabahKorporasi.view')): ?>
+                                    <a href="<?php echo $this->vars['backendUrl']; ?>swift/incompleteNasabahKorporasi">Incomplete Nasabah Korporasi</a>
+                                <?php endif; ?>
                             </li>
                         </ul>
-                    </li><li class="dropdown">
+                    </li>
+                    <li class="dropdown 
+                    <?php
+                    if ($this->id == 'group' ||
+                            $this->id == 'admin' ||
+                            $this->id == 'me' ||
+                            $this->id == 'company') :
+                        ?>active<?php endif; ?>">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="icon-cog"></span> System <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="<?php echo $this->vars['backendUrl']; ?>company">System Parameter</a>
-                                <a href="<?php echo $this->vars['backendUrl']; ?>admin">Daftar Pengguna</a>
-                                <a href="<?php echo $this->vars['backendUrl']; ?>group">Kelompok</a>
-                                <a href="<?php echo $this->vars['backendUrl']; ?>default/logout">Logout</a>
+                                <?php if ($admin->hasPermissions('group.view')): ?>
+                                    <a href="<?php echo $this->vars['backendUrl']; ?>group">Kelompok</a>
+                                <?php endif; ?>
+                                <?php if ($admin->hasPermissions('admin.view')): ?>
+                                    <a href="<?php echo $this->vars['backendUrl']; ?>admin">Daftar Pengguna</a>
+                                <?php endif; ?>
+                                <a href="<?php echo $this->vars['backendUrl']; ?>me"><?php echo ($admin->username) ? ucwords($admin->username) : 'Me'; ?> (My Account)</a>
 
                                 <div class="divider"></div>
 
-                                <a href="<?php echo $this->vars['backendUrl']; ?>me"><?php echo ($admin->username) ? ucwords($admin->username) : 'Me'; ?></a>
-                                <a href="">About System</a>
+                                <a href="" class="hidden">About System</a>
+                                <?php if ($admin->hasPermissions('company.view')): ?>
+                                    <a href="<?php echo $this->vars['backendUrl']; ?>company">System Parameter</a>
+                                <?php endif; ?>
+                                <a href="<?php echo $this->vars['backendUrl']; ?>default/logout">Logout</a>
                             </li>
                         </ul>
                     </li>

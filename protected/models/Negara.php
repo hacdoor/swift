@@ -55,6 +55,7 @@ class Negara extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
                     'propinsi' => array(self::HAS_MANY, 'Propinsi', 'negara_id'),
+                    'propinsiCount' => array(self::STAT, 'Propinsi', 'negara_id'),
 //                    'mataUang' => array(self::HAS_ONE, 'MataUang', 'negara_id'),
 		);
 	}

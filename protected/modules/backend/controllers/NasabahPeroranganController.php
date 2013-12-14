@@ -8,7 +8,6 @@ class NasabahPeroranganController extends BackendController {
     }
 
     public function actionIndex() {
-
         $this->checkAccess('nasabahPerorangan.view');
 
         $filters = (isset($_GET['Filter'])) ? $_GET['Filter'] : array('namaLengkap' => '', 'noRekening' => '');

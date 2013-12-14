@@ -1,14 +1,8 @@
-<?php
-/* @var $this GroupController */
-/* @var $model Group */
-/* @var $form CActiveForm */
-?>
-
 <div class="form-wrapper">
 
     <?php
     $form = $this->beginWidget('CActiveForm', array(
-        'id' => 'group-_form-form',
+        'id' => 'group-form',
         'enableAjaxValidation' => false,
         'errorMessageCssClass' => 'label label-danger',
         'htmlOptions' => array('class' => 'form-horizontal', 'role' => 'form')
@@ -16,7 +10,6 @@
     ?>
 
     <div class="col-md-12">
-
         <fieldset>
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'name', array('class' => 'col-md-2 control-label')); ?>
@@ -25,7 +18,6 @@
                     <?php echo $form->error($model, 'name'); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'slug', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-10">
@@ -33,8 +25,6 @@
                     <?php echo $form->error($model, 'slug'); ?>
                 </div>
             </div>
-
-
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'description', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-10">
@@ -89,12 +79,11 @@
             </div>
     </div>
 </fieldset>
-
 </div>
 
 <div class="col-md-12 clear form-actions">
     <hr>
-    <a href="<?php echo Yii::app()->request->baseUrl; ?>/backend/group" class="btn btn-lg btn-default">Cancel</a>
+    <a href="<?php echo $this->vars['backendUrl']; ?>group" class="btn btn-lg btn-default">Cancel</a>
     <?php echo CHtml::submitButton('Submit', array('class' => 'btn btn-lg btn-primary')); ?>
 </div>
 

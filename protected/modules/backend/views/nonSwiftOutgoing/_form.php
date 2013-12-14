@@ -1,30 +1,20 @@
-<?php
-/* @var $this SwiftController */
-/* @var $model Swift */
-/* @var $form CActiveForm */
-?>
-
 <div class="form-wrapper">
 
     <?php
     $form = $this->beginWidget('CActiveForm', array(
         'id' => 'swiftOutgoing-form',
         'enableAjaxValidation' => FALSE,
+        'enableClientValidation' => true,
+        'clientOptions' => array(
+            'validateOnSubmit' => true,
+        ),
         'errorMessageCssClass' => 'label label-danger',
         'htmlOptions' => array('class' => 'form-horizontal', 'role' => 'form')
-    ));
+            ));
     ?>
 
-
     <div class="col-md-12">
-
-        <fieldset>
-
-            <p class="note">Fields with <span class="required">*</span> are required.</p>
-
-            <?php echo $form->errorSummary($model); ?>
-
-
+        <fieldset class="well">
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'jenisLaporan', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -85,7 +75,7 @@
 
     <?php $this->endWidget(); ?>
 
-</div><!-- form -->
+</div>
 
 <script>
     $('#Swift_jenisLaporan').on('change', function() {

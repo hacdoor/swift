@@ -1,8 +1,8 @@
 <?php
 $admin = Yii::app()->user->getState('admin');
 $nameSort = (isset($_GET['sort'])) ? $_GET['sort'] : '';
-
 ?>
+
 <div class="row">
     <div class="col-md-12">
         <div id="content-inner">

@@ -6,7 +6,6 @@
                 <span class="icon-plus"></span> Buat Baru Group
                 <a href="<?php echo $this->vars['backendUrl']; ?>group" class="btn btn-xs btn-primary pull-right"><span class="icon icon-chevron-left"></span> Back</a>
             </h1>
-
             <div class="row">
                 <?php $this->renderPartial('/group/_form', array('model' => $model, 'permissions' => $permissions)); ?>
             </div>

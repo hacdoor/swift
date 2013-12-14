@@ -111,7 +111,6 @@ class AdminController extends BackendController {
                             $gp->save();
                         }
                     }
-
                     // Redirect
                     Yii::app()->user->setFlash('success', 'Success!|' . 'New Admin has been created.');
                     $this->redirect($this->vars['backendUrl'] . 'admin');

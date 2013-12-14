@@ -8,7 +8,6 @@ class UangController extends BackendController {
     }
 
     public function actionIndex() {
-
         $this->checkAccess('uang.view');
 
         $filters = (isset($_GET['Filter'])) ? $_GET['Filter'] : array('nama' => '', 'simbol' => '', 'negara_id|negara' => '');
@@ -19,7 +18,7 @@ class UangController extends BackendController {
         );
         $data_grid = array('nama', 'simbol', array('relasi' => 'negara_id&negara', 'field' => 'nama'));
         //$data_grid = array('nama', 'simbol', array('relasi' => 'negara_id&modul[negara]'));
-        
+
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'Data Master'),
             1 => array('url' => '', 'label' => 'Mata Uang')
@@ -120,8 +119,6 @@ class UangController extends BackendController {
             $this->redirect($this->vars['backendUrl'] . 'mata-uang');
             Yii::app()->end();
         }
-
-        $admin = Yii::app()->user->getState('admin');
 
         // Delete admin
         if ($model->delete()) {

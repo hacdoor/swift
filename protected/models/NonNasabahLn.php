@@ -61,7 +61,7 @@ class NonNasabahLn extends CActiveRecord {
             array('alamat', 'length', 'max' => 100),
             array('noTelp, negaraBagianKota, ktp, sim, passport, kimsKitasKitap, npwp, jenisBuktiLain, noBuktiLain', 'length', 'max' => 30),
             array('tglLahir', 'safe'),
-            array('ktp, sim, passport, kimsKitasKitap, npwp', 'oneOfFive', 'on' => 'other'),
+            array('ktp, sim, passport, kimsKitasKitap, npwp', 'oneOfFive'),
             array('noRekening, alamat', 'oneOfTwo'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
@@ -70,10 +70,12 @@ class NonNasabahLn extends CActiveRecord {
     }
 
     public function oneOfFive($attribute, $params) {
-        if (!$this->ktp && !$this->sim && !$this->passport && !$this->kimsKitasKitap && !$this->npwp)
-            $this->addError($attribute, $attribute . ' is required.');
+        if ($this->action->id != 'AddPengirimNonNasabah') {
+            if (!$this->ktp && !$this->sim && !$this->passport && !$this->kimsKitasKitap && !$this->npwp)
+                $this->addError($attribute, $attribute . ' is required.');
+        }
     }
-    
+
     public function oneOfTwo($attribute, $params) {
         if (!$this->noRekening && !$this->alamat)
             $this->addError($attribute, $attribute . ' is required.');
@@ -156,8 +158,8 @@ class NonNasabahLn extends CActiveRecord {
         $criteria->compare('swift_id', $this->swift_id);
 
         return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
-        ));
+                    'criteria' => $criteria,
+                ));
     }
 
 }

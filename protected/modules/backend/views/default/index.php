@@ -15,7 +15,9 @@
                         ));
                 ?>
                 <p>Tell us who you are!</p>
+
                 <hr>
+
                 <div class="input-group" id="group-username">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
                     <?php echo $form->textField($model, 'username', array('class' => 'form-control', 'placeholder' => 'Username/Email')); ?>
@@ -30,8 +32,11 @@
                         Remember me
                     </label>
                 </div>
+
                 <hr>
+
                 <?php echo CHtml::submitButton('Log me in!', array('class' => 'btn btn-lg btn-block btn-primary')); ?>
+
                 <?php if (Yii::app()->user->getFlashes(false)): ?>
                     <hr>
                     <?php
@@ -67,7 +72,9 @@
                         </div>
                     <?php endif; ?>
                 <?php endif; ?>
+
                 <?php $this->endWidget(); ?>
+
             </div>
         </div>
     </div>

@@ -3,7 +3,9 @@ $admin = Yii::app()->user->getState('admin');
 $nameSort = (isset($_GET['sort'])) ? $_GET['sort'] : '';
 $showSort = '<i class="icon-sort sortIcon pull-right"></i> ';
 ?>
+
 <?php echo Yii::app()->util->ahdaBreadcrumbGridForm($breadcrumb) ?>
+
 <div class="row">
     <div class="col-md-12">
         <div id="content-inner">

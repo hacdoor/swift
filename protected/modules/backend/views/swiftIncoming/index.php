@@ -14,15 +14,6 @@ $this->pageTitle = $title;
         <div id="content-inner">
             <?php echo Yii::app()->util->ahdaTitleGridForm(array('icon' => 'list-alt', 'label' => $title)) ?>
             <div class="row">
-                <?php
-//                $this->widget('ext.EDateRangePicker.EDateRangePicker', array(
-//                    'id' => 'Filter_date',
-//                    'name' => 'Filter[date]',
-//                    'value' => date('d/m/Y'),
-//                    'options' => array('arrows' => true),
-//                    'htmlOptions' => array('class' => 'inputClass'),
-//                ));
-                ?>
                 <div class="col-md-10">
                     <div class="advanceSearch hidden" <?php echo $openSearch; ?>>
                         <form method="get" class="form-filter">
@@ -56,7 +47,7 @@ $this->pageTitle = $title;
                                 </div>
                                 <div class="col-md-3 col-sm-3">
                                     <div class="form-group">
-                                        <input class="form-control datepicker" type="text" name="Filter[created_end]" placeholder="... until ..." value="<?php // echo $filters['created_end'];                                                                                                                    ?>" readonly="readonly" data-date-format="yyyy-mm-dd">
+                                        <input class="form-control datepicker" type="text" name="Filter[created_end]" placeholder="... until ..." value="<?php // echo $filters['created_end'];                                                                                                                         ?>" readonly="readonly" data-date-format="yyyy-mm-dd">
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-3">
@@ -121,14 +112,14 @@ $this->pageTitle = $title;
                                             <td class="list-number"><?php echo $i; ?>.</td>
                                             <td><?php echo Yii::app()->util->purify($d->localId); ?></td>
                                             <td><?php echo Yii::app()->util->purify($d->noLtdln); ?></td>
-                                            <td><?php echo Yii::app()->dateFormatter->formatDateTime($d->tglLaporan, 'long', null); ?></td>
+                                            <td><?php echo Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' => 'tanggal', 'data' => $d->tglLaporan))); ?></td>
                                             <td><?php echo Yii::app()->util->purify($d->getJenisLaporanText()); ?></td>
                                             <td><?php echo Yii::app()->util->purify($d->getStatusText()); ?></td>
                                             <td class="list-actions">
-                                                <?php if ($admin->hasPermissions('swift.update')): ?>
+                                                <?php if ($admin->hasPermissions('swiftIncoming.update')): ?>
                                                     <a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming/umum/<?php echo $d->id; ?>" class="btn btn-xs btn-default bootip" title="Update"><span class="icon icon-pencil"></span></a>
                                                 <?php endif; ?>
-                                                <?php if ($admin->hasPermissions('swift.export')): ?>
+                                                <?php if ($admin->hasPermissions('swiftIncoming.generateExcel')): ?>
                                                     <a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming/createExcel/<?php echo $d->id; ?>" class="btn btn-xs btn-default bootip" title="Export to Excel"><span class="icon icon-file"></span></a>
                                                 <?php endif; ?>
                                             </td>
@@ -150,7 +141,7 @@ $this->pageTitle = $title;
                 </div>
                 <div class="col-md-2">
 
-                    <?php if ($admin->hasPermissions('swift.create')): ?>
+                    <?php if ($admin->hasPermissions('swiftIncoming.create')): ?>
                         <a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming/create" class="btn btn-primary btn-lg btn-block"><span class="icon icon-plus"></span> Buat Baru</a>
                         <hr>
                     <?php endif; ?>

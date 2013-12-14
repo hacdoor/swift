@@ -38,7 +38,7 @@ class KabupatenController extends BackendController {
         $sort->applyOrder($criteria);
 
         $data = Kabupaten::model()->findAll($criteria);
-        
+
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'Data Master'),
             1 => array('url' => '', 'label' => 'Kabupaten')
@@ -75,7 +75,7 @@ class KabupatenController extends BackendController {
                 Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed creating Kabupaten, please check below for errors.');
             }
         }
-        
+
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'Data Master'),
             1 => array('url' => 'kabupaten', 'label' => 'Kabupaten'),
@@ -152,7 +152,7 @@ class KabupatenController extends BackendController {
 
         Yii::app()->end();
     }
-    
+
     public function actionGetKota($id) {
         $this->layout = false;
 

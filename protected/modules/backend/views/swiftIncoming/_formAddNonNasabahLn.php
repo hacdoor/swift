@@ -12,8 +12,6 @@
         'htmlOptions' => array('class' => 'form-horizontal', 'role' => 'form')
             ));
     ?>
-    
-    <?php echo $form->errorSummary($nonNasabahLn); ?>
 
     <div class="col-md-12">
 

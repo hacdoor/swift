@@ -43,17 +43,24 @@ class SwiftController extends BackendController {
 
         $data = Swift::model()->findAll($criteria);
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Swift')
+        );
+
         $vars = array(
             'data' => $data,
             'pages' => $pages,
             'filters' => $filters,
-            'sort' => $sort
+            'sort' => $sort,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('index', $vars);
     }
 
     public function actionKonfirmasiDataTransaksi() {
+        $this->checkAccess('swift.konfirmasiDataTransaksi');
 
         if (isset($_POST['ConfirmButton'])) {
             if (isset($_POST['selectedIds'])) {
@@ -74,8 +81,6 @@ class SwiftController extends BackendController {
                 }
             }
         }
-
-        $this->checkAccess('swift.view');
 
         $data = null;
         $pages = null;
@@ -126,9 +131,8 @@ class SwiftController extends BackendController {
         $data = Swift::model()->findAll($criteria);
 
         $breadcrumb = array(
-            0 => array('url' => '', 'label' => 'Transaksi'),
-            1 => array('url' => '', 'label' => 'Proses'),
-            2 => array('url' => '', 'label' => 'Konfirmasi Data Transaksi')
+            0 => array('url' => '', 'label' => 'Proses'),
+            1 => array('url' => '', 'label' => 'Konfirmasi Data Transaksi')
         );
 
         $vars = array(
@@ -140,7 +144,172 @@ class SwiftController extends BackendController {
             'dateRange' => $dataRange
         );
 
-        $this->render('konfirmasi', $vars);
+        $this->render('konfirmasiDataTransaksi', $vars);
+    }
+
+    public function actionIncompleteTransaksi() {
+        $this->checkAccess('report.incompleteTransaksi');
+
+        $data = null;
+        $pages = null;
+        $dataRange = (isset($_GET['date_range'])) ? $_GET['date_range'] : '';
+        $filters = array(
+            'localId' => '',
+            'noLtdln' => '',
+            'created_start' => '',
+            'created_end' => '',
+            'jenisLaporan' => '',
+            'swiftStatus' => '',
+            'date_range' => ''
+        );
+
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'status = :statusIncomplete';
+        $criteria->params = array(':statusIncomplete' => Swift::STATUS_DRAFT);
+
+        if (isset($_GET['Filter']))
+            $filters = $_GET['Filter'];
+        if ($filters['localId'])
+            $criteria->addSearchCondition('localId', $filters['localId']);
+        if ($filters['noLtdln'])
+            $criteria->addSearchCondition('noLtdln', $filters['noLtdln']);
+        if ($filters['created_start'] || $filters['created_end'])
+            $criteria->addBetweenCondition('tglLaporan', $filters['created_start'] . ' 00:00:00', $filters['created_end'] . ' 23:59:59');
+        if (isset($_GET['date_range']) && $_GET['date_range'] != '') {
+            $dateRange = explode(' - ', $_GET['date_range']);
+            $startDate = $dateRange[0];
+            $endDate = $dateRange[1];
+            $criteria->addBetweenCondition('tglLaporan', $startDate . ' 00:00:00', $endDate . ' 23:59:59');
+        }
+        if ($filters['jenisLaporan'])
+            $criteria->addInCondition('jenisLaporan', array('jenisLaporan' => $filters['jenisLaporan']));
+
+        $dataCount = Swift::model()->count($criteria);
+
+        $pages = new CPagination($dataCount);
+        $pages->setPageSize(Yii::app()->setting->get('list_size'));
+        $pages->applyLimit($criteria);
+
+        $sort = new CSort;
+        $sort->modelClass = 'Swift';
+        $sort->attributes = array('*');
+        $sort->defaultOrder = 'id DESC';
+        $sort->applyOrder($criteria);
+
+        $data = Swift::model()->findAll($criteria);
+
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Report'),
+            1 => array('url' => '', 'label' => 'Incomplete Transaksi')
+        );
+
+        $vars = array(
+            'data' => $data,
+            'pages' => $pages,
+            'filters' => $filters,
+            'sort' => $sort,
+            'breadcrumb' => $breadcrumb,
+            'dateRange' => $dataRange
+        );
+
+        $this->render('incompleteTransaksi', $vars);
+    }
+
+    public function actionIncompleteNasabahPerorangan() {
+        $this->checkAccess('report.incompleteNasabahPerorangan');
+
+        $data = null;
+        $pages = null;
+        $filters = array(
+            'noRekening' => '',
+            'namaLengkap' => '',
+            'tglLahir_start' => '',
+            'tglLahir_end' => '',
+        );
+
+        $criteria = new CDbCriteria;
+
+        if (isset($_GET['Filter']))
+            $filters = $_GET['Filter'];
+        if ($filters['noRekening'])
+            $criteria->addSearchCondition('noRekening', $filters['noRekening']);
+        if ($filters['namaLengkap'])
+            $criteria->addSearchCondition('namaLengkap', $filters['namaLengkap']);
+        if ($filters['tglLahir_start'] || $filters['tglLahir_end'])
+            $criteria->addBetweenCondition('tglLahir', $filters['tglLahir_start'] . ' 00:00:00', $filters['tglLahir_end'] . ' 23:59:59');
+        
+        $nasabahPeroranganLn = NasabahPeroranganLn::model()->findAll($criteria);
+        $nasabahPeroranganDn = NasabahPeroranganDn::model()->findAll($criteria);
+
+        $data = CMap::mergeArray($nasabahPeroranganLn, $nasabahPeroranganDn);
+
+        $dataCount = count($data);
+
+        $pages = new CPagination($dataCount);
+        $pages->setPageSize(Yii::app()->setting->get('list_size'));
+        $pages->applyLimit($criteria);
+
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Report'),
+            1 => array('url' => '', 'label' => 'Incomplete Nasabah Perorangan')
+        );
+
+        $vars = array(
+            'data' => $data,
+            'pages' => $pages,
+            'filters' => $filters,
+            'breadcrumb' => $breadcrumb,
+        );
+
+        $this->render('incompleteNasabahPerorangan', $vars);
+    }
+    
+    public function actionIncompleteNasabahKorporasi() {
+        $this->checkAccess('report.incompleteNasabahKorporasi');
+
+        $data = null;
+        $pages = null;
+        $filters = array(
+            'noRekening' => '',
+            'namaKorporasi' => '',
+            'bentukBadan' => '',
+        );
+
+        $criteria = new CDbCriteria;
+
+        if (isset($_GET['Filter']))
+            $filters = $_GET['Filter'];
+        if ($filters['noRekening'])
+            $criteria->addSearchCondition('noRekening', $filters['noRekening']);
+        if ($filters['namaKorporasi'])
+            $criteria->addSearchCondition('namaKorporasi', $filters['namaKorporasi']);
+        if ($filters['bentukBadan'])
+            $criteria->addSearchCondition('bentukBadan', $filters['bentukBadan']);
+        
+        $nasabahKorporasiLn = NasabahKorporasiDn::model()->findAll($criteria);
+        $nasabahKorporasiDn = NasabahKorporasiLn::model()->findAll($criteria);
+
+        $data = CMap::mergeArray($nasabahKorporasiLn, $nasabahKorporasiDn);
+
+        $dataCount = count($data);
+
+        $pages = new CPagination($dataCount);
+        $pages->setPageSize(Yii::app()->setting->get('list_size'));
+        $pages->applyLimit($criteria);
+
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Report'),
+            1 => array('url' => '', 'label' => 'Incomplete Nasabah Perorangan')
+        );
+
+        $vars = array(
+            'data' => $data,
+            'pages' => $pages,
+            'filters' => $filters,
+            'breadcrumb' => $breadcrumb,
+        );
+
+        $this->render('incompleteNasabahKorporasi', $vars);
     }
 
     public function actionGenerate() {
@@ -156,6 +325,7 @@ class SwiftController extends BackendController {
 
     public function actionCreate() {
         $this->checkAccess('swift.create');
+
         $model = new Swift;
 
         // Uncomment the following line if AJAX validation is needed
@@ -172,13 +342,21 @@ class SwiftController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => 'swift', 'label' => 'Swift'),
+            2 => array('url' => '', 'label' => 'Buat Baru')
+        );
+
         $this->render('create', array(
             'model' => $model,
+            'breadcrumb' => $breadcrumb
         ));
     }
 
     public function actionUpdate($id) {
         $this->checkAccess('swift.update');
+
         $model = $this->loadModel($id);
 
         if (NasabahPeroranganDn::model()->countByAttributes(array('swift_id' => $model->id)) != 0)
@@ -295,6 +473,13 @@ class SwiftController extends BackendController {
                 Yii::app()->user->setFlash('success', 'Success!|' . 'Transaksi has been updated.');
             }
         }
+
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => 'swift', 'label' => 'Swift'),
+            2 => array('url' => '', 'label' => 'Sunting Swift')
+        );
+
         $this->render('update', array(
             'model' => $model,
             'nasabahPeroranganDn' => $nasabahPeroranganDn,
@@ -305,6 +490,7 @@ class SwiftController extends BackendController {
             'nonNasabahLn' => $nonNasabahLn,
             'infoLain' => $infoLain,
             'transaksi' => $transaksi,
+            'breadcrumb' => $breadcrumb
         ));
     }
 
@@ -316,7 +502,6 @@ class SwiftController extends BackendController {
         $korporasiPengirimSwIn = new NasabahKorporasiDn;
         $nonNasabahPengirimSwIn = new NonNasabahDn;
         $number = Yii::app()->util->getNumberSwift($type);
-
 
         if (isset($_POST['Swift'])) {
             $flag = TRUE;
@@ -406,8 +591,6 @@ class SwiftController extends BackendController {
                 Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed creating Swift Incoming, please check below for errors.');
             }
 
-
-
             if ($flagSave && $flag) {
                 Yii::app()->util->setLog('Swift Incoming', $model->id, 'Tambah data');
                 Yii::app()->user->setFlash('success', 'Success!|' . 'New Swift Incoming has been created.');
@@ -415,13 +598,19 @@ class SwiftController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => 'swift', 'label' => 'Swift'),
+            2 => array('url' => '', 'label' => 'Buat Baru')
+        );
 
         $vars = array(
             'model' => $model,
             'peroranganPengirimSwIn' => $peroranganPengirimSwIn,
             'korporasiPengirimSwIn' => $korporasiPengirimSwIn,
             'nonNasabahPengirimSwIn' => $nonNasabahPengirimSwIn,
-            'number' => $number
+            'number' => $number,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('create', $vars);
@@ -448,7 +637,6 @@ class SwiftController extends BackendController {
         $peroranganPengirimSwIn = new PeroranganPengirimSwIn;
         $korporasiPengirimSwIn = new KorporasiPengirimSwIn;
         $nonNasabahPengirimSwIn = new NonNasabahPengirimSwIn;
-
 
         $oldModel = $model->attributes;
         $oldPeroranganPengirimSwIn = $peroranganPengirimSwIn->attributes;
@@ -492,7 +680,6 @@ class SwiftController extends BackendController {
             $model->tglLaporan = date('Y-m-d', strtotime($data['tglLaporan']));
             $model->jenisLaporan = 1;
             $model->jenisSwift = 1;
-
 
             if ($model->validate()) {
                 if ($jenisPengirim == 1) {
@@ -580,19 +767,24 @@ class SwiftController extends BackendController {
                 Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed updating Swift Incoming, please check below for errors.');
             }
 
-
-
             if ($flagSave && $flag) {
                 Yii::app()->user->setFlash('success', 'Success!|' . 'Swift Incoming has been updated.');
                 $this->redirect($this->vars['backendUrl'] . 'swift?type=' . $type);
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => 'swift', 'label' => 'Swift'),
+            2 => array('url' => '', 'label' => 'Sunting Swift')
+        );
+
         $vars = array(
             'model' => $model,
             'peroranganPengirimSwIn' => $peroranganPengirimSwIn,
             'korporasiPengirimSwIn' => $korporasiPengirimSwIn,
             'nonNasabahPengirimSwIn' => $nonNasabahPengirimSwIn,
+            'breadcrumb' => $breadcrumb
         );
 
         $this->render('update', $vars);
@@ -672,7 +864,6 @@ class SwiftController extends BackendController {
 
             $form = Yii::app()->util->getFormXml($value);
             $xml = Yii::app()->util->genSwiftXml($form, $xml = null, $root = 'ifti', $type);
-
 
             file_put_contents($filename, $xml);
             $dataFile[] = $filename;

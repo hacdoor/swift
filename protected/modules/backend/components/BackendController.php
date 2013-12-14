@@ -1,50 +1,49 @@
 <?php
+
 /**
  * Controller is the customized base controller class.
  * All controller classes for this application should extend from this base class.
  */
-class BackendController extends CController
-{
+class BackendController extends CController {
 
-	public $menu=array();
+    public $menu = array();
+    public $breadcrumbs = array();
+    public $vars = array(
+        'baseUrl' => null,
+        'backendUrl' => null,
+        'assetsUrl' => null,
+    );
 
-	public $breadcrumbs=array();
+    protected function beforeAction($action) {
 
-	public $vars = array(
-		'baseUrl' => null,
-		'backendUrl' => null,
-		'assetsUrl' => null,
-	);
+        // Global variables
+        $this->vars = array(
+            'baseUrl' => Yii::app()->request->baseUrl . '/',
+            'backendUrl' => Yii::app()->request->baseUrl . '/backend/',
+            'assetsUrl' => $this->module->getAssetsUrl() . '/',
+        );
 
-	protected function beforeAction($action) {
+        return parent::beforeAction($action);
+    }
 
-		// Global variables
-		$this->vars = array(
-			'baseUrl' => Yii::app()->request->baseUrl . '/',
-			'backendUrl' => Yii::app()->request->baseUrl . '/backend/',
-			'assetsUrl' => $this->module->getAssetsUrl() . '/',
-		);
+    protected function checkAccess($reqPerm = null) {
+        $admin = Yii::app()->user->getState('admin');
 
-		return parent::beforeAction($action);
-	}
+        if (!$admin) {
+            Yii::app()->user->logout();
+            $this->redirect(Yii::app()->request->baseUrl . '/backend?denied=1');
+            Yii::app()->end();
+        } else {
+            if ($reqPerm !== null) {
+                if (!$admin->hasPermissions($reqPerm)) {
+                    Yii::app()->user->logout();
+                    $this->redirect(Yii::app()->request->baseUrl . '/backend?denied=1');
+                    Yii::app()->end();
+                }
+            }
+        }
 
-	protected function checkAccess($reqPerm = null) {
-		$admin = Yii::app()->user->getState('admin');
+        return true;
+    }
 
-		if (!$admin) {
-			Yii::app()->user->logout();
-			$this->redirect(Yii::app()->request->baseUrl . '/backend?denied=1');
-			Yii::app()->end();
-		} else {
-			if ($reqPerm !== null) {
-				if (!$admin->hasPermissions($reqPerm)) {
-					Yii::app()->user->logout();
-					$this->redirect(Yii::app()->request->baseUrl . '/backend?denied=1');
-					Yii::app()->end();
-				}
-			}
-		}
-
-		return true;
-	}
 }
