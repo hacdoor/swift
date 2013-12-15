@@ -336,13 +336,13 @@ class SwiftController extends BackendController {
 
     public function actionGenerate() {
         $this->checkAccess('swift.generateXml');
-
+        $dataRange = (isset($_GET['date_range'])) ? $_GET['date_range'] : '';
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'Proses'),
             1 => array('url' => '', 'label' => 'Generate XML')
         );
 
-        $this->render('generateXml', array('breadcrumb' => $breadcrumb));
+        $this->render('generateXml', array('breadcrumb' => $breadcrumb, 'dateRange' => $dataRange));
     }
 
     public function actionCreate() {
@@ -877,21 +877,37 @@ class SwiftController extends BackendController {
     }
 
     public function actionGenerateXml() {
-        $model = Swift::model()->findAll();
-        $dataFile = array();
-
-        foreach ($model as $value) {
-            $type = Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $value->jenisSwift));
-            $filename = 'download/' . $value->localId . '-' . $type . '.xml';
-
-            $form = Yii::app()->util->getFormXml($value);
-            $xml = Yii::app()->util->genSwiftXml($form, $xml = null, $root = 'ifti', $type);
-
-            file_put_contents($filename, $xml);
-            $dataFile[] = $filename;
+        $dataRange = (isset($_GET['date_range'])) ? $_GET['date_range'] : '';
+        if (empty($dataRange)) {
+            Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed');
+            $this->redirect($this->vars['backendUrl'] . 'swift/generate');
         }
+        $dateRange = explode(' - ', $_GET['date_range']);
+        $startDate = $dateRange[0];
+        $endDate = $dateRange[1];
 
-        Yii::app()->util->actionCreatefile('SWIFTXML.zip', $dataFile);
+        $criteria = new CDbCriteria;
+        $criteria->addBetweenCondition('tglLaporan', $startDate . ' 00:00:00', $endDate . ' 23:59:59');
+        $criteria->addInCondition('status', array('status' => 2));
+        $model = Swift::model()->findAll($criteria);
+        $dataFile = array();
+        if ($model) {
+            foreach ($model as $value) {
+                $type = Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $value->jenisSwift));
+                $filename = 'download/' . $value->localId . '-' . $type . '.xml';
+
+                $form = Yii::app()->util->getFormXml($value);
+                $xml = Yii::app()->util->genSwiftXml($form, $xml = null, $root = 'ifti', $type);
+
+                file_put_contents($filename, $xml);
+                $dataFile[] = $filename;
+            }
+
+            Yii::app()->util->actionCreatefile('SWIFTXML.zip', $dataFile);
+        }else{
+            Yii::app()->user->setFlash('danger', 'Error!|' . 'Data empty');
+            $this->redirect($this->vars['backendUrl'] . 'swift/generate');
+        }
     }
 
     /**

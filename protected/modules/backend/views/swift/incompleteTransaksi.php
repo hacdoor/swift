@@ -64,12 +64,12 @@ $this->pageTitle = $title;
                                                 <td><?php echo Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $d->jenisSwift))); ?></td>
                                                 <td><?php echo ($d->tglLaporan) ? Yii::app()->dateFormatter->format('dd-MM-yyyy', $d->tglLaporan) : ''; ?></td>
                                                 <td>
-
+                                                    <?php echo Yii::app()->util->getPengirim($d->id,'namaLengkap')?>
                                                 </td>
                                                 <td>
-
+                                                    <?php echo Yii::app()->util->getPenerima($d->id,'namaLengkap')?>
                                                 </td>
-                                                <td></td>
+                                                <td><?php echo ($d->transaksis) ? $d->transaksis->currency->simbol : '' ?></td>
                                                 <td><?php echo ($d->transaksis) ? Yii::app()->numberFormatter->formatCurrency($d->transaksis->amountDalamRupiah, 'IDR') : ''; ?></td>
                                                 <td>User</td>
                                                 <td class="list-actions">

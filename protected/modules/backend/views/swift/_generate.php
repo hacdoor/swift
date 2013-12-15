@@ -13,16 +13,10 @@
         <fieldset>
 
             <div class="form-group">
-                <label class="col-md-2 control-label required" for="Input_1">Tanggal Mulai <span class="required">*</span></label>                
-                <div class="col-md-2">
-                    <input id="Input_1" class="form-control dateSwift" type="text" name="tanggalMulai" value="" readonly="readonly" data-date-format="dd-mm-yyyy">
-                </div>
-            </div>
+                <label class="col-md-2 control-label required" for="Input_1">Tanggal<span class="required">*</span></label>                
+                <div class="col-md-3">
+                    <input class="form-control rangePicker input-lg" type="text" name="date_range" placeholder="<?php echo ($dateRange) ? $dateRange : 'Date range ...'; ?>" value="" readonly="readonly" data-date-format="dd-mm-yyyy">
 
-            <div class="form-group">
-                <label class="col-md-2 control-label required" for="Input_2">Tanggal Akhir <span class="required">*</span></label>                
-                <div class="col-md-2">
-                    <input id="Input_2" class="form-control dateSwift" type="text" name="tanggalAkhir" value="" readonly="readonly" data-date-format="dd-mm-yyyy">
                 </div>
             </div>
 

@@ -665,7 +665,32 @@ class UtilComponent extends CApplicationComponent {
 
 
         /* ============================ IDENTITAS PENGIRIM ============================ */
-        $kewarganegaraanPeroranganPengirim = $this->getFormKewarganegaraanXml(array());
+        $pengirimLn = $this->getPengirim($param->id, 'all');
+        switch ($pengirimLn['key']) {
+            case 1:
+                $peroranganPengirimLn = $pengirimLn['data'];
+                $korporasiPengirimLN = new NasabahKorporasiLn;
+                $peroranganNonNasabahLn = new NonNasabahLn;
+                break;
+            case 2:
+                $peroranganPengirimLn = new NasabahPeroranganLn;
+                $korporasiPengirimLN = $pengirimLn['data'];
+                $peroranganNonNasabahLn = new NonNasabahLn;
+                break;
+            case 3:
+                $peroranganPengirimLn = new NasabahPeroranganLn;
+                $korporasiPengirimLN = new NasabahKorporasiLn;
+                $peroranganNonNasabahLn = $pengirimLn['data'];
+                break;
+
+            default:
+                break;
+        }
+        $kewarganegaraanPeroranganPengirim = $this->getFormKewarganegaraanXml(array(
+            $peroranganPengirimLn->wargaNegara,
+            $peroranganPengirimLn->idNegaraKewarganegaraan,
+            $peroranganPengirimLn->negaraLainKewarganegaraan
+        ));
         $alamatSesuaiVoucherPeroranganPengirim = $this->getFormAlamatXml(array());
 
         $buktiLainPeroranganPengirim = $this->getFormBuktiLainXml(array());
@@ -680,9 +705,21 @@ class UtilComponent extends CApplicationComponent {
 
         $korporasiPengirim = $this->getFormKorporasiXml(array(2 => $alamatSesuaiVoucherKorporasiPengirim));
 
-        $alamatSesuaiVoucherNonNasabahPengirim = $this->getFormAlamatXml(array());
-        $nonNasabahPengirim = $this->getFormNonNasabahXml(array(4 => $alamatSesuaiVoucherNonNasabahPengirim));
-        $nasabahPengirim = $this->getFormIdentitasXml(array($peroranganPengirim, $korporasiPengirim), 1);
+        $alamatSesuaiVoucherNonNasabahPengirim = $this->getFormAlamatXml(array(
+            $peroranganNonNasabahLn->alamat,
+            $peroranganNonNasabahLn->negaraBagianKota,
+            $peroranganNonNasabahLn->idNegara,
+            $peroranganNonNasabahLn->negaraLain
+        ));
+        $nonNasabahPengirim = $this->getFormNonNasabahXml(array(
+            $peroranganNonNasabahLn->noRekening,
+            $peroranganNonNasabahLn->namaLengkap,
+            $peroranganNonNasabahLn->namaLengkap,
+            $peroranganNonNasabahLn->tglLahir,
+            $alamatSesuaiVoucherNonNasabahPengirim,
+            $peroranganNonNasabahLn->noTelp
+            ));
+        $nasabahPengirim = $this->getFormIdentitasXml(array($peroranganPengirim, $korporasiPengirim), 2);
 
         $identitasPengirim = $this->getFormIdentitasXml(array($nasabahPengirim, $nonNasabahPengirim));
 
