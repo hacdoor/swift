@@ -1413,24 +1413,39 @@ class UtilComponent extends CApplicationComponent {
 
                 if (count($nasabahPeroranganDn) > 0) {
                     $nasabahPeroranganDn = current($nasabahPeroranganDn);
-                    if ($param === 'all')
-                        return $nasabahPeroranganDn;
+                    if ($param === 'all'){
+                        $data = array(
+                            'key' => 1,
+                            'data' =>$nasabahPeroranganDn
+                            );
+                        return $data;
+                    }
                     else
                         return $nasabahPeroranganDn->{$param};
                 }
                 
                 if (count($nasabahKorporasiDn) > 0) {
                     $nasabahKorporasiDn = current($nasabahKorporasiDn);
-                    if ($param === 'all')
-                        return $nasabahKorporasiDn;
+                    if ($param === 'all'){
+                        $data = array(
+                            'key' => 2,
+                            'data' =>$nasabahKorporasiDn
+                            );
+                        return $data;
+                    }
                     else
                         return $nasabahKorporasiDn->namaKorporasi;
                 }
                 
                 if (count($nonNasabahDn) > 0) {
                     $nonNasabahDn = current($nonNasabahDn);
-                    if ($param === 'all')
-                        return $nonNasabahDn;
+                    if ($param === 'all'){
+                        $data = array(
+                            'key' => 3,
+                            'data' =>$nonNasabahDn
+                            );
+                        return $data;
+                    }
                     else
                         return $nonNasabahDn->{$param};
                 }
@@ -1445,24 +1460,39 @@ class UtilComponent extends CApplicationComponent {
 
                 if (count($nasabahPeroranganLn) > 0) {
                     $nasabahPeroranganLn = current($nasabahPeroranganLn);
-                    if ($param === 'all')
-                        return $nasabahPeroranganLn;
+                    if ($param === 'all'){
+                        $data = array(
+                            'key' => 1,
+                            'data' =>$nasabahPeroranganLn
+                            );
+                        return $data;
+                    }
                     else
                         return $nasabahPeroranganLn->{$param};
                 }
                 
                 if (count($nasabahKorporasiLn) > 0) {
                     $nasabahKorporasiLn = current($nasabahKorporasiLn);
-                    if ($param === 'all')
-                        return $nasabahKorporasiLn;
+                    if ($param === 'all'){
+                        $data = array(
+                            'key' => 2,
+                            'data' =>$nasabahKorporasiLn
+                            );
+                        return $data;
+                    }
                     else
                         return $nasabahKorporasiLn->namaKorporasi;
                 }
                 
                 if (count($nonNasabahLn) > 0) {
                     $nonNasabahLn = current($nonNasabahLn);
-                    if ($param === 'all')
-                        return $nonNasabahLn;
+                    if ($param === 'all'){
+                        $data = array(
+                            'key' => 3,
+                            'data' =>$nonNasabahLn
+                            );
+                        return $data;
+                    }
                     else
                         return $nonNasabahLn->{$param};
                 }
@@ -1487,24 +1517,39 @@ class UtilComponent extends CApplicationComponent {
 
                 if (count($nasabahPeroranganDn) > 0) {
                     $nasabahPeroranganDn = current($nasabahPeroranganDn);
-                    if ($param === 'all')
-                        return $nasabahPeroranganDn;
+                    if ($param === 'all'){
+                        $data = array(
+                            'key' => 1,
+                            'data' =>$nasabahPeroranganDn
+                            );
+                        return $data;
+                    }
                     else
                         return $nasabahPeroranganDn->{$param};
                 }
                 
                 if (count($nasabahKorporasiDn) > 0) {
                     $nasabahKorporasiDn = current($nasabahKorporasiDn);
-                    if ($param === 'all')
-                        return $nasabahKorporasiDn;
+                    if ($param === 'all'){
+                        $data = array(
+                            'key' => 2,
+                            'data' =>$nasabahKorporasiDn
+                            );
+                        return $data;
+                    }
                     else
                         return $nasabahKorporasiDn->namaKorporasi;
                 }
                 
                 if (count($nonNasabahDn) > 0) {
                     $nonNasabahDn = current($nonNasabahDn);
-                    if ($param === 'all')
-                        return $nonNasabahDn;
+                    if ($param === 'all'){
+                        $data = array(
+                            'key' => 3,
+                            'data' =>$nonNasabahDn
+                            );
+                        return $data;
+                    }
                     else
                         return $nonNasabahDn->{$param};
                 }
@@ -1519,24 +1564,39 @@ class UtilComponent extends CApplicationComponent {
 
                 if (count($nasabahPeroranganLn) > 0) {
                     $nasabahPeroranganLn = current($nasabahPeroranganLn);
-                    if ($param === 'all')
-                        return $nasabahPeroranganLn;
+                    if ($param === 'all'){
+                        $data = array(
+                            'key' => 1,
+                            'data' =>$nasabahPeroranganLn
+                            );
+                        return $data;
+                    }
                     else
                         return $nasabahPeroranganLn->{$param};
                 }
                 
                 if (count($nasabahKorporasiLn) > 0) {
                     $nasabahKorporasiLn = current($nasabahKorporasiLn);
-                    if ($param === 'all')
-                        return $nasabahKorporasiLn;
+                    if ($param === 'all'){
+                        $data = array(
+                            'key' => 2,
+                            'data' =>$nasabahKorporasiLn
+                            );
+                        return $data;
+                    }
                     else
                         return $nasabahKorporasiLn->namaKorporasi;
                 }
                 
                 if (count($nonNasabahLn) > 0) {
                     $nonNasabahLn = current($nonNasabahLn);
-                    if ($param === 'all')
-                        return $nonNasabahLn;
+                    if ($param === 'all'){
+                        $data = array(
+                            'key' => 3,
+                            'data' =>$nonNasabahLn
+                            );
+                        return $data;
+                    }
                     else
                         return $nonNasabahLn->{$param};
                 }

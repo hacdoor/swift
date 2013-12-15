@@ -45,6 +45,7 @@ $this->pageTitle = $title;
                                         <th>Penerima</th>
                                         <th>Mata Uang</th>
                                         <th>Nilai Transaksi</th>
+                                        <th>User</th>
                                         <th class="list-actions">Incomplete Info</th>
                                     </tr>
                                 </thead>
@@ -63,29 +64,14 @@ $this->pageTitle = $title;
                                                 <td><?php echo Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $d->jenisSwift))); ?></td>
                                                 <td><?php echo ($d->tglLaporan) ? Yii::app()->dateFormatter->format('dd-MM-yyyy', $d->tglLaporan) : ''; ?></td>
                                                 <td>
-                                                    <?php if ($d->jenisSwift == Swift::TYPE_SWIN || $d->jenisSwift == Swift::TYPE_NONSWIN) : ?>
-                                                        <?php //echo ($d->nasabahKorporasiLns) ? Yii::app()->util->purify($d->nasabahKorporasiLns->namaKorporasi) : ''; ?>
-                                                        <?php //echo ($d->nasabahPeroranganLns) ? Yii::app()->util->purify($d->nasabahPeroranganLns->namaLengkap) : ''; ?>
-                                                        <?php //echo ($d->nonNasabahLns) ? Yii::app()->util->purify($d->nonNasabahLns->namaLengkap) : ''; ?>
-                                                    <?php else: ?>
-                                                        <?php //echo ($d->nasabahKorporasiDns) ? Yii::app()->util->purify($d->nasabahKorporasiDns->namaKorporasi) : ''; ?>
-                                                        <?php //echo ($d->nasabahPeroranganDns) ? Yii::app()->util->purify($d->nasabahPeroranganDns->namaLengkap) : ''; ?>
-                                                        <?php //echo ($d->nonNasabahDns) ? Yii::app()->util->purify($d->nonNasabahDns->namaLengkap) : ''; ?>
-                                                    <?php endif; ?>
+                                                    
                                                 </td>
                                                 <td>
-                                                    <?php if ($d->jenisSwift == Swift::TYPE_SWIN || $d->jenisSwift == Swift::TYPE_NONSWIN) : ?>
-                                                        <?php //echo ($d->nasabahKorporasiLns) ? Yii::app()->util->purify($d->nasabahKorporasiLns->namaKorporasi) : ''; ?>
-                                                        <?php //echo ($d->nasabahPeroranganLns) ? Yii::app()->util->purify($d->nasabahPeroranganLns->namaLengkap) : ''; ?>
-                                                        <?php //echo ($d->nonNasabahLns) ? Yii::app()->util->purify($d->nonNasabahLns->namaLengkap) : ''; ?>
-                                                    <?php else: ?>
-                                                        <?php //echo ($d->nasabahKorporasiDns) ? Yii::app()->util->purify($d->nasabahKorporasiDns->namaKorporasi) : ''; ?>
-                                                        <?php //echo ($d->nasabahPeroranganDns) ? Yii::app()->util->purify($d->nasabahPeroranganDns->namaLengkap) : ''; ?>
-                                                        <?php //echo ($d->nonNasabahDns) ? Yii::app()->util->purify($d->nonNasabahDns->namaLengkap) : ''; ?>
-                                                    <?php endif; ?>
+                                                    
                                                 </td>
                                                 <td></td>
                                                 <td><?php echo ($d->transaksis) ? Yii::app()->numberFormatter->formatCurrency($d->transaksis->amountDalamRupiah, 'IDR') : ''; ?></td>
+                                                <td>User</td>
                                                 <td class="list-actions">
                                                     <span class="label label-warning">-</span>
                                                 </td>
