@@ -7,6 +7,7 @@
  * @property integer $id
  * @property string $kodeRahasia
  * @property string $noRekening
+ * @property string $namaBank
  * @property string $namaLengkap
  * @property string $tglLahir
  * @property string $alamat
@@ -56,7 +57,7 @@ class NonNasabahLn extends CActiveRecord {
             array('namaLengkap, negaraBagianKota, idNegara, swift_id', 'required'),
             array('idNegara, swift_id', 'numerical', 'integerOnly' => true),
             array('nilaiTransaksiDalamRupiah', 'numerical'),
-            array('kodeRahasia, noRekening, negaraLain', 'length', 'max' => 50),
+            array('kodeRahasia, noRekening, namaBank, negaraLain', 'length', 'max' => 50),
             array('namaLengkap', 'length', 'max' => 255),
             array('alamat', 'length', 'max' => 100),
             array('noTelp, negaraBagianKota, ktp, sim, passport, kimsKitasKitap, npwp, jenisBuktiLain, noBuktiLain', 'length', 'max' => 30),
@@ -65,7 +66,7 @@ class NonNasabahLn extends CActiveRecord {
             array('noRekening, alamat', 'oneOfTwo'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, kodeRahasia, noRekening, namaLengkap, tglLahir, alamat, noTelp, negaraBagianKota, idNegara, negaraLain, ktp, sim, passport, kimsKitasKitap, npwp, jenisBuktiLain, noBuktiLain, swift_id', 'safe', 'on' => 'search'),
+            array('id, kodeRahasia, noRekening, namaBank, namaLengkap, tglLahir, alamat, noTelp, negaraBagianKota, idNegara, negaraLain, ktp, sim, passport, kimsKitasKitap, npwp, jenisBuktiLain, noBuktiLain, swift_id', 'safe', 'on' => 'search'),
         );
     }
 
@@ -113,6 +114,7 @@ class NonNasabahLn extends CActiveRecord {
             'id' => 'ID',
             'kodeRahasia' => 'Kode Rahasia',
             'noRekening' => 'No Rekening',
+            'namaBank' => 'Nama Bank',
             'namaLengkap' => 'Nama Lengkap',
             'tglLahir' => 'Tgl Lahir',
             'alamat' => 'Alamat',
@@ -145,6 +147,7 @@ class NonNasabahLn extends CActiveRecord {
         $criteria->compare('id', $this->id);
         $criteria->compare('kodeRahasia', $this->kodeRahasia, true);
         $criteria->compare('noRekening', $this->noRekening, true);
+        $criteria->compare('namaBank', $this->namaBank, true);
         $criteria->compare('namaLengkap', $this->namaLengkap, true);
         $criteria->compare('tglLahir', $this->tglLahir, true);
         $criteria->compare('alamat', $this->alamat, true);

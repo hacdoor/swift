@@ -643,13 +643,8 @@ class UtilComponent extends CApplicationComponent {
     public function getFormSwInXml($param) {
 
         /* ============================ GET MODEL ======================================== */
+
         $infolains = $param->infolains;
-        $nasabahKorporasiDns = $param->nasabahKorporasiDns;
-        $nasabahKorporasiLns = $param->nasabahKorporasiLns;
-        $nasabahPeroranganDns = $param->nasabahPeroranganDns;
-        $nasabahPeroranganLns = $param->nasabahPeroranganLns;
-        $nonNasabahDns = $param->nonNasabahDns;
-        $nonNasabahLns = $param->nonNasabahLns;
         $transaksis = $param->transaksis;
         /* ============================ END GET MODEL ======================================== */
 
@@ -665,21 +660,22 @@ class UtilComponent extends CApplicationComponent {
 
 
         /* ============================ IDENTITAS PENGIRIM ============================ */
+
+        $peroranganPengirimLn = new NasabahPeroranganLn;
+        $peroranganPengirimLn->unsetAttributes();
+        $korporasiPengirimLN = new NasabahKorporasiLn;
+        $korporasiPengirimLN->unsetAttributes();
+        $peroranganNonNasabahLn = new NonNasabahLn;
+        $peroranganNonNasabahLn->unsetAttributes();
         $pengirimLn = $this->getPengirim($param->id, 'all');
         switch ($pengirimLn['key']) {
             case 1:
                 $peroranganPengirimLn = $pengirimLn['data'];
-                $korporasiPengirimLN = new NasabahKorporasiLn;
-                $peroranganNonNasabahLn = new NonNasabahLn;
                 break;
             case 2:
-                $peroranganPengirimLn = new NasabahPeroranganLn;
                 $korporasiPengirimLN = $pengirimLn['data'];
-                $peroranganNonNasabahLn = new NonNasabahLn;
                 break;
             case 3:
-                $peroranganPengirimLn = new NasabahPeroranganLn;
-                $korporasiPengirimLN = new NasabahKorporasiLn;
                 $peroranganNonNasabahLn = $pengirimLn['data'];
                 break;
 
@@ -690,35 +686,65 @@ class UtilComponent extends CApplicationComponent {
             $peroranganPengirimLn->wargaNegara,
             $peroranganPengirimLn->idNegaraKewarganegaraan,
             $peroranganPengirimLn->negaraLainKewarganegaraan
-        ));
-        $alamatSesuaiVoucherPeroranganPengirim = $this->getFormAlamatXml(array());
-
-        $buktiLainPeroranganPengirim = $this->getFormBuktiLainXml(array());
-        $buktiIdentitasPeroranganPengirim = $this->getFormBuktiIdentitasXml(array(5 => $buktiLainPeroranganPengirim));
-
-        $peroranganPengirim = $this->getFormPeroranganXml(array(
-            3 => $kewarganegaraanPeroranganPengirim,
-            4 => $alamatSesuaiVoucherPeroranganPengirim,
-            6 => $buktiIdentitasPeroranganPengirim
                 ));
-        $alamatSesuaiVoucherKorporasiPengirim = $this->getFormAlamatXml(array());
+        $alamatSesuaiVoucherPeroranganPengirim = $this->getFormAlamatXml(array(
+            $peroranganPengirimLn->alamat,
+            $peroranganPengirimLn->negaraBagianKota,
+            $peroranganPengirimLn->idNegaraVoucher,
+            $peroranganPengirimLn->negaraLainVoucher
+                ));
 
-        $korporasiPengirim = $this->getFormKorporasiXml(array(2 => $alamatSesuaiVoucherKorporasiPengirim));
+        $buktiLainPeroranganPengirim = $this->getFormBuktiLainXml(array(
+            $peroranganPengirimLn->jenisBuktiLain,
+            $peroranganPengirimLn->noBuktiLain
+                ));
+        $buktiIdentitasPeroranganPengirim = $this->getFormBuktiIdentitasXml(array(
+            $peroranganPengirimLn->ktp,
+            $peroranganPengirimLn->sim,
+            $peroranganPengirimLn->passport,
+            $peroranganPengirimLn->kimsKitasKitap,
+            $peroranganPengirimLn->npwp,
+            $buktiLainPeroranganPengirim
+                ));
+        
+        $peroranganPengirim = $this->getFormPeroranganXml(array(
+            $peroranganPengirimLn->noRekening,
+            $peroranganPengirimLn->namaLengkap,
+            $this->checkDate($peroranganPengirimLn->tglLahir),
+            $kewarganegaraanPeroranganPengirim,
+            $alamatSesuaiVoucherPeroranganPengirim,
+            $peroranganPengirimLn->noTelp,
+            $buktiIdentitasPeroranganPengirim
+                ));
+        $alamatSesuaiVoucherKorporasiPengirim = $this->getFormAlamatXml(array(
+            $korporasiPengirimLN->alamat,
+            $korporasiPengirimLN->negaraBagianKota,
+            $korporasiPengirimLN->idNegara,
+            $korporasiPengirimLN->negaraLain
+                ));
+
+        $korporasiPengirim = $this->getFormKorporasiXml(array(
+            $korporasiPengirimLN->noRekening,
+            $korporasiPengirimLN->namaKorporasi,
+            $alamatSesuaiVoucherKorporasiPengirim,
+            $korporasiPengirimLN->noTelp
+                ));
 
         $alamatSesuaiVoucherNonNasabahPengirim = $this->getFormAlamatXml(array(
             $peroranganNonNasabahLn->alamat,
             $peroranganNonNasabahLn->negaraBagianKota,
             $peroranganNonNasabahLn->idNegara,
             $peroranganNonNasabahLn->negaraLain
-        ));
+                ));
+        
         $nonNasabahPengirim = $this->getFormNonNasabahXml(array(
             $peroranganNonNasabahLn->noRekening,
+            $peroranganNonNasabahLn->namaBank,
             $peroranganNonNasabahLn->namaLengkap,
-            $peroranganNonNasabahLn->namaLengkap,
-            $peroranganNonNasabahLn->tglLahir,
+            $this->checkDate($peroranganNonNasabahLn->tglLahir),
             $alamatSesuaiVoucherNonNasabahPengirim,
             $peroranganNonNasabahLn->noTelp
-            ));
+                ));
         $nasabahPengirim = $this->getFormIdentitasXml(array($peroranganPengirim, $korporasiPengirim), 2);
 
         $identitasPengirim = $this->getFormIdentitasXml(array($nasabahPengirim, $nonNasabahPengirim));
@@ -729,52 +755,204 @@ class UtilComponent extends CApplicationComponent {
 
 
         /* ============================ IDENTITAS PENERIMA ================================= */
-        $alamatLengkapKorporasiPenerusPenerima = $this->getFormAlamatXml(array(), 2);
+        $pjkBankSebagai = $param->pjkBankSebagai;
+        $peroranganPenerimaDnAkhir = new NasabahPeroranganDn;
+        $peroranganPenerimaDnAkhir->unsetAttributes();
+        $korporasiPenerimaDnAkhir = new NasabahKorporasiDn;
+        $korporasiPenerimaDnAkhir->unsetAttributes();
+        $peroranganPenerimaNonNasabahDnAkhir = new NonNasabahDn;
+        $peroranganPenerimaNonNasabahDnAkhir->unsetAttributes();
+
+        $peroranganPenerimaDnPenerus = new NasabahPeroranganDn;
+        $peroranganPenerimaDnPenerus->unsetAttributes();
+        $korporasiPenerimaDnPenerus = new NasabahKorporasiDn;
+        $korporasiPenerimaDnPenerus->unsetAttributes();
+        $peroranganPenerimaNonNasabahDnPenerus = new NonNasabahDn;
+        $peroranganPenerimaNonNasabahDnPenerus->unsetAttributes();
+
+        $penerimaDn = $this->getPenerima($param->id, 'all');
+        switch ($penerimaDn['key']) {
+            case 1:
+                if ($pjkBankSebagai == 1) {
+                    $peroranganPenerimaDnAkhir = $penerimaDn['data'];
+                } else {
+                    $peroranganPenerimaDnPenerus = $penerimaDn['data'];
+                }
+                break;
+            case 2:
+                if ($pjkBankSebagai == 1) {
+                    $korporasiPenerimaDnAkhir = $penerimaDn['data'];
+                } else {
+                    $korporasiPenerimaDnPenerus = $penerimaDn['data'];
+                }
+                break;
+            case 3:
+                if ($pjkBankSebagai == 1) {
+                    $peroranganPenerimaNonNasabahDnAkhir = $penerimaDn['data'];
+                } else {
+                    $peroranganPenerimaNonNasabahDnPenerus = $penerimaDn['data'];
+                }
+                break;
+
+            default:
+                break;
+        }
+
+
+
+        $alamatLengkapKorporasiPenerusPenerima = $this->getFormAlamatXml(array(
+            $korporasiPenerimaDnPenerus->alamat,
+            $korporasiPenerimaDnPenerus->idPropinsi,
+            $korporasiPenerimaDnPenerus->propinsiLain,
+            $korporasiPenerimaDnPenerus->idKabKota,
+            $korporasiPenerimaDnPenerus->kabKotaLain
+                ), 2);
         $korporasiPenerusPenerima = $this->getFormKorporasiXml(array(
-            7 => $alamatLengkapKorporasiPenerusPenerima
+            $korporasiPenerimaDnPenerus->noRekening,
+            $korporasiPenerimaDnPenerus->namaBank,
+            $korporasiPenerimaDnPenerus->namaKorporasi,
+            $korporasiPenerimaDnPenerus->bentukBadan,
+            $korporasiPenerimaDnPenerus->bentukBadanLain,
+            $korporasiPenerimaDnPenerus->bidangUsaha,
+            $korporasiPenerimaDnPenerus->bidangUsahaLain,
+            $alamatLengkapKorporasiPenerusPenerima,
+            $korporasiPenerimaDnPenerus->noTelp,
+            $korporasiPenerimaDnPenerus->nilaiTransaksiDalamRupiah
                 ), 2);
 
-        $buktiLainPeroranganPenerusPenerima = $this->getFormBuktiLainXml(array());
-        $buktiIdentitasPeroranganPenerusPenerima = $this->getFormBuktiIdentitasXml(
-                array(5 => $buktiLainPeroranganPenerusPenerima)
-        );
-        $alamatSesuaiBuktiIdentitasPenerusPenerima = $this->getFormAlamatXml(array(), 2);
-        $alamatDomisiliPenerusPenerima = $this->getFormAlamatXml(array(), 2);
-        $kewarganegaraanPenerusPenerima = $this->getFormKewarganegaraanXml(array());
+        $buktiLainPeroranganPenerusPenerima = $this->getFormBuktiLainXml(array(
+            $peroranganPenerimaDnPenerus->jenisBuktiLain,
+            $peroranganPenerimaDnPenerus->noBuktiLain
+                ));
+        $buktiIdentitasPeroranganPenerusPenerima = $this->getFormBuktiIdentitasXml(array(
+            $peroranganPenerimaDnPenerus->ktp,
+            $peroranganPenerimaDnPenerus->sim,
+            $peroranganPenerimaDnPenerus->passport,
+            $peroranganPenerimaDnPenerus->kimsKitasKitap,
+            $peroranganPenerimaDnPenerus->npwp,
+            $buktiLainPeroranganPenerusPenerima
+                ));
+        $alamatSesuaiBuktiIdentitasPenerusPenerima = $this->getFormAlamatXml(array(
+            $peroranganPenerimaDnPenerus->alamatIdentitas,
+            $peroranganPenerimaDnPenerus->idPropinsiIdentitas,
+            $peroranganPenerimaDnPenerus->propinsiLainIdentitas,
+            $peroranganPenerimaDnPenerus->idKabKotaIdentitas,
+            $peroranganPenerimaDnPenerus->kabKotaLainIdentitas
+                ), 2);
+        $alamatDomisiliPenerusPenerima = $this->getFormAlamatXml(array(
+            $peroranganPenerimaDnPenerus->alamatDomisili,
+            $peroranganPenerimaDnPenerus->idPropinsiDomisili,
+            $peroranganPenerimaDnPenerus->propinsiLainDomisili,
+            $peroranganPenerimaDnPenerus->idKabKotaDomisili,
+            $peroranganPenerimaDnPenerus->kabKotaLain
+                ), 2);
+        $kewarganegaraanPenerusPenerima = $this->getFormKewarganegaraanXml(array(
+            $peroranganPenerimaDnPenerus->wargaNegara,
+            $peroranganPenerimaDnPenerus->idNegaraKewarganegaraan,
+            $peroranganPenerimaDnPenerus->negaraLainKewarganegaraan
+                ));
+        
         $peroranganPenerusPenerima = $this->getFormPeroranganXml(array(
-            4 => $kewarganegaraanPenerusPenerima,
-            7 => $alamatDomisiliPenerusPenerima,
-            8 => $alamatSesuaiBuktiIdentitasPenerusPenerima,
-            10 => $buktiIdentitasPeroranganPenerusPenerima
+            $peroranganPenerimaDnPenerus->noRekening,
+            $peroranganPenerimaDnPenerus->namaBank,
+            $peroranganPenerimaDnPenerus->namaLengkap,
+            $this->checkDate($peroranganPenerimaDnPenerus->tglLahir),
+            $kewarganegaraanPenerusPenerima,
+            $peroranganPenerimaDnPenerus->pekerjaan,
+            $peroranganPenerimaDnPenerus->pekerjaanLain,
+            $alamatDomisiliPenerusPenerima,
+            $alamatSesuaiBuktiIdentitasPenerusPenerima,
+            $peroranganPenerimaDnPenerus->noTelp,
+            $buktiIdentitasPeroranganPenerusPenerima,
+            $peroranganPenerimaDnPenerus->nilaiTransaksiDalamRupiah
                 ), 2);
 
-        $buktiLainNonNasabahPenerimaAkhir = $this->getFormBuktiLainXml(array());
-        $buktiIdentitasNonNasabahPenerimaAkhir = $this->getFormBuktiIdentitasXml(
-                array(5 => $buktiLainNonNasabahPenerimaAkhir)
-        );
+        $buktiLainNonNasabahPenerimaAkhir = $this->getFormBuktiLainXml(array(
+            $peroranganPenerimaNonNasabahDnAkhir->jenisBuktiLain,
+            $peroranganPenerimaNonNasabahDnAkhir->noBuktiLain
+                ));
+        $buktiIdentitasNonNasabahPenerimaAkhir = $this->getFormBuktiIdentitasXml(array(
+            $peroranganPenerimaNonNasabahDnAkhir->ktp,
+            $peroranganPenerimaNonNasabahDnAkhir->sim,
+            $peroranganPenerimaNonNasabahDnAkhir->passport,
+            $peroranganPenerimaNonNasabahDnAkhir->kimsKitasKitap,
+            $peroranganPenerimaNonNasabahDnAkhir->npwp,
+            $buktiLainNonNasabahPenerimaAkhir
+                ));
 
-
+        
         $nonNasabahPenerimaAkhir = $this->getFormNonNasabahXml(array(
-            4 => $buktiIdentitasNonNasabahPenerimaAkhir
+            $peroranganPenerimaNonNasabahDnAkhir->namaLengkap,
+            $this->checkDate($peroranganPenerimaNonNasabahDnAkhir->tglLahir),
+            $peroranganPenerimaNonNasabahDnAkhir->alamat,
+            $peroranganPenerimaNonNasabahDnAkhir->noTelp,
+            $buktiIdentitasNonNasabahPenerimaAkhir,
+            $peroranganPenerimaNonNasabahDnAkhir->nilaiTransaksiDalamRupiah
                 ), 2);
 
-        $buktiLainPeroranganPenerimaAkhir = $this->getFormBuktiLainXml(array());
-        $buktiIdentitasPeroranganPenerimaAkhir = $this->getFormBuktiIdentitasXml(
-                array(5 => $buktiLainPeroranganPenerimaAkhir)
-        );
-        $alamatSesuaiBuktiIdentitasPenerimaAkhir = $this->getFormAlamatXml(array(), 2);
-        $alamatDomisiliPenerimaAkhir = $this->getFormAlamatXml(array(), 2);
-        $kewarganegaraanPenerimaAkhir = $this->getFormKewarganegaraanXml(array());
+        $buktiLainPeroranganPenerimaAkhir = $this->getFormBuktiLainXml(array(
+            $peroranganPenerimaDnAkhir->jenisBuktiLain,
+            $peroranganPenerimaDnAkhir->noBuktiLain
+                ));
+        $buktiIdentitasPeroranganPenerimaAkhir = $this->getFormBuktiIdentitasXml(array(
+            $peroranganPenerimaDnAkhir->ktp,
+            $peroranganPenerimaDnAkhir->sim,
+            $peroranganPenerimaDnAkhir->passport,
+            $peroranganPenerimaDnAkhir->kimsKitasKitap,
+            $peroranganPenerimaDnAkhir->npwp,
+            $buktiLainPeroranganPenerimaAkhir
+                ));
+        $alamatSesuaiBuktiIdentitasPenerimaAkhir = $this->getFormAlamatXml(array(
+            $peroranganPenerimaDnAkhir->alamatIdentitas,
+            $peroranganPenerimaDnAkhir->idPropinsiIdentitas,
+            $peroranganPenerimaDnAkhir->propinsiLainIdentitas,
+            $peroranganPenerimaDnAkhir->idKabKotaIdentitas,
+            $peroranganPenerimaDnAkhir->kabKotaLainIdentitas
+                ), 2);
+        $alamatDomisiliPenerimaAkhir = $this->getFormAlamatXml(array(
+            $peroranganPenerimaDnAkhir->alamatDomisili,
+            $peroranganPenerimaDnAkhir->idPropinsiDomisili,
+            $peroranganPenerimaDnAkhir->propinsiLainDomisili,
+            $peroranganPenerimaDnAkhir->idKabKotaDomisili,
+            $peroranganPenerimaDnAkhir->kabKotaLain
+                ), 2);
+        $kewarganegaraanPenerimaAkhir = $this->getFormKewarganegaraanXml(array(
+            $peroranganPenerimaDnAkhir->wargaNegara,
+            $peroranganPenerimaDnAkhir->idNegaraKewarganegaraan,
+            $peroranganPenerimaDnAkhir->negaraLainKewarganegaraan
+                ));
+        
         $peroranganPenerimaAkhir = $this->getFormPeroranganXml(array(
-            3 => $kewarganegaraanPenerimaAkhir,
-            6 => $alamatDomisiliPenerimaAkhir,
-            7 => $alamatSesuaiBuktiIdentitasPenerimaAkhir,
-            9 => $buktiIdentitasPeroranganPenerimaAkhir
+            $peroranganPenerimaDnAkhir->noRekening,
+            $peroranganPenerimaDnAkhir->namaLengkap,
+            $this->checkDate($peroranganPenerimaDnAkhir->tglLahir),
+            $kewarganegaraanPenerimaAkhir,
+            $peroranganPenerimaDnAkhir->pekerjaan,
+            $peroranganPenerimaDnAkhir->pekerjaanLain,
+            $alamatDomisiliPenerimaAkhir,
+            $alamatSesuaiBuktiIdentitasPenerimaAkhir,
+            $peroranganPenerimaDnAkhir->noTelp,
+            $buktiIdentitasPeroranganPenerimaAkhir,
+            $peroranganPenerimaDnAkhir->nilaiTransaksiDalamRupiah
                 ), 3);
 
-        $alamatKorporasiPenerimaAkhrir = $this->getFormAlamatXml(array(), 2);
+        $alamatKorporasiPenerimaAkhrir = $this->getFormAlamatXml(array(
+            $korporasiPenerimaDnAkhir->alamat,
+            $korporasiPenerimaDnAkhir->idPropinsi,
+            $korporasiPenerimaDnAkhir->propinsiLain,
+            $korporasiPenerimaDnAkhir->idKabKota,
+            $korporasiPenerimaDnAkhir->kabKotaLain
+                ), 2);
         $korporasiPenerimaAkhir = $this->getFormKorporasiXml(array(
-            6 => $alamatKorporasiPenerimaAkhrir
+            $korporasiPenerimaDnAkhir->noRekening,
+            $korporasiPenerimaDnAkhir->namaKorporasi,
+            $korporasiPenerimaDnAkhir->bentukBadan,
+            $korporasiPenerimaDnAkhir->bentukBadanLain,
+            $korporasiPenerimaDnAkhir->bidangUsaha,
+            $korporasiPenerimaDnAkhir->bidangUsahaLain,
+            $alamatKorporasiPenerimaAkhrir,
+            $korporasiPenerimaDnAkhir->noTelp,
+            $korporasiPenerimaDnAkhir->nilaiTransaksiDalamRupiah
                 ), 3);
 
         $nasabahPenerimaAkhir = $this->getFormIdentitasXml(array(
@@ -797,45 +975,47 @@ class UtilComponent extends CApplicationComponent {
 
         /* ============================ TRANSAKSI ================================= */
         $trxCurrency = $this->getFormCurrencyInstructedAmountXml(array(
-            $this->getValue($transaksis, 'idCurrencyInstructedAmount'),
-            $this->getValue($transaksis, 'currencyLain'),
-            $this->getValue($transaksis, 'instructedAmount')
+            $transaksis->idCurrencyInstructedAmount,
+            $transaksis->currencyLainInstructedAmount,
+            $transaksis->instructedAmount
                 ));
+        
         $trxDate = $this->getFormDateCurrencyAmountXml(array(
-            $this->getValue($transaksis, 'valueDate'),
-            $this->getValue($transaksis, 'amount'),
-            $this->getValue($transaksis, 'idCurrency'),
-            $this->getValue($transaksis, 'currencyLain'),
-            $this->getValue($transaksis, 'amountDalamRupiah'),
+            $this->checkDate($transaksis->valueDate),
+            $transaksis->amount,
+            $transaksis->idCurrency,
+            $transaksis->currencyLain,
+            $transaksis->amountDalamRupiah,
                 ));
+        
         $transaksi = $this->getFormTransaksiXml(array(
-            $this->getValue($transaksis, 'tglTransaksi'),
-            $this->getValue($transaksis, 'timeIndication'),
-            $this->getValue($transaksis, 'sendersReference'),
-            $this->getValue($transaksis, 'bankOperationCode'),
-            $this->getValue($transaksis, 'instructionCode'),
-            $this->getValue($transaksis, 'kanCabPenyelenggaraPengirimAsal'),
-            $this->getValue($transaksis, 'typeTransactionCode'),
+            $this->checkDate($transaksis->tglTransaksi),
+            $transaksis->timeIndication,
+            $transaksis->sendersReference,
+            $transaksis->bankOperationCode,
+            $transaksis->instructionCode,
+            $transaksis->kanCabPenyelenggaraPengirimAsal,
+            $transaksis->typeTransactionCode,
             $trxDate,
             $trxCurrency,
-            $this->getValue($transaksis, 'exchangeRate'),
-            $this->getValue($transaksis, 'sendingInstitution'),
-            $this->getValue($transaksis, 'tujuanTransaksi'),
-            $this->getValue($transaksis, 'sumberDana')
+            $transaksis->exchangeRate,
+            $transaksis->sendingInstitution,
+            $transaksis->tujuanTransaksi,
+            $transaksis->sumberDana
                 ));
         /* ============================ END TRANSAKSI ================================= */
 
 
         /* ============================ INFO LAINNYA ================================= */
         $infoLainnya = $this->getFormInfoLainXml(array(
-            $this->getValue($infolains, 'infSendersCorrespondent'),
-            $this->getValue($infolains, 'infReceiverCorrespondent'),
-            $this->getValue($infolains, 'infThirdReimbursementInstitution'),
-            $this->getValue($infolains, 'infIntermediaryInstitution'),
-            $this->getValue($infolains, 'remittanceInformation'),
-            $this->getValue($infolains, 'senderToReceiverInformation'),
-            $this->getValue($infolains, 'regulatoryReporting'),
-            $this->getValue($infolains, 'envelopeContents')
+            $infolains->infSendersCorrespondent,
+            $infolains->infReceiverCorrespondent,
+            $infolains->infThirdReimbursementInstitution,
+            $infolains->infIntermediaryInstitution,
+            $infolains->remittanceInformation,
+            $infolains->senderToReceiverInformation,
+            $infolains->regulatoryReporting,
+            $infolains->envelopeContents
                 ));
         /* ============================ END INFO LAINNYA ================================= */
 
@@ -850,6 +1030,13 @@ class UtilComponent extends CApplicationComponent {
         );
 
         return $ifti;
+    }
+
+    public function checkDate($param) {
+        if ($param === '0000-00-00' || !$param)
+            return null;
+        else
+            return date('d/m/Y', strtotime($param));
     }
 
     public function getFormInfoLainXml($param) {
@@ -1446,37 +1633,37 @@ class UtilComponent extends CApplicationComponent {
 
                 if (count($nasabahPeroranganDn) > 0) {
                     $nasabahPeroranganDn = current($nasabahPeroranganDn);
-                    if ($param === 'all'){
+                    if ($param === 'all') {
                         $data = array(
                             'key' => 1,
-                            'data' =>$nasabahPeroranganDn
-                            );
+                            'data' => $nasabahPeroranganDn
+                        );
                         return $data;
                     }
                     else
                         return $nasabahPeroranganDn->{$param};
                 }
-                
+
                 if (count($nasabahKorporasiDn) > 0) {
                     $nasabahKorporasiDn = current($nasabahKorporasiDn);
-                    if ($param === 'all'){
+                    if ($param === 'all') {
                         $data = array(
                             'key' => 2,
-                            'data' =>$nasabahKorporasiDn
-                            );
+                            'data' => $nasabahKorporasiDn
+                        );
                         return $data;
                     }
                     else
                         return $nasabahKorporasiDn->namaKorporasi;
                 }
-                
+
                 if (count($nonNasabahDn) > 0) {
                     $nonNasabahDn = current($nonNasabahDn);
-                    if ($param === 'all'){
+                    if ($param === 'all') {
                         $data = array(
                             'key' => 3,
-                            'data' =>$nonNasabahDn
-                            );
+                            'data' => $nonNasabahDn
+                        );
                         return $data;
                     }
                     else
@@ -1484,8 +1671,8 @@ class UtilComponent extends CApplicationComponent {
                 }
 
                 break;
-                
-                
+
+
             case ($jenisSwift == 2 || $jenisSwift == 4):
                 $nasabahPeroranganLn = $swift->nasabahPeroranganLns;
                 $nasabahKorporasiLn = $swift->nasabahKorporasiLns;
@@ -1493,37 +1680,37 @@ class UtilComponent extends CApplicationComponent {
 
                 if (count($nasabahPeroranganLn) > 0) {
                     $nasabahPeroranganLn = current($nasabahPeroranganLn);
-                    if ($param === 'all'){
+                    if ($param === 'all') {
                         $data = array(
                             'key' => 1,
-                            'data' =>$nasabahPeroranganLn
-                            );
+                            'data' => $nasabahPeroranganLn
+                        );
                         return $data;
                     }
                     else
                         return $nasabahPeroranganLn->{$param};
                 }
-                
+
                 if (count($nasabahKorporasiLn) > 0) {
                     $nasabahKorporasiLn = current($nasabahKorporasiLn);
-                    if ($param === 'all'){
+                    if ($param === 'all') {
                         $data = array(
                             'key' => 2,
-                            'data' =>$nasabahKorporasiLn
-                            );
+                            'data' => $nasabahKorporasiLn
+                        );
                         return $data;
                     }
                     else
                         return $nasabahKorporasiLn->namaKorporasi;
                 }
-                
+
                 if (count($nonNasabahLn) > 0) {
                     $nonNasabahLn = current($nonNasabahLn);
-                    if ($param === 'all'){
+                    if ($param === 'all') {
                         $data = array(
                             'key' => 3,
-                            'data' =>$nonNasabahLn
-                            );
+                            'data' => $nonNasabahLn
+                        );
                         return $data;
                     }
                     else
@@ -1536,7 +1723,7 @@ class UtilComponent extends CApplicationComponent {
                 break;
         }
     }
-    
+
     public function getPengirim($swiftId, $param) {
         $swift = Swift::model()->findByPk($swiftId);
 
@@ -1550,37 +1737,37 @@ class UtilComponent extends CApplicationComponent {
 
                 if (count($nasabahPeroranganDn) > 0) {
                     $nasabahPeroranganDn = current($nasabahPeroranganDn);
-                    if ($param === 'all'){
+                    if ($param === 'all') {
                         $data = array(
                             'key' => 1,
-                            'data' =>$nasabahPeroranganDn
-                            );
+                            'data' => $nasabahPeroranganDn
+                        );
                         return $data;
                     }
                     else
                         return $nasabahPeroranganDn->{$param};
                 }
-                
+
                 if (count($nasabahKorporasiDn) > 0) {
                     $nasabahKorporasiDn = current($nasabahKorporasiDn);
-                    if ($param === 'all'){
+                    if ($param === 'all') {
                         $data = array(
                             'key' => 2,
-                            'data' =>$nasabahKorporasiDn
-                            );
+                            'data' => $nasabahKorporasiDn
+                        );
                         return $data;
                     }
                     else
                         return $nasabahKorporasiDn->namaKorporasi;
                 }
-                
+
                 if (count($nonNasabahDn) > 0) {
                     $nonNasabahDn = current($nonNasabahDn);
-                    if ($param === 'all'){
+                    if ($param === 'all') {
                         $data = array(
                             'key' => 3,
-                            'data' =>$nonNasabahDn
-                            );
+                            'data' => $nonNasabahDn
+                        );
                         return $data;
                     }
                     else
@@ -1588,8 +1775,8 @@ class UtilComponent extends CApplicationComponent {
                 }
 
                 break;
-                
-                
+
+
             case ($jenisSwift == 1 || $jenisSwift == 3):
                 $nasabahPeroranganLn = $swift->nasabahPeroranganLns;
                 $nasabahKorporasiLn = $swift->nasabahKorporasiLns;
@@ -1597,37 +1784,37 @@ class UtilComponent extends CApplicationComponent {
 
                 if (count($nasabahPeroranganLn) > 0) {
                     $nasabahPeroranganLn = current($nasabahPeroranganLn);
-                    if ($param === 'all'){
+                    if ($param === 'all') {
                         $data = array(
                             'key' => 1,
-                            'data' =>$nasabahPeroranganLn
-                            );
+                            'data' => $nasabahPeroranganLn
+                        );
                         return $data;
                     }
                     else
                         return $nasabahPeroranganLn->{$param};
                 }
-                
+
                 if (count($nasabahKorporasiLn) > 0) {
                     $nasabahKorporasiLn = current($nasabahKorporasiLn);
-                    if ($param === 'all'){
+                    if ($param === 'all') {
                         $data = array(
                             'key' => 2,
-                            'data' =>$nasabahKorporasiLn
-                            );
+                            'data' => $nasabahKorporasiLn
+                        );
                         return $data;
                     }
                     else
                         return $nasabahKorporasiLn->namaKorporasi;
                 }
-                
+
                 if (count($nonNasabahLn) > 0) {
                     $nonNasabahLn = current($nonNasabahLn);
-                    if ($param === 'all'){
+                    if ($param === 'all') {
                         $data = array(
                             'key' => 3,
-                            'data' =>$nonNasabahLn
-                            );
+                            'data' => $nonNasabahLn
+                        );
                         return $data;
                     }
                     else
@@ -1640,6 +1827,5 @@ class UtilComponent extends CApplicationComponent {
                 break;
         }
     }
-    
 
 }

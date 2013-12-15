@@ -166,7 +166,7 @@ class Swift extends CActiveRecord {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
-            'infolains' => array(self::HAS_MANY, 'InfoLain', 'swift_id'),
+            'infolains' => array(self::HAS_ONE, 'InfoLain', 'swift_id'),
             'nasabahKorporasiDns' => array(self::HAS_MANY, 'NasabahKorporasiDn', 'swift_id'),
             'nasabahKorporasiLns' => array(self::HAS_MANY, 'NasabahKorporasiLn', 'swift_id'),
             'nasabahPeroranganDns' => array(self::HAS_MANY, 'NasabahPeroranganDn', 'swift_id'),

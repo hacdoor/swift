@@ -6,6 +6,7 @@
  * The followings are the available columns in table 'nasabah_korporasi_dn':
  * @property integer $id
  * @property string $noRekening
+ * @property string $namaBank
  * @property string $namaKorporasi
  * @property integer $bentukBadan
  * @property string $bentukBadanLain
@@ -60,7 +61,7 @@ class NasabahKorporasiDn extends CActiveRecord {
             array('noRekening, alamat', 'oneOfTwo'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, noRekening, namaKorporasi, bentukBadan, bentukBadanLain, bidangUsaha, bidangUsahaLain, alamat, idPropinsi, propinsiLain, idKabKota, kabKotaLain, noTelp, swift_id', 'safe', 'on' => 'search'),
+            array('id, noRekening, namaBank, namaKorporasi, bentukBadan, bentukBadanLain, bidangUsaha, bidangUsahaLain, alamat, idPropinsi, propinsiLain, idKabKota, kabKotaLain, noTelp, swift_id', 'safe', 'on' => 'search'),
         );
     }
 
@@ -96,6 +97,7 @@ class NasabahKorporasiDn extends CActiveRecord {
         return array(
             'id' => 'ID',
             'noRekening' => 'No Rekening',
+            'namaBank' => 'Nama Bank',
             'namaKorporasi' => 'Nama Korporasi',
             'bentukBadan' => 'Bentuk Badan',
             'bentukBadanLain' => 'Bentuk Badan Lain',
@@ -124,6 +126,7 @@ class NasabahKorporasiDn extends CActiveRecord {
 
         $criteria->compare('id', $this->id);
         $criteria->compare('noRekening', $this->noRekening, true);
+        $criteria->compare('namaBank', $this->namaBank, true);
         $criteria->compare('namaKorporasi', $this->namaKorporasi, true);
         $criteria->compare('bentukBadan', $this->bentukBadan);
         $criteria->compare('bentukBadanLain', $this->bentukBadanLain, true);

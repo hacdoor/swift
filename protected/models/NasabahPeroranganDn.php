@@ -6,6 +6,7 @@
  * The followings are the available columns in table 'nasabah_perorangan_dn':
  * @property integer $id
  * @property string $noRekening
+ * @property string $namaBank
  * @property string $namaLengkap
  * @property string $tglLahir
  * @property integer $wargaNegara
@@ -78,7 +79,7 @@ class NasabahPeroranganDn extends CActiveRecord {
             array('ktp, sim, passport, kimsKitasKitap, npwp', 'oneOfFive'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, noRekening, namaLengkap, tglLahir, wargaNegara, idNegaraKewarganegaraan, negaraLainKewarganegaraan, pekerjaan, pekerjaanLain, alamatDomisili, idPropinsiDomisili, propinsiLainDomisili, idKabKotaDomisili, kabKotaLain, alamatIdentitas, idPropinsiIdentitas, propinsiLainIdentitas, idKabKotaIdentitas, kabKotaLainIdentitas, noTelp, ktp, sim, passport, kimsKitasKitap, npwp, jenisBuktiLain, noBuktiLain, swift_id', 'safe', 'on' => 'search'),
+            array('id, noRekening, namaBank, namaLengkap, tglLahir, wargaNegara, idNegaraKewarganegaraan, negaraLainKewarganegaraan, pekerjaan, pekerjaanLain, alamatDomisili, idPropinsiDomisili, propinsiLainDomisili, idKabKotaDomisili, kabKotaLain, alamatIdentitas, idPropinsiIdentitas, propinsiLainIdentitas, idKabKotaIdentitas, kabKotaLainIdentitas, noTelp, ktp, sim, passport, kimsKitasKitap, npwp, jenisBuktiLain, noBuktiLain, swift_id', 'safe', 'on' => 'search'),
         );
     }
 
@@ -118,6 +119,7 @@ class NasabahPeroranganDn extends CActiveRecord {
         return array(
             'id' => 'ID',
             'noRekening' => 'No Rekening',
+            'namaBank' => 'Nama Bank',
             'namaLengkap' => 'Nama Lengkap',
             'tglLahir' => 'Tgl Lahir',
             'wargaNegara' => 'Warga Negara',
@@ -160,6 +162,7 @@ class NasabahPeroranganDn extends CActiveRecord {
 
         $criteria->compare('id', $this->id);
         $criteria->compare('noRekening', $this->noRekening, true);
+        $criteria->compare('namaBank', $this->namaBank, true);
         $criteria->compare('namaLengkap', $this->namaLengkap, true);
         $criteria->compare('tglLahir', $this->tglLahir, true);
         $criteria->compare('wargaNegara', $this->wargaNegara);

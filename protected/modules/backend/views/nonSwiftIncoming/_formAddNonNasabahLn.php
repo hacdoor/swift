@@ -23,6 +23,13 @@
                 </div>
             </div>
             <div class="form-group">
+                <?php echo $form->labelEx($nonNasabahLn, 'namaBank', array('class' => 'col-md-2 control-label')); ?>
+                <div class="col-md-5">
+                    <?php echo $form->textField($nonNasabahLn, 'namaBank', array('class' => 'form-control')); ?>
+                    <?php echo $form->error($nonNasabahLn, 'namaBank'); ?>
+                </div>
+            </div>
+            <div class="form-group">
                 <?php echo $form->labelEx($nonNasabahLn, 'namaLengkap', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
                     <?php echo $form->textField($nonNasabahLn, 'namaLengkap', array('class' => 'form-control')); ?>
