@@ -39,10 +39,8 @@ class Swift extends CActiveRecord {
     const JENIS_LAPORAN_KOREKSI = 2;
     const JENIS_LAPORAN_RECALL = 3;
     const JENIS_LAPORAN_REJECT = 4;
-    
     const KETERLIBATAN_BENEFICIAL_OWNER_YA = 1;
     const KETERLIBATAN_BENEFICIAL_OWNER_TIDAK = 0;
-
 
     public static function getKeterlibatanBeneficialOwnerOptions() {
         return array(
@@ -57,7 +55,7 @@ class Swift extends CActiveRecord {
         return isset($keterlibatanBeneficialOwnerOptions[$value]) ?
                 $keterlibatanBeneficialOwnerOptions[$value] : "unknown keterlibatanBeneficialOwner ({$value})";
     }
-    
+
     public static function getJenisLaporanOptions() {
         return array(
             self::JENIS_LAPORAN_BARU => 'Baru',
@@ -152,7 +150,7 @@ class Swift extends CActiveRecord {
             array('localId, noLtdln, tglLaporan, namaPjk, namaPejabatPjk, jenisLaporan, pjkBankSebagai, jenisSwift, status', 'required'),
             array('jenisLaporan, pjkBankSebagai, jenisSwift, keterlibatanBeneficialOwner', 'numerical', 'integerOnly' => true),
             array('localId', 'length', 'max' => 50),
-            array('localId', 'unique'),
+            array('localId,jenisSwift', 'uniqueLocalId'),
             array('noLtdln, noLtdlnKoreksi', 'length', 'max' => 30),
             array('namaPjk, namaPejabatPjk', 'length', 'max' => 100),
             // The following rule is used by search().
@@ -228,12 +226,18 @@ class Swift extends CActiveRecord {
         $criteria->compare('pjkBankSebagai', $this->pjkBankSebagai);
         $criteria->compare('jenisSwift', $this->jenisSwift);
         $criteria->compare('status', $this->status);
-        $criteria->compare('keterlibatanBeneficialOwner', $this->keterlibatanBeneficialOwner);        
+        $criteria->compare('keterlibatanBeneficialOwner', $this->keterlibatanBeneficialOwner);
         $criteria->order = 'id DESC';
 
         return new CActiveDataProvider($this, array(
-                    'criteria' => $criteria,
+            'criteria' => $criteria,
                 ));
+    }
+
+    public function uniqueLocalID($attribute,$params) {
+        $ch = Swift::model()->findAll('localId='.$this->localId .' and jenisSwift='.$this->jenisSwift);
+        if ($ch)
+            $this->addError($attribute, $attribute . ' is unique.');
     }
 
 }

@@ -1400,4 +1400,153 @@ class UtilComponent extends CApplicationComponent {
         return $str;
     }
 
+    public function getPenerima($swiftId, $param) {
+        $swift = Swift::model()->findByPk($swiftId);
+
+        $jenisSwift = $swift->jenisSwift;
+
+        switch ($jenisSwift) {
+            case ($jenisSwift == 1 || $jenisSwift == 3):
+                $nasabahPeroranganDn = $swift->nasabahPeroranganDns;
+                $nasabahKorporasiDn = $swift->nasabahKorporasiDns;
+                $nonNasabahDn = $swift->nonNasabahDns;
+
+                if (count($nasabahPeroranganDn) > 0) {
+                    $nasabahPeroranganDn = current($nasabahPeroranganDn);
+                    if ($param === 'all')
+                        return $nasabahPeroranganDn;
+                    else
+                        return $nasabahPeroranganDn->{$param};
+                }
+                
+                if (count($nasabahKorporasiDn) > 0) {
+                    $nasabahKorporasiDn = current($nasabahKorporasiDn);
+                    if ($param === 'all')
+                        return $nasabahKorporasiDn;
+                    else
+                        return $nasabahKorporasiDn->namaKorporasi;
+                }
+                
+                if (count($nonNasabahDn) > 0) {
+                    $nonNasabahDn = current($nonNasabahDn);
+                    if ($param === 'all')
+                        return $nonNasabahDn;
+                    else
+                        return $nonNasabahDn->{$param};
+                }
+
+                break;
+                
+                
+            case ($jenisSwift == 2 || $jenisSwift == 4):
+                $nasabahPeroranganLn = $swift->nasabahPeroranganLns;
+                $nasabahKorporasiLn = $swift->nasabahKorporasiLns;
+                $nonNasabahLn = $swift->nonNasabahLns;
+
+                if (count($nasabahPeroranganLn) > 0) {
+                    $nasabahPeroranganLn = current($nasabahPeroranganLn);
+                    if ($param === 'all')
+                        return $nasabahPeroranganLn;
+                    else
+                        return $nasabahPeroranganLn->{$param};
+                }
+                
+                if (count($nasabahKorporasiLn) > 0) {
+                    $nasabahKorporasiLn = current($nasabahKorporasiLn);
+                    if ($param === 'all')
+                        return $nasabahKorporasiLn;
+                    else
+                        return $nasabahKorporasiLn->namaKorporasi;
+                }
+                
+                if (count($nonNasabahLn) > 0) {
+                    $nonNasabahLn = current($nonNasabahLn);
+                    if ($param === 'all')
+                        return $nonNasabahLn;
+                    else
+                        return $nonNasabahLn->{$param};
+                }
+
+                break;
+
+            default:
+                break;
+        }
+    }
+    
+    public function getPengirim($swiftId, $param) {
+        $swift = Swift::model()->findByPk($swiftId);
+
+        $jenisSwift = $swift->jenisSwift;
+
+        switch ($jenisSwift) {
+            case ($jenisSwift == 2 || $jenisSwift == 4):
+                $nasabahPeroranganDn = $swift->nasabahPeroranganDns;
+                $nasabahKorporasiDn = $swift->nasabahKorporasiDns;
+                $nonNasabahDn = $swift->nonNasabahDns;
+
+                if (count($nasabahPeroranganDn) > 0) {
+                    $nasabahPeroranganDn = current($nasabahPeroranganDn);
+                    if ($param === 'all')
+                        return $nasabahPeroranganDn;
+                    else
+                        return $nasabahPeroranganDn->{$param};
+                }
+                
+                if (count($nasabahKorporasiDn) > 0) {
+                    $nasabahKorporasiDn = current($nasabahKorporasiDn);
+                    if ($param === 'all')
+                        return $nasabahKorporasiDn;
+                    else
+                        return $nasabahKorporasiDn->namaKorporasi;
+                }
+                
+                if (count($nonNasabahDn) > 0) {
+                    $nonNasabahDn = current($nonNasabahDn);
+                    if ($param === 'all')
+                        return $nonNasabahDn;
+                    else
+                        return $nonNasabahDn->{$param};
+                }
+
+                break;
+                
+                
+            case ($jenisSwift == 1 || $jenisSwift == 3):
+                $nasabahPeroranganLn = $swift->nasabahPeroranganLns;
+                $nasabahKorporasiLn = $swift->nasabahKorporasiLns;
+                $nonNasabahLn = $swift->nonNasabahLns;
+
+                if (count($nasabahPeroranganLn) > 0) {
+                    $nasabahPeroranganLn = current($nasabahPeroranganLn);
+                    if ($param === 'all')
+                        return $nasabahPeroranganLn;
+                    else
+                        return $nasabahPeroranganLn->{$param};
+                }
+                
+                if (count($nasabahKorporasiLn) > 0) {
+                    $nasabahKorporasiLn = current($nasabahKorporasiLn);
+                    if ($param === 'all')
+                        return $nasabahKorporasiLn;
+                    else
+                        return $nasabahKorporasiLn->namaKorporasi;
+                }
+                
+                if (count($nonNasabahLn) > 0) {
+                    $nonNasabahLn = current($nonNasabahLn);
+                    if ($param === 'all')
+                        return $nonNasabahLn;
+                    else
+                        return $nonNasabahLn->{$param};
+                }
+
+                break;
+
+            default:
+                break;
+        }
+    }
+    
+
 }

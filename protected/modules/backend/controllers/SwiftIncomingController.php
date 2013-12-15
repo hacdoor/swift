@@ -209,11 +209,11 @@ class SwiftIncomingController extends BackendController {
         }
 
         $dataProvider = new CActiveDataProvider('NasabahPeroranganDn', array(
-                    'criteria' => array(
-                        'condition' => 'swift_id=:swiftId',
-                        'params' => array(':swiftId' => $model->id),
-                    ),
-                    'pagination' => FALSE,
+            'criteria' => array(
+                'condition' => 'swift_id=:swiftId',
+                'params' => array(':swiftId' => $model->id),
+            ),
+            'pagination' => FALSE,
                 ));
 
         if (isset($_POST['DeleteButton'])) {
@@ -270,11 +270,11 @@ class SwiftIncomingController extends BackendController {
         }
 
         $dataProvider = new CActiveDataProvider('NasabahKorporasiDn', array(
-                    'criteria' => array(
-                        'condition' => 'swift_id=:swiftId',
-                        'params' => array(':swiftId' => $model->id),
-                    ),
-                    'pagination' => FALSE,
+            'criteria' => array(
+                'condition' => 'swift_id=:swiftId',
+                'params' => array(':swiftId' => $model->id),
+            ),
+            'pagination' => FALSE,
                 ));
 
         if (isset($_POST['DeleteButton'])) {
@@ -331,11 +331,11 @@ class SwiftIncomingController extends BackendController {
         }
 
         $dataProvider = new CActiveDataProvider('NonNasabahDn', array(
-                    'criteria' => array(
-                        'condition' => 'swift_id=:swiftId',
-                        'params' => array(':swiftId' => $model->id),
-                    ),
-                    'pagination' => FALSE,
+            'criteria' => array(
+                'condition' => 'swift_id=:swiftId',
+                'params' => array(':swiftId' => $model->id),
+            ),
+            'pagination' => FALSE,
                 ));
 
         if (isset($_POST['DeleteButton'])) {
@@ -448,9 +448,13 @@ class SwiftIncomingController extends BackendController {
         if (isset($_POST['NonNasabahLn'])) {
             $nonNasabahLn->attributes = $_POST['NonNasabahLn'];
             $nonNasabahLn->swift_id = $model->id;
-            if ($nonNasabahLn->save()) {
-                Yii::app()->util->setLog('NonNasabahLn', $nonNasabahLn->id, 'Update data');
-                Yii::app()->user->setFlash('success', 'Success!|' . 'NonNasabahLn has been updated.');
+            if ($nonNasabahLn->validate()) {
+                if ($nonNasabahLn->save()) {
+                    Yii::app()->util->setLog('NonNasabahLn', $nonNasabahLn->id, 'Update data');
+                    Yii::app()->user->setFlash('success', 'Success!|' . 'NonNasabahLn has been updated.');
+                } else {
+                    Yii::app()->user->setFlash('danger', 'Danger!|' . 'Failed save NonNasabahLn !.');
+                }
             }
         }
 

@@ -105,6 +105,9 @@ class SwiftOutgoingController extends BackendController {
         $this->checkAccess('swiftOutgoing.create');
 
         $model = new Swift;
+        $company = Company::model()->findByPk(1);
+        $model->namaPjk = $company->namaPjk;
+        $model->namaPejabatPjk = $company->namaPejabatPjk;
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
@@ -264,9 +267,11 @@ class SwiftOutgoingController extends BackendController {
             $nonNasabahDn->swift_id = $model->id;
             $nonNasabahDn->keterlibatanBeneficialOwner = NonNasabahDn::KETERLIBATAN_BENEFICIAL_OWNER_TIDAK;
             $is_diatas_seratus_juta ? $nonNasabahDn->isBesarDariSeratusJuta = NonNasabahDn::IS_BESAR_DARI_SERATUS_JUTA_YA : $nonNasabahDn->isBesarDariSeratusJuta = NonNasabahDn::IS_BESAR_DARI_SERATUS_JUTA_TIDAK;
-            if ($nonNasabahDn->save()) {
-                Yii::app()->util->setLog('NonNasabahDn', $nonNasabahDn->id, 'Update data');
-                Yii::app()->user->setFlash('success', 'Success!|' . 'NonNasabahDn has been updated.');
+            if ($nonNasabahDn->validate()) {
+                if ($nonNasabahDn->save()) {
+                    Yii::app()->util->setLog('NonNasabahDn', $nonNasabahDn->id, 'Update data');
+                    Yii::app()->user->setFlash('success', 'Success!|' . 'NonNasabahDn has been updated.');
+                }
             }
         }
 
@@ -414,11 +419,11 @@ class SwiftOutgoingController extends BackendController {
         }
 
         $dataProvider = new CActiveDataProvider('NasabahPeroranganLn', array(
-                    'criteria' => array(
-                        'condition' => 'swift_id=:swiftId',
-                        'params' => array(':swiftId' => $model->id),
-                    ),
-                    'pagination' => FALSE,
+            'criteria' => array(
+                'condition' => 'swift_id=:swiftId',
+                'params' => array(':swiftId' => $model->id),
+            ),
+            'pagination' => FALSE,
                 ));
 
         if (isset($_POST['DeleteButton'])) {
@@ -482,11 +487,11 @@ class SwiftOutgoingController extends BackendController {
         }
 
         $dataProvider = new CActiveDataProvider('NasabahKorporasiLn', array(
-                    'criteria' => array(
-                        'condition' => 'swift_id=:swiftId',
-                        'params' => array(':swiftId' => $model->id),
-                    ),
-                    'pagination' => FALSE,
+            'criteria' => array(
+                'condition' => 'swift_id=:swiftId',
+                'params' => array(':swiftId' => $model->id),
+            ),
+            'pagination' => FALSE,
                 ));
 
         if (isset($_POST['DeleteButton'])) {
@@ -543,18 +548,20 @@ class SwiftOutgoingController extends BackendController {
         if (isset($_POST['NonNasabahLn'])) {
             $nonNasabahLn->attributes = $_POST['NonNasabahLn'];
             $nonNasabahLn->swift_id = $model->id;
-            if ($nonNasabahLn->save()) {
-                Yii::app()->util->setLog('NonNasabahLn', $nonNasabahLn->id, 'Update data');
-                Yii::app()->user->setFlash('success', 'Success!|' . 'NonNasabahLn has been updated.');
+            if ($nonNasabahLn->validate()) {
+                if ($nonNasabahLn->save()) {
+                    Yii::app()->util->setLog('NonNasabahLn', $nonNasabahLn->id, 'Update data');
+                    Yii::app()->user->setFlash('success', 'Success!|' . 'NonNasabahLn has been updated.');
+                }
             }
         }
 
         $dataProvider = new CActiveDataProvider('NonNasabahLn', array(
-                    'criteria' => array(
-                        'condition' => 'swift_id=:swiftId',
-                        'params' => array(':swiftId' => $model->id),
-                    ),
-                    'pagination' => FALSE,
+            'criteria' => array(
+                'condition' => 'swift_id=:swiftId',
+                'params' => array(':swiftId' => $model->id),
+            ),
+            'pagination' => FALSE,
                 ));
 
         if (isset($_POST['DeleteButton'])) {
@@ -707,7 +714,7 @@ class SwiftOutgoingController extends BackendController {
             Yii::app()->end();
         }
     }
-    
+
     /**
      * List all ajax action to generate 
      */

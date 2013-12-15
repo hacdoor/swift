@@ -70,15 +70,19 @@ class NonNasabahLn extends CActiveRecord {
     }
 
     public function oneOfFive($attribute, $params) {
-        if ($this->action->id != 'AddPengirimNonNasabah') {
+        $action = Yii::app()->getController()->getAction()->getId();
+        if ($action !== 'addPengirimNonNasabah' || $action !== 'addPenerimaNonNasabah') {
             if (!$this->ktp && !$this->sim && !$this->passport && !$this->kimsKitasKitap && !$this->npwp)
                 $this->addError($attribute, $attribute . ' is required.');
         }
     }
 
     public function oneOfTwo($attribute, $params) {
-        if (!$this->noRekening && !$this->alamat)
-            $this->addError($attribute, $attribute . ' is required.');
+        $action = Yii::app()->getController()->getAction()->getId();
+        if ($action !== 'addPengirimNonNasabah' || $action !== 'addPenerimaNonNasabah') {
+            if (!$this->noRekening && !$this->alamat)
+                $this->addError($attribute, $attribute . ' is required.');
+        }
     }
 
     /**
@@ -158,7 +162,7 @@ class NonNasabahLn extends CActiveRecord {
         $criteria->compare('swift_id', $this->swift_id);
 
         return new CActiveDataProvider($this, array(
-                    'criteria' => $criteria,
+            'criteria' => $criteria,
                 ));
     }
 

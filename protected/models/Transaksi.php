@@ -84,6 +84,7 @@ class Transaksi extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'swift' => array(self::BELONGS_TO, 'Swift', 'swift_id'),
+			'currency' => array(self::BELONGS_TO, 'MataUang', 'idCurrency'),
 		);
 	}
 
