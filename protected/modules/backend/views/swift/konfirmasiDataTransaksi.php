@@ -55,7 +55,7 @@ $this->pageTitle = $title;
                                         <th>Mata Uang</th>
                                         <th>Nilai Transaksi</th>
                                         <th><?php echo $sort->link('status', $showSort . 'Status') ?></th>
-                                        <th class="list-actions">Actions</th>
+                                        <th class="list-actions">Show detail</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -75,20 +75,17 @@ $this->pageTitle = $title;
                                                 <td><?php echo Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $d->jenisSwift))); ?></td>
                                                 <td><?php echo ($d->tglLaporan) ? Yii::app()->dateFormatter->format('dd-MM-yyyy', $d->tglLaporan) : ''; ?></td>
                                                 <td>
-                                                    <?php echo Yii::app()->util->getPengirim($d->id,'namaLengkap')?>
+                                                    <?php echo Yii::app()->util->getPengirim($d->id, 'namaLengkap') ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo Yii::app()->util->getPenerima($d->id,'namaLengkap')?>
+                                                    <?php echo Yii::app()->util->getPenerima($d->id, 'namaLengkap') ?>
                                                 </td>
                                                 <td><?php echo ($d->transaksis) ? $d->transaksis->currency->simbol : '' ?></td>
                                                 <td><?php echo ($d->transaksis) ? Yii::app()->numberFormatter->formatCurrency($d->transaksis->amountDalamRupiah, 'IDR') : ''; ?></td>
                                                 <td><?php echo Yii::app()->util->purify($d->getStatusText()); ?></td>
                                                 <td class="list-actions">
-                                                    <?php if ($admin->hasPermissions('swift.update')): ?>
-                                                        <a href="<?php echo $this->vars['backendUrl']; ?>konfirmasiDataTransaksi/umum/<?php echo $d->id; ?>" class="btn btn-xs btn-default bootip" title="Update"><span class="icon icon-pencil"></span></a>
-                                                    <?php endif; ?>
-                                                    <?php if ($admin->hasPermissions('swift.export')): ?>
-                                                        <a href="<?php echo $this->vars['backendUrl']; ?>konfirmasiDataTransaksi/createExcel/<?php echo $d->id; ?>" class="btn btn-xs btn-default bootip" title="Export to Excel"><span class="icon icon-file"></span></a>
+                                                    <?php if ($admin->hasPermissions('swift.detail')): ?>
+                                                        <a href="<?php echo $this->vars['backendUrl']; ?>swift/detail/<?php echo $d->id; ?>" class="btn btn-xs btn-default bootip" title="More detail"><span class="icon icon-eye-open"></span></a>
                                                     <?php endif; ?>
                                                 </td>
                                             </tr>

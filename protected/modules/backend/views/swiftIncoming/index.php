@@ -15,53 +15,6 @@ $this->pageTitle = $title;
             <?php echo Yii::app()->util->ahdaTitleGridForm(array('icon' => 'list-alt', 'label' => $title)) ?>
             <div class="row">
                 <div class="col-md-10">
-                    <div class="advanceSearch hidden" <?php echo $openSearch; ?>>
-                        <form method="get" class="form-filter">
-                            <div class="row">
-                                <div class="col-md-3 col-sm-3">
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" name="Filter[localId]" placeholder="Local Id contains ..." value="<?php echo $filters['localId']; ?>">
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-sm-3">
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" name="Filter[noLtdln]" placeholder="No LTDLN contains ..." value="<?php echo $filters['noLtdln']; ?>">
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-sm-3">
-                                    <div class="form-group">
-                                        <?php echo Yii::app()->util->getKodeStandar(array('modul' => 'jenisLaporan', 'data' => array('name' => 'Filter[jenisLaporan]', 'value' => $filters['jenisLaporan']))) ?>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-sm-3">
-                                    <div class="form-group">
-                                        <?php echo Yii::app()->util->getKodeStandar(array('modul' => 'swiftStatus', 'data' => array('name' => 'Filter[swiftStatus]', 'value' => $filters['swiftStatus']))) ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3 col-sm-3">
-                                    <div class="form-group">
-                                        <input class="form-control datepicker" type="text" name="Filter[created_start]" placeholder="Created between ..." value="<?php echo $filters['created_start']; ?>" readonly="readonly" data-date-format="yyyy-mm-dd">
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-sm-3">
-                                    <div class="form-group">
-                                        <input class="form-control datepicker" type="text" name="Filter[created_end]" placeholder="... until ..." value="<?php // echo $filters['created_end'];                                                                                                                         ?>" readonly="readonly" data-date-format="yyyy-mm-dd">
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-sm-3">
-
-                                </div>
-                                <div class="col-md-3 col-sm-3">
-                                    <button class="btn btn-default btn-lg pull-right"><span class="icon icon-search"></span> Search</button>
-                                </div>
-                            </div>
-                        </form>
-
-                        <hr/>
-
-                    </div>
 
                     <?php echo CHtml::beginForm(); ?>
 
@@ -120,7 +73,7 @@ $this->pageTitle = $title;
                                                     <a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming/umum/<?php echo $d->id; ?>" class="btn btn-xs btn-default bootip" title="Update"><span class="icon icon-pencil"></span></a>
                                                 <?php endif; ?>
                                                 <?php if ($admin->hasPermissions('swiftIncoming.generateExcel')): ?>
-                                                    <a href="<?php echo $this->vars['backendUrl']; ?>swiftIncoming/createExcel/<?php echo $d->id; ?>" class="btn btn-xs btn-default bootip" title="Export to Excel"><span class="icon icon-file"></span></a>
+                                                    <a href="<?php echo $this->vars['backendUrl']; ?>swift/createExcel/<?php echo $d->id; ?>" class="btn btn-xs btn-default bootip" title="Export to Excel"><span class="icon icon-file"></span></a>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>
@@ -204,7 +157,6 @@ $this->pageTitle = $title;
                                     <li><?php echo $sort->link('noLtdln') ?></li>
                                     <li><?php echo $sort->link('tglLaporan') ?></li>
                                     <li><?php echo $sort->link('jenisLaporan') ?></li>
-                                    <li><?php echo $sort->link('status') ?></li>
                                 </ul>
                             </div>
                         </div>
@@ -222,9 +174,6 @@ $this->pageTitle = $title;
                                 </div>
                                 <div class="form-group">
                                     <?php echo Yii::app()->util->getKodeStandar(array('modul' => 'jenisLaporan', 'data' => array('name' => 'Filter[jenisLaporan]', 'value' => $filters['jenisLaporan'], 'class' => 'chzn-select'))) ?>
-                                </div>
-                                <div class="form-group">
-                                    <?php echo Yii::app()->util->getKodeStandar(array('modul' => 'swiftStatus', 'data' => array('name' => 'Filter[swiftStatus]', 'value' => $filters['swiftStatus'], 'class' => 'chzn-select'))) ?>
                                 </div>
                                 <div class="form-group">
                                     <input class="form-control datepicker" type="text" name="Filter[created_start]" placeholder="Created between ..." value="<?php echo $filters['created_start']; ?>" readonly="readonly" data-date-format="yyyy-mm-dd">

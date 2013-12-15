@@ -44,13 +44,12 @@ class NonSwiftOutgoingController extends BackendController {
             'noLtdln' => '',
             'created_start' => '',
             'created_end' => '',
-            'jenisLaporan' => '',
-            'swiftStatus' => ''
+            'jenisLaporan' => ''
         );
 
         $criteria = new CDbCriteria;
-        $criteria->condition = 'jenisSwift = :jeniSwift';
-        $criteria->params = array(':jeniSwift' => Swift::TYPE_NONSWOUT);
+        $criteria->condition = 'jenisSwift = :jeniSwift AND status = :statusSwift';
+        $criteria->params = array(':jeniSwift' => Swift::TYPE_NONSWOUT, ':statusSwift' => Swift::STATUS_DRAFT);
 
         if (isset($_GET['Filter']))
             $filters = $_GET['Filter'];
@@ -62,9 +61,7 @@ class NonSwiftOutgoingController extends BackendController {
             $criteria->addBetweenCondition('tglLaporan', $filters['created_start'] . ' 00:00:00', $filters['created_end'] . ' 23:59:59');
         if ($filters['jenisLaporan'])
             $criteria->addInCondition('jenisLaporan', array('jenisLaporan' => $filters['jenisLaporan']));
-        if ($filters['swiftStatus'])
-            $criteria->addInCondition('status', array('status' => $filters['swiftStatus']));
-
+       
         $dataCount = Swift::model()->count($criteria);
 
         $pages = new CPagination($dataCount);
@@ -705,167 +702,6 @@ class NonSwiftOutgoingController extends BackendController {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }
-    }
-    
-    /**
-     * List all ajax action to generate 
-     */
-    public function actionExportToExcel($id) {
-        $this->checkAccess('swiftIncoming.exportToExcel');
-
-        $model = Swift::model()->findByPk($id);
-        Yii::app()->request->sendFile('swift_' . date('dmY') . '.xls', $this->renderPartial('excelReport', array(
-                    'model' => $model
-                        ), true)
-        );
-    }
-
-    public function actionCreateExcel($id) {
-        $this->checkAccess('swiftIncoming.createExcel');
-
-        // Find Single Data Swift
-        $oneData = Swift::model()->findByPk($id);
-
-        //Create Excel
-        Yii::import('ext.phpexcel.XPHPExcel');
-        $objPHPExcel = XPHPExcel::createPHPExcel();
-        $objPHPExcel->getProperties()->setCreator("Ahda Ridwan")
-                ->setLastModifiedBy("Ahda Ridwan")
-                ->setTitle("Office 2007 XLSX Production Document")
-                ->setSubject("Office 2007 XLSX Production Document")
-                ->setDescription("Production document for Office 2007 XLSX, generated using PHP classes.")
-                ->setKeywords("office 2007 openxml php")
-                ->setCategory("Production result file");
-
-        // Set AutoSize
-        PHPExcel_Shared_Font::setAutoSizeMethod(PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT);
-
-        // Set AutoSize to Column
-        foreach (range('A', 'E') as $columnID) {
-            $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
-                    ->setAutoSize(true);
-        }
-
-        // White Page Default
-        $objPHPExcel->getDefaultStyle()->applyFromArray(
-                array(
-                    'fill' => array(
-                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                        'color' => array('argb' => 'FFFFFFFF')
-                    ),
-                )
-        );
-
-        // Set Bold & Center Font
-        $styleArray = array(
-            'font' => array(
-                'bold' => true
-            ),
-            'alignment' => array(
-                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-            ),
-        );
-
-        // Set Border
-        $styleArrayBord = array(
-            'borders' => array(
-                'allborders' => array(
-                    'style' => PHPExcel_Style_Border::BORDER_THIN
-                )
-            )
-        );
-
-        // Set Bold
-        $styleArrayOther = array(
-            'font' => array(
-                'bold' => true
-            )
-        );
-
-        // Add Text Header
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A1', 'LAPORAN TRANSAKSI KEUANGAN TRANSFER DANA DARI DAN KE LUAR NEGERI');
-
-        // Merge Column
-        $objPHPExcel->getActiveSheet()->mergeCells('A1:E1');
-
-        // Center Header
-        $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray);
-
-        // Data Umum
-        $dataUmum = array(
-            array('1' => 'I. Umum', '2' => ''),
-            array('1' => 'No LTKL', '2' => ': ' . $oneData->noLtdln),
-            array('1' => 'No LTDLN Koreksi', '2' => ': ' . $oneData->noLtdlnKoreksi),
-            array('1' => 'Tanggal Laporan', '2' => ': ' . Yii::app()->dateFormatter->format('d-MM-yyyy', $oneData->tglLaporan)),
-            array('1' => 'Nama PJK Bank Pelapor', '2' => ': ' . $oneData->namaPjk),
-            array('1' => 'Nama Pejabat PJK Bank Pelapor', '2' => ': ' . $oneData->namaPejabatPjk),
-            array('1' => 'Jenis Laporan', '2' => ': ' . $oneData->getJenisLaporanText()),
-        );
-
-        // Data Identitas Pengirim Nasabah Perorangan
-        $dataPengirimPerorangan = array(
-            array('1' => 'II. Identitas Pengirim Nasabah Perorangan', '2' => ''),
-            array('1' => 'No Rekening', '2' => ': '),
-            array('1' => 'Nama Lengkap', '2' => ': '),
-            array('1' => 'Tanggal Lahir', '2' => ': '),
-            array('1' => 'Kewarganegaraan', '2' => ': '),
-            array('1' => 'Negara', '2' => ': '),
-            array('1' => 'Negara Lain', '2' => ': '),
-            array('1' => '', '2' => ': '),
-        );
-
-        // Array to Set Bold
-        $setBold = array(
-            '1' => 'A3',
-            '2' => 'A11',
-            '3' => 'A19',
-            '4' => 'A22',
-        );
-
-        // Looping Bold
-        foreach ($setBold as $value) {
-            $objPHPExcel->getActiveSheet()->getStyle($value)->applyFromArray($styleArrayOther);
-        }
-
-        // Looping Data Umum
-        $sheetActive = $objPHPExcel->getActiveSheet();
-        foreach ($dataUmum as $row => $columns) {
-            foreach ($columns as $column => $data) {
-                $sheetActive->setCellValueByColumnAndRow($column - 1, $row + 3, $data);
-            }
-        }
-
-        // Looping Data Pengirim Nasabah Perorangan
-        $sheetActive = $objPHPExcel->getActiveSheet();
-        foreach ($dataPengirimPerorangan as $row => $columns) {
-            foreach ($columns as $column => $data) {
-                $sheetActive->setCellValueByColumnAndRow($column - 1, $row + 11, $data);
-            }
-        }
-
-        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
-        $objPHPExcel->setActiveSheetIndex(0);
-
-        // Rename worksheet
-        $objPHPExcel->getActiveSheet()->setTitle('Swift Incoming ' . date('d-m-Y'));
-
-        // Redirect output to a client web browser (Excel5)
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="Swift Incoming ' . date('d-m-Y') . '.xls"');
-        header('Cache-Control: max-age=0');
-        // If you're serving to IE 9, then the following may be needed
-        header('Cache-Control: max-age=1');
-
-        // If you're serving to IE over SSL, then the following may be needed
-        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
-        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-        header('Pragma: public'); // HTTP/1.0
-
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-        $objWriter->save('php://output');
-        Yii::app()->end();
     }
 
 }

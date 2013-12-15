@@ -150,7 +150,7 @@ class Swift extends CActiveRecord {
             array('localId, noLtdln, tglLaporan, namaPjk, namaPejabatPjk, jenisLaporan, pjkBankSebagai, jenisSwift, status', 'required'),
             array('jenisLaporan, pjkBankSebagai, jenisSwift, keterlibatanBeneficialOwner', 'numerical', 'integerOnly' => true),
             array('localId', 'length', 'max' => 50),
-            array('localId,jenisSwift', 'uniqueLocalId'),
+            array('localId', 'unique'),
             array('noLtdln, noLtdlnKoreksi', 'length', 'max' => 30),
             array('namaPjk, namaPejabatPjk', 'length', 'max' => 100),
             // The following rule is used by search().
@@ -230,14 +230,8 @@ class Swift extends CActiveRecord {
         $criteria->order = 'id DESC';
 
         return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
+                    'criteria' => $criteria,
                 ));
-    }
-
-    public function uniqueLocalID($attribute,$params) {
-        $ch = Swift::model()->findAll('localId='.$this->localId .' and jenisSwift='.$this->jenisSwift);
-        if ($ch)
-            $this->addError($attribute, $attribute . ' is unique.');
     }
 
 }

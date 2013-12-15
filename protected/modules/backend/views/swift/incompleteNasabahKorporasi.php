@@ -20,9 +20,10 @@ $this->pageTitle = $title;
                             <table class="table table-bordered table-striped list">
                                 <thead>
                                     <tr>
-                                        <th>No Rekening</th>
-                                        <th>Nama Korporasi</th>
-                                        <th>Bentuk Badan</th>
+                                        <th class="wrap">#</th>
+                                        <th><?php echo $sort->link('noRekening', $showSort . 'No Rekening') ?></th>
+                                        <th><?php echo $sort->link('namaKorporasi', $showSort . 'Nama Korporasi') ?></th>
+                                        <th><?php echo $sort->link('idBentukBadan', $showSort . 'Bentuk Badan') ?></th>
                                         <th class="list-actions">Incomplete Info</th>
                                     </tr>
                                 </thead>
@@ -37,17 +38,27 @@ $this->pageTitle = $title;
                                             $i++;
                                             ?>
                                             <tr>
+                                                <td class="wrap"><?php echo $i; ?></td>
                                                 <td><?php echo Yii::app()->util->purify($d->noRekening); ?></td>
                                                 <td><?php echo Yii::app()->util->purify($d->namaKorporasi); ?></td>
-                                                <td><?php echo Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' => 'bentukBadanUsaha', 'data' => $d->bentukBadan))); ?></td>
+                                                <td><?php echo Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' => 'bentukBadanUsaha', 'data' => $d->idBentukBadan))); ?></td>
                                                 <td class="list-actions">
-                                                    <span class="label label-warning">-</span>
+                                                    <?php if (!$d->validate()): ?>
+                                                        <?php
+                                                        $incomplete = $d->getErrors();
+                                                        $value = array();
+                                                        foreach ($incomplete as $values => $key):
+                                                            $value[] = $d->getAttributeLabel($values);
+                                                            ?>
+                                                        <?php endforeach; ?>
+                                                        <?php echo implode(', ', $value); ?>
+                                                    <?php endif; ?>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <tr>
-                                            <td colspan="4">
+                                            <td colspan="5">
                                                 <div class="alert alert-warning">No record found.</div>
                                             </td>
                                         </tr>

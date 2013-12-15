@@ -382,10 +382,6 @@ class UtilComponent extends CApplicationComponent {
         else {
             if (array_key_exists($param['data'], $data)) {
                 return $data[$param['data']];
-            } else {
-                foreach ($data as $key => $value) {
-                    return $value;
-                }
             }
         }
     }
