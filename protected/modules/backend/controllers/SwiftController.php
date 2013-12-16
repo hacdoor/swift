@@ -1003,7 +1003,7 @@ class SwiftController extends BackendController {
      * List all ajax action to generate 
      */
     public function actionExportToExcel($id) {
-        $this->checkAccess('swiftIncoming.exportToExcel');
+        $this->checkAccess('swift.exportToExcel');
 
         $model = Swift::model()->findByPk($id);
         Yii::app()->request->sendFile('swift_' . date('dmY') . '.xls', $this->renderPartial('excelReport', array(
@@ -1013,7 +1013,7 @@ class SwiftController extends BackendController {
     }
 
     public function actionCreateExcel($id) {
-        $this->checkAccess('swiftIncoming.createExcel');
+        $this->checkAccess('swift.exportExcel');
 
         // Find Single Data Swift
         $oneData = Swift::model()->findByPk($id);

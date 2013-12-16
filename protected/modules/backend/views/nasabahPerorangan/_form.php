@@ -4,15 +4,17 @@
     $form = $this->beginWidget('CActiveForm', array(
         'id' => 'nasabah-perorangan-form',
         'enableAjaxValidation' => false,
+        'enableClientValidation' => true,
+        'clientOptions' => array(
+            'validateOnSubmit' => true,
+        ),
         'errorMessageCssClass' => 'label label-danger',
         'htmlOptions' => array('class' => 'form-horizontal', 'role' => 'form')
             ));
     ?>
 
     <div class="col-md-12">
-
         <fieldset>
-
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'noRekening', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-2">
@@ -37,7 +39,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'kewarganegaraan', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($model, 'kewarganegaraan', Yii::app()->util->getKodeStandar(array('modul' => 'kewarganegaraan', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
+                    <?php echo $form->dropDownList($model, 'kewarganegaraan', Yii::app()->util->getKodeStandar(array('modul' => 'kewarganegaraan', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
                     <?php echo $form->error($model, 'kewarganegaraan'); ?>
                 </div>
             </div>
@@ -45,7 +47,7 @@
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'idNegaraKewarganegaraan', array('class' => 'col-md-2 control-label')); ?>
                     <div class="col-md-5">
-                        <?php echo $form->dropDownList($model, 'idNegaraKewarganegaraan', Yii::app()->util->getKodeStandar(array('modul' => 'negara', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
+                        <?php echo $form->dropDownList($model, 'idNegaraKewarganegaraan', Yii::app()->util->getKodeStandar(array('modul' => 'negara', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
                         <?php echo $form->error($model, 'idNegaraKewarganegaraan'); ?>
                     </div>
                 </div>
@@ -221,7 +223,8 @@
 
     <?php $this->endWidget(); ?>
 
-</div><!-- form -->
+</div>
+
 <script>
     var baseUrl = "<?php echo Yii::app()->request->baseUrl; ?>";
     $('#NasabahPerorangan_idPropinsi').on('change', function() {

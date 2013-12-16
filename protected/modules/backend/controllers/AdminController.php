@@ -78,14 +78,47 @@ class AdminController extends BackendController {
         foreach ($rawPermissions as $p) {
             $ps = explode('.', $p->name);
             switch ($ps[0]) {
+                case 'admin':
+                    $key = 'Admin';
+                    break;
+                case 'company':
+                    $key = 'Company';
+                    break;
+                case 'kabupaten':
+                    $key = 'Kabupaten';
+                    break;
+                case 'nasabahKorporasi':
+                    $key = 'Nasabah Korporasi';
+                    break;
+                case 'nasabahPerorangan':
+                    $key = 'Nasabah Perorangan';
+                    break;
                 case 'negara':
                     $key = 'Negara';
+                    break;
+                case 'swiftIncoming':
+                    $key = 'Swift Incoming';
+                    break;
+                case 'swiftOutgoing':
+                    $key = 'Swift Outgoing';
+                    break;
+                case 'nonSwiftIncoming':
+                    $key = 'Non Swift Incoming';
+                    break;
+                case 'nonSwiftOutgoing':
+                    $key = 'Non Swift Outgoing';
                     break;
                 case 'propinsi':
                     $key = 'Propinsi';
                     break;
-                case 'admin':
-                    $key = 'Admin';
+                case 'report':
+                    $key = 'Report';
+                    break;
+                case 'uang':
+                    $key = 'Mata Uang';
+                    break;
+                case 'upload':
+                    $key = 'Upload';
                     break;
                 default:
                     $key = 'System';
@@ -155,14 +188,47 @@ class AdminController extends BackendController {
         foreach ($rawPermissions as $p) {
             $ps = explode('.', $p->name);
             switch ($ps[0]) {
+                case 'admin':
+                    $key = 'Admin';
+                    break;
+                case 'company':
+                    $key = 'Company';
+                    break;
+                case 'kabupaten':
+                    $key = 'Kabupaten';
+                    break;
+                case 'nasabahKorporasi':
+                    $key = 'Nasabah Korporasi';
+                    break;
+                case 'nasabahPerorangan':
+                    $key = 'Nasabah Perorangan';
+                    break;
                 case 'negara':
                     $key = 'Negara';
+                    break;
+                case 'swiftIncoming':
+                    $key = 'Swift Incoming';
+                    break;
+                case 'swiftOutgoing':
+                    $key = 'Swift Outgoing';
+                    break;
+                case 'nonSwiftIncoming':
+                    $key = 'Non Swift Incoming';
+                    break;
+                case 'nonSwiftOutgoing':
+                    $key = 'Non Swift Outgoing';
                     break;
                 case 'propinsi':
                     $key = 'Propinsi';
                     break;
-                case 'admin':
-                    $key = 'Admin';
+                case 'report':
+                    $key = 'Report';
+                    break;
+                case 'uang':
+                    $key = 'Mata Uang';
+                    break;
+                case 'upload':
+                    $key = 'Upload';
                     break;
                 default:
                     $key = 'System';

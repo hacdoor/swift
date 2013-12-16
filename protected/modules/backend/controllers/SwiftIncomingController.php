@@ -11,7 +11,7 @@ class SwiftIncomingController extends BackendController {
      * Lists all models.
      */
     public function actionIndex() {
-        $this->checkAccess('swift.view');
+        $this->checkAccess('swiftIncoming.view');
 
         $model = new Swift('search');
         $model->unsetAttributes();  // clear any default values

@@ -38,50 +38,102 @@ class DefaultController extends BackendController {
     public function actionDashboard() {
         $this->checkAccess('dashbord.view');
 
-        // Find Swift Incoming
-        $criteria = new CDbCriteria;
-        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_SWIN;
-        $swiftIn = Swift::model()->findAll($criteria);
+        /* Find Data Swift Harian */
 
-        // Find Swift Outgoing
+        // Find Swift Incoming Harian
         $criteria = new CDbCriteria;
-        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_SWOUT;
-        $swiftOut = Swift::model()->findAll($criteria);
+        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_SWIN . ' AND tglLaporan = ' . date('Y-m-d');
+        $swiftInHarian = Swift::model()->findAll($criteria);
 
-        // Find Swift Outgoing
+        // Find Swift Outgoing Harian
         $criteria = new CDbCriteria;
-        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_NONSWIN;
-        $nonSwiftIn = Swift::model()->findAll($criteria);
+        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_SWOUT . ' AND tglLaporan = ' . date('Y-m-d');
+        $swiftOutHarian = Swift::model()->findAll($criteria);
 
-        // Find Swift Outgoing
+        // Find Swift Outgoing Harian
         $criteria = new CDbCriteria;
-        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_NONSWOUT;
-        $nonSwiftOut = Swift::model()->findAll($criteria);
+        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_NONSWIN . ' AND tglLaporan = ' . date('Y-m-d');
+        $nonSwiftInHarian = Swift::model()->findAll($criteria);
+
+        // Find Swift Outgoing Harian
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_NONSWOUT . ' AND tglLaporan = ' . date('Y-m-d');
+        $nonSwiftOutHarian = Swift::model()->findAll($criteria);
+
+        /* Find Data Swift Finalize / Confirm */
+
+        // Find Swift Incoming Finalize / Confirm
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_SWIN . ' AND YEAR(tglLaporan)=:yearLaporan AND status = ' . Swift::STATUS_FINALIZE;
+        $criteria->params = array(':yearLaporan' => date('Y'));
+        $swiftInConfirm = Swift::model()->findAll($criteria);
+
+        // Find Swift Outgoing Finalize / Confirm
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_SWOUT . ' AND YEAR(tglLaporan)=:yearLaporan AND status = ' . Swift::STATUS_FINALIZE;
+        $criteria->params = array(':yearLaporan' => date('Y'));
+        $swiftOutConfirm = Swift::model()->findAll($criteria);
+
+        // Find Swift Outgoing Finalize / Confirm
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_NONSWIN . ' AND YEAR(tglLaporan)=:yearLaporan AND status = ' . Swift::STATUS_FINALIZE;
+        $criteria->params = array(':yearLaporan' => date('Y'));
+        $nonSwiftInConfirm = Swift::model()->findAll($criteria);
+
+        // Find Swift Outgoing Finalize / Confirm
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_NONSWOUT . ' AND YEAR(tglLaporan)=:yearLaporan AND status = ' . Swift::STATUS_FINALIZE;
+        $criteria->params = array(':yearLaporan' => date('Y'));
+        $nonSwiftOutConfirm = Swift::model()->findAll($criteria);
+
+        /* Find Data Swift Draft */
+
+        // Find Swift Incoming Finalize / Confirm
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_SWIN . ' AND YEAR(tglLaporan)=:yearLaporan AND status = ' . Swift::STATUS_DRAFT;
+        $criteria->params = array(':yearLaporan' => date('Y'));
+        $swiftInDraft = Swift::model()->findAll($criteria);
+
+        // Find Swift Outgoing Finalize / Confirm
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_SWOUT . ' AND YEAR(tglLaporan)=:yearLaporan AND status = ' . Swift::STATUS_DRAFT;
+        $criteria->params = array(':yearLaporan' => date('Y'));
+        $swiftOutDraft = Swift::model()->findAll($criteria);
+
+        // Find Swift Outgoing Finalize / Confirm
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_NONSWIN . ' AND YEAR(tglLaporan)=:yearLaporan AND status = ' . Swift::STATUS_DRAFT;
+        $criteria->params = array(':yearLaporan' => date('Y'));
+        $nonSwiftInDraft = Swift::model()->findAll($criteria);
+
+        // Find Swift Outgoing Finalize / Confirm
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_NONSWOUT . ' AND YEAR(tglLaporan)=:yearLaporan AND status = ' . Swift::STATUS_DRAFT;
+        $criteria->params = array(':yearLaporan' => date('Y'));
+        $nonSwiftOutDraft = Swift::model()->findAll($criteria);
 
         $jsItems = array(
             array(
                 'name' => 'Swift Incoming',
-                'data' => array(count($swiftIn)),
+                'data' => array(count($swiftInHarian), count($swiftInConfirm), count($swiftInDraft)),
             ),
             array(
                 'name' => 'Swift Outgoing',
-                'data' => array(count($swiftOut)),
+                'data' => array(count($swiftOutHarian), count($swiftOutConfirm), count($swiftOutDraft)),
             ),
             array(
                 'name' => 'Non Swift Incoming',
-                'data' => array(count($nonSwiftIn)),
+                'data' => array(count($nonSwiftInHarian), count($nonSwiftInConfirm), count($nonSwiftInDraft)),
             ),
             array(
                 'name' => 'Non Swift Outgoing',
-                'data' => array(count($nonSwiftOut)),
+                'data' => array(count($nonSwiftOutHarian), count($nonSwiftOutConfirm), count($nonSwiftOutDraft)),
             )
         );
 
         $jsItems = json_encode($jsItems);
 
         $vars = array(
-            'siwftIn' => $swiftIn,
-            'swiftOut' => $swiftOut,
             'jsItems' => $jsItems
         );
 

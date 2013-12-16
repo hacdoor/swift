@@ -11,10 +11,10 @@
                 defaultSeriesType: 'column'
             },
             title: {
-                text: 'Data Transaksi Swift'
+                text: 'Data Transaksi Swift 2013'
             },
             xAxis: {
-                categories: ['<?php echo Yii::app()->dateFormatter->format('EEEE, d MMMM yyyy', date('Y-m-d')); ?>']
+                categories: ['Hari ini', 'Confirm', 'Draft']
             },
             yAxis: {
                 min: 0,

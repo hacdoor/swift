@@ -14,9 +14,7 @@
     ?>
 
     <div class="col-md-12">
-
         <fieldset>
-
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'noRekening', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-2">
@@ -73,7 +71,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'idPropinsi', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($model, 'idPropinsi', Yii::app()->util->getKodeStandar(array('modul' => 'propinsi', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
+                    <?php echo $form->dropDownList($model, 'idPropinsi', Yii::app()->util->getKodeStandar(array('modul' => 'propinsi', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
                     <?php echo $form->error($model, 'idPropinsi'); ?>
                 </div>
             </div>
@@ -89,7 +87,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'idKabKota', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->dropDownList($model, 'idKabKota', Yii::app()->util->getKodeStandar(array('modul' => 'kabupaten', 'data' => 'all&blank')), array('class' => 'form-control chzn-select')); ?>
+                    <?php echo $form->dropDownList($model, 'idKabKota', Yii::app()->util->getKodeStandar(array('modul' => 'kabupaten', 'data' => 'all&blank')), array('class' => 'form-control')); ?>
                     <?php echo $form->error($model, 'idKabKota'); ?>
                 </div>
             </div>
@@ -109,7 +107,6 @@
                     <?php echo $form->error($model, 'noTelp'); ?>
                 </div>
             </div>
-
         </fieldset>
     </div>
 
@@ -121,7 +118,8 @@
 
     <?php $this->endWidget(); ?>
 
-</div><!-- form -->
+</div>
+
 <script>
     var baseUrl = "<?php echo Yii::app()->request->baseUrl; ?>";
     $('#NasabahKorporasi_idBentukBadan').on('change', function() {
@@ -167,7 +165,7 @@
                     $.each(data, function(i, o) {
                         kelSelect.append('<option value="' + o['id'] + '">' + o['nama'] + '</option>');
                     });
-//                    kelSelect.append('<option value="' + 440 + '">Lain-lain</option>');
+                    //                    kelSelect.append('<option value="' + 440 + '">Lain-lain</option>');
                     kelSelect.removeAttr('disabled');
                 },
                 error: function() {
@@ -210,7 +208,4 @@
             });
         }
     });
-
-
-
 </script>

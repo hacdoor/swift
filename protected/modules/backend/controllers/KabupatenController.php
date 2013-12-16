@@ -139,8 +139,6 @@ class KabupatenController extends BackendController {
             Yii::app()->end();
         }
 
-        $admin = Yii::app()->user->getState('admin');
-
         // Delete admin
         if ($model->delete()) {
             Yii::app()->user->setFlash('success', 'Success!|' . 'Kabupaten has been deleted.');
