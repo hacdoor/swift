@@ -8,10 +8,100 @@ class NonSwiftIncomingController extends BackendController {
     }
 
     /**
+     * Lists all models.
+     */
+    public function actionIndex() {
+        $this->checkAccess('nonSwiftIncoming.view');
+
+        $model = new Swift('search');
+        $model->unsetAttributes();  // clear any default values
+        $model->jenisSwift = Swift::TYPE_NONSWIN;
+
+        if (isset($_POST['FinalizeButton'])) {
+            if (isset($_POST['selectedIds'])) {
+                foreach ($_POST['selectedIds'] as $id) {
+                    $swift = Swift::model()->findByPk($id);
+                    $swift->status = Swift::STATUS_FINALIZE;
+                    $swift->save();
+                }
+            }
+        }
+
+        if (isset($_POST['DraftButton'])) {
+            if (isset($_POST['selectedIds'])) {
+                foreach ($_POST['selectedIds'] as $id) {
+                    $swift = Swift::model()->findByPk($id);
+                    $swift->status = Swift::STATUS_DRAFT;
+                    $swift->save();
+                }
+            }
+        }
+
+        $data = null;
+        $pages = null;
+        $filters = array(
+            'localId' => '',
+            'noLtdln' => '',
+            'created_start' => '',
+            'created_end' => '',
+            'jenisLaporan' => ''
+        );
+
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'jenisSwift = :jeniSwift AND status = :statusSwift';
+        $criteria->params = array(':jeniSwift' => Swift::TYPE_NONSWIN, ':statusSwift' => Swift::STATUS_DRAFT);
+
+        if (isset($_GET['Filter']))
+            $filters = $_GET['Filter'];
+        if ($filters['localId'])
+            $criteria->addSearchCondition('localId', $filters['localId']);
+        if ($filters['noLtdln'])
+            $criteria->addSearchCondition('noLtdln', $filters['noLtdln']);
+        if ($filters['created_start'] || $filters['created_end'])
+            $criteria->addBetweenCondition('tglLaporan', $filters['created_start'] . ' 00:00:00', $filters['created_end'] . ' 23:59:59');
+        if ($filters['jenisLaporan'])
+            $criteria->addInCondition('jenisLaporan', array('jenisLaporan' => $filters['jenisLaporan']));
+        
+        $dataCount = Swift::model()->count($criteria);
+
+        $pages = new CPagination($dataCount);
+        $pages->setPageSize(Yii::app()->setting->get('list_size'));
+        $pages->applyLimit($criteria);
+
+        $sort = new CSort;
+        $sort->modelClass = 'Swift';
+        $sort->attributes = array('*');
+        $sort->defaultOrder = 'id DESC';
+        $sort->applyOrder($criteria);
+
+        $data = Swift::model()->findAll($criteria);
+
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Non Swift'),
+            2 => array('url' => '', 'label' => 'Non Swift Incoming')
+        );
+
+        $vars = array(
+            'data' => $data,
+            'pages' => $pages,
+            'filters' => $filters,
+            'sort' => $sort,
+            'model' => $model,
+            'breadcrumb' => $breadcrumb
+        );
+
+        $this->render('index', $vars);
+    }
+
+    /**
      * Creates a new model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
+        $this->checkAccess('nonSwiftIncoming.create');
+
+        // Find Non Swift Form
         $model = new NonSwiftForm;
 
         // Uncomment the following line if AJAX validation is needed
@@ -30,8 +120,16 @@ class NonSwiftIncomingController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Non Swift'),
+            2 => array('url' => 'nonSwiftIncoming', 'label' => 'Non Swift Incoming'),
+            3 => array('url' => '', 'label' => 'Buat Baru')
+        );
+
         $this->render('create', array(
             'model' => $model,
+            'breadcrumb' => $breadcrumb
         ));
     }
 
@@ -41,11 +139,12 @@ class NonSwiftIncomingController extends BackendController {
      * @param integer $id the ID of the model to be updated
      */
     public function actionUmum($id) {
+        $this->checkAccess('nonSwiftIncoming.umum');
+
         $model = $this->loadModel($id);
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
-
         if (isset($_POST['NonSwiftForm'])) {
             $model->attributes = $_POST['NonSwiftForm'];
             if ($model->save()) {
@@ -54,8 +153,17 @@ class NonSwiftIncomingController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Non Swift'),
+            2 => array('url' => 'nonSwiftIncoming', 'label' => 'Non Swift Incoming'),
+            3 => array('url' => '', 'label' => 'Sunting Non Swift Incoming'),
+            4 => array('url' => '', 'label' => 'Data Umum')
+        );
+
         $this->render('umum', array(
             'model' => $model,
+            'breadcrumb' => $breadcrumb
         ));
     }
 
@@ -65,13 +173,15 @@ class NonSwiftIncomingController extends BackendController {
      * @param integer $id the ID of the model to be updated
      */
     public function actionAddPenerimaNasabahPerorangan($id, $update_id = NULL) {
+        $this->checkAccess('nonSwiftIncoming.addPenerimaNasabahPerorangan');
+
         $model = $this->loadModel($id);
 
         /*
          * validate swift
          */
         if (NasabahPeroranganLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NasabahKorporasiLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NonNasabahLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL) {
-            Yii::app()->user->setFlash('success', 'Warning!|' . 'Data Identitas Pengirim wajib di isi dulu.');
+            Yii::app()->user->setFlash('warning', 'Warning!|' . 'Data Identitas Pengirim wajib di isi dulu.');
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('nonSwiftIncoming/umum', 'id' => $model->id));
         }
 
@@ -94,12 +204,12 @@ class NonSwiftIncomingController extends BackendController {
         }
 
         $dataProvider = new CActiveDataProvider('NasabahPeroranganDn', array(
-            'criteria' => array(
-                'condition' => 'swift_id=:swiftId',
-                'params' => array(':swiftId' => $model->id),
-            ),
-            'pagination' => FALSE,
-        ));
+                    'criteria' => array(
+                        'condition' => 'swift_id=:swiftId',
+                        'params' => array(':swiftId' => $model->id),
+                    ),
+                    'pagination' => FALSE,
+                ));
 
         if (isset($_POST['DeleteButton'])) {
             if (isset($_POST['selectedIds'])) {
@@ -110,21 +220,31 @@ class NonSwiftIncomingController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Non Swift'),
+            2 => array('url' => 'nonSwiftIncoming', 'label' => 'Non Swift Incoming'),
+            3 => array('url' => '', 'label' => 'Tambah Penerima Nasabah Perorangan'),
+        );
+
         $this->render('addNasabahPeroranganDn', array(
             'model' => $model,
             'nasabahPeroranganDn' => $nasabahPeroranganDn,
             'dataProvider' => $dataProvider,
+            'breadscrumb' => $breadcrumb
         ));
     }
 
     public function actionAddPenerimaNasabahKorporasi($id, $update_id = NULL) {
+        $this->checkAccess('nonSwiftIncoming.addPenerimaNasabahKorporasi');
+
         $model = $this->loadModel($id);
 
         /*
          * validate swift
          */
         if (NasabahPeroranganLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NasabahKorporasiLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NonNasabahLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL) {
-            Yii::app()->user->setFlash('success', 'Warning!|' . 'Data Identitas Pengirim wajib di isi dulu.');
+            Yii::app()->user->setFlash('warning', 'Warning!|' . 'Data Identitas Pengirim wajib di isi dulu.');
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('nonSwiftIncoming/umum', 'id' => $model->id));
         }
 
@@ -145,12 +265,12 @@ class NonSwiftIncomingController extends BackendController {
         }
 
         $dataProvider = new CActiveDataProvider('NasabahKorporasiDn', array(
-            'criteria' => array(
-                'condition' => 'swift_id=:swiftId',
-                'params' => array(':swiftId' => $model->id),
-            ),
-            'pagination' => FALSE,
-        ));
+                    'criteria' => array(
+                        'condition' => 'swift_id=:swiftId',
+                        'params' => array(':swiftId' => $model->id),
+                    ),
+                    'pagination' => FALSE,
+                ));
 
         if (isset($_POST['DeleteButton'])) {
             if (isset($_POST['selectedIds'])) {
@@ -161,21 +281,31 @@ class NonSwiftIncomingController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Non Swift'),
+            2 => array('url' => 'nonSwiftIncoming', 'label' => 'Non Swift Incoming'),
+            3 => array('url' => '', 'label' => 'Tambah Penerima Nasabah Korporasi'),
+        );
+
         $this->render('addNasabahKorporasiDn', array(
             'model' => $model,
             'nasabahKorporasiDn' => $nasabahKorporasiDn,
             'dataProvider' => $dataProvider,
+            'breadscrumb' => $breadcrumb
         ));
     }
 
     public function actionAddPenerimaNonNasabah($id, $update_id = NULL) {
+        $this->checkAccess('nonSwiftIncoming.addPenerimaNonNasabah');
+
         $model = $this->loadModel($id);
 
         /*
          * validate swift
          */
         if (NasabahPeroranganLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NasabahKorporasiLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NonNasabahLn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL) {
-            Yii::app()->user->setFlash('success', 'Warning!|' . 'Data Identitas Pengirim wajib di isi dulu.');
+            Yii::app()->user->setFlash('warning', 'Warning!|' . 'Data Identitas Pengirim wajib di isi dulu.');
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('nonSwiftIncoming/umum', 'id' => $model->id));
         }
 
@@ -196,12 +326,12 @@ class NonSwiftIncomingController extends BackendController {
         }
 
         $dataProvider = new CActiveDataProvider('NonNasabahDn', array(
-            'criteria' => array(
-                'condition' => 'swift_id=:swiftId',
-                'params' => array(':swiftId' => $model->id),
-            ),
-            'pagination' => FALSE,
-        ));
+                    'criteria' => array(
+                        'condition' => 'swift_id=:swiftId',
+                        'params' => array(':swiftId' => $model->id),
+                    ),
+                    'pagination' => FALSE,
+                ));
 
         if (isset($_POST['DeleteButton'])) {
             if (isset($_POST['selectedIds'])) {
@@ -212,14 +342,24 @@ class NonSwiftIncomingController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Non Swift'),
+            2 => array('url' => 'nonSwiftIncoming', 'label' => 'Non Swift Incoming'),
+            3 => array('url' => '', 'label' => 'Tambah Penerima Non-Nasabah'),
+        );
+
         $this->render('addNonNasabahDn', array(
             'model' => $model,
             'nonNasabahDn' => $nonNasabahDn,
             'dataProvider' => $dataProvider,
+            'breadcrumb' => $breadcrumb
         ));
     }
 
     public function actionAddPengirimNasabahPerorangan($id) {
+        $this->checkAccess('nonSwiftIncoming.addPengirimNasabahPerorangan');
+
         $model = $this->loadModel($id);
 
         if (NasabahPeroranganLn::model()->countByAttributes(array('swift_id' => $model->id)) != 0)
@@ -239,13 +379,23 @@ class NonSwiftIncomingController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Non Swift'),
+            2 => array('url' => 'nonSwiftIncoming', 'label' => 'Non Swift Incoming'),
+            3 => array('url' => '', 'label' => 'Tambah Pengirim Nasabah Perorangan'),
+        );
+
         $this->render('addNasabahPeroranganLn', array(
             'model' => $model,
             'nasabahPeroranganLn' => $nasabahPeroranganLn,
+            'breadcrumb' => $breadcrumb
         ));
     }
 
     public function actionAddPengirimNasabahKorporasi($id) {
+        $this->checkAccess('nonSwiftIncoming.addPengirimNasabahKorporasi');
+
         $model = $this->loadModel($id);
 
         if (NasabahKorporasiLn::model()->countByAttributes(array('swift_id' => $model->id)) != 0)
@@ -264,13 +414,23 @@ class NonSwiftIncomingController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Non Swift'),
+            2 => array('url' => 'nonSwiftIncoming', 'label' => 'Non Swift Incoming'),
+            3 => array('url' => '', 'label' => 'Tambah Pengirim Nasabah Korporasi'),
+        );
+
         $this->render('addNasabahKorporasiLn', array(
             'model' => $model,
             'nasabahKorporasiLn' => $nasabahKorporasiLn,
+            'breadcrumb' => $breadcrumb
         ));
     }
 
     public function actionAddPengirimNonNasabah($id) {
+        $this->checkAccess('nonSwiftIncoming.addPengirimNonNasabah');
+
         $model = $this->loadModel($id);
 
         if (NonNasabahLn::model()->countByAttributes(array('swift_id' => $model->id)) != 0)
@@ -289,20 +449,30 @@ class NonSwiftIncomingController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Non Swift'),
+            2 => array('url' => 'nonSwiftIncoming', 'label' => 'Non Swift Incoming'),
+            3 => array('url' => '', 'label' => 'Tambah Pengirim Non-Nasabah'),
+        );
+
         $this->render('addNonNasabahLn', array(
             'model' => $model,
             'nonNasabahLn' => $nonNasabahLn,
+            'breadcrumb' => $breadcrumb
         ));
     }
 
     public function actionAddTransaksi($id) {
+        $this->checkAccess('nonSwiftIncoming.addTransaksi');
+
         $model = $this->loadModel($id);
 
         /*
          * validate swift
          */
         if (NasabahPeroranganDn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NasabahKorporasiDn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL && NonNasabahDn::model()->findByAttributes(array('swift_id' => $model->id)) == NULL) {
-            Yii::app()->user->setFlash('success', 'Warning!|' . 'Data Identitas Penerima wajib di isi dulu.');
+            Yii::app()->user->setFlash('warning', 'Warning!|' . 'Data Identitas Penerima wajib di isi dulu.');
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('nonSwiftIncoming/umum', 'id' => $model->id));
         }
 
@@ -323,20 +493,30 @@ class NonSwiftIncomingController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Non Swift'),
+            2 => array('url' => 'nonSwiftIncoming', 'label' => 'Non Swift Incoming'),
+            3 => array('url' => '', 'label' => 'Tambah Transaksi'),
+        );
+
         $this->render('addTransaksi', array(
             'model' => $model,
             'transaksi' => $transaksi,
+            'breadcrumb' => $breadcrumb
         ));
     }
 
     public function actionAddInfoLain($id) {
+        $this->checkAccess('nonSwiftIncoming.addInfoLain');
+
         $model = $this->loadModel($id);
 
         /*
          * validate swift
          */
         if (Transaksi::model()->findByAttributes(array('swift_id' => $model->id)) == NULL) {
-            Yii::app()->user->setFlash('success', 'Warning!|' . 'Data Transaksi wajib di isi dulu.');
+            Yii::app()->user->setFlash('warning', 'Warning!|' . 'Data Transaksi wajib di isi dulu.');
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('nonSwiftIncoming/umum', 'id' => $model->id));
         }
 
@@ -356,9 +536,17 @@ class NonSwiftIncomingController extends BackendController {
             }
         }
 
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Transaksi'),
+            1 => array('url' => '', 'label' => 'Non Swift'),
+            2 => array('url' => 'nonSwiftIncoming', 'label' => 'Non Swift Incoming'),
+            3 => array('url' => '', 'label' => 'Tambah Info Lain'),
+        );
+
         $this->render('addInfoLain', array(
             'model' => $model,
             'infoLain' => $infoLain,
+            'breadcrumb' => $breadcrumb
         ));
     }
 
@@ -368,34 +556,13 @@ class NonSwiftIncomingController extends BackendController {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
+        $this->checkAccess('nonSwiftIncoming.delete');
+
         $this->loadModel($id)->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax']))
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-    }
-
-    /**
-     * Lists all models.
-     */
-    public function actionIndex() {
-        $model = new Swift('search');
-        $model->unsetAttributes();  // clear any default values
-        $model->jenisSwift = Swift::TYPE_NONSWIN;
-
-        if (isset($_POST['FinalizeButton'])) {
-            if (isset($_POST['selectedIds'])) {
-                foreach ($_POST['selectedIds'] as $id) {
-                    $swift = Swift::model()->findByPk($id);
-                    $swift->status = Swift::STATUS_FINALIZE;
-                    $swift->save();
-                }
-            }
-        }
-
-        $this->render('index', array(
-            'model' => $model,
-        ));
     }
 
     /**
@@ -422,5 +589,5 @@ class NonSwiftIncomingController extends BackendController {
             Yii::app()->end();
         }
     }
-
+    
 }

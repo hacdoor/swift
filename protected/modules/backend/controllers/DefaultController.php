@@ -3,7 +3,6 @@
 class DefaultController extends BackendController {
 
     protected function beforeAction($action) {
-
         return parent::beforeAction($action);
     }
 
@@ -49,6 +48,16 @@ class DefaultController extends BackendController {
         $criteria->condition = 'jenisSwift = ' . Swift::TYPE_SWOUT;
         $swiftOut = Swift::model()->findAll($criteria);
 
+        // Find Swift Outgoing
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_NONSWIN;
+        $nonSwiftIn = Swift::model()->findAll($criteria);
+
+        // Find Swift Outgoing
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'jenisSwift = ' . Swift::TYPE_NONSWOUT;
+        $nonSwiftOut = Swift::model()->findAll($criteria);
+
         $jsItems = array(
             array(
                 'name' => 'Swift Incoming',
@@ -56,15 +65,15 @@ class DefaultController extends BackendController {
             ),
             array(
                 'name' => 'Swift Outgoing',
-                'data' => array(5),
-            ),
-            array(
-                'name' => 'Non Swift Incoming',
                 'data' => array(count($swiftOut)),
             ),
             array(
+                'name' => 'Non Swift Incoming',
+                'data' => array(count($nonSwiftIn)),
+            ),
+            array(
                 'name' => 'Non Swift Outgoing',
-                'data' => array(7),
+                'data' => array(count($nonSwiftOut)),
             )
         );
 

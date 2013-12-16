@@ -35,7 +35,7 @@
 
     <div class="col-md-12 clear form-actions">
         <hr>
-        <a href="<?php echo Yii::app()->request->baseUrl; ?>/backend/kabupaten" class="btn btn-lg btn-default">Cancel</a>
+        <a href="<?php echo $this->vars['backendUrl']; ?>kabupaten" class="btn btn-lg btn-default">Cancel</a>
         <?php echo CHtml::submitButton('Submit', array('class' => 'btn btn-lg btn-primary')); ?>
     </div>
 

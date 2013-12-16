@@ -39,10 +39,8 @@ class Swift extends CActiveRecord {
     const JENIS_LAPORAN_KOREKSI = 2;
     const JENIS_LAPORAN_RECALL = 3;
     const JENIS_LAPORAN_REJECT = 4;
-    
     const KETERLIBATAN_BENEFICIAL_OWNER_YA = 1;
     const KETERLIBATAN_BENEFICIAL_OWNER_TIDAK = 0;
-
 
     public static function getKeterlibatanBeneficialOwnerOptions() {
         return array(
@@ -57,7 +55,7 @@ class Swift extends CActiveRecord {
         return isset($keterlibatanBeneficialOwnerOptions[$value]) ?
                 $keterlibatanBeneficialOwnerOptions[$value] : "unknown keterlibatanBeneficialOwner ({$value})";
     }
-    
+
     public static function getJenisLaporanOptions() {
         return array(
             self::JENIS_LAPORAN_BARU => 'Baru',
@@ -168,7 +166,7 @@ class Swift extends CActiveRecord {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
-            'infolains' => array(self::HAS_MANY, 'InfoLain', 'swift_id'),
+            'infolains' => array(self::HAS_ONE, 'InfoLain', 'swift_id'),
             'nasabahKorporasiDns' => array(self::HAS_MANY, 'NasabahKorporasiDn', 'swift_id'),
             'nasabahKorporasiLns' => array(self::HAS_MANY, 'NasabahKorporasiLn', 'swift_id'),
             'nasabahPeroranganDns' => array(self::HAS_MANY, 'NasabahPeroranganDn', 'swift_id'),
@@ -228,7 +226,7 @@ class Swift extends CActiveRecord {
         $criteria->compare('pjkBankSebagai', $this->pjkBankSebagai);
         $criteria->compare('jenisSwift', $this->jenisSwift);
         $criteria->compare('status', $this->status);
-        $criteria->compare('keterlibatanBeneficialOwner', $this->keterlibatanBeneficialOwner);        
+        $criteria->compare('keterlibatanBeneficialOwner', $this->keterlibatanBeneficialOwner);
         $criteria->order = 'id DESC';
 
         return new CActiveDataProvider($this, array(

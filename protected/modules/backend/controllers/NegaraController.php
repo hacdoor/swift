@@ -122,15 +122,18 @@ class NegaraController extends BackendController {
             Yii::app()->end();
         }
 
-        $admin = Yii::app()->user->getState('admin');
-
         // Delete admin
-        if ($model->delete()) {
-            Yii::app()->util->setLog('Negara', $id, 'Hapus data');
-            Yii::app()->user->setFlash('success', 'Success!|' . 'Negara has been deleted.');
-            $this->redirect($this->vars['backendUrl'] . 'negara');
+        if ($model->propinsiCount == 0) {
+            if ($model->delete()) {
+                Yii::app()->util->setLog('Negara', $id, 'Hapus data');
+                Yii::app()->user->setFlash('success', 'Success!|' . 'Negara has been deleted.');
+                $this->redirect($this->vars['backendUrl'] . 'negara');
+            } else {
+                Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed deleting Negara, please try again.');
+                $this->redirect($this->vars['backendUrl'] . 'negara');
+            }
         } else {
-            Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed deleting Negara, please try again.');
+            Yii::app()->user->setFlash('warning', 'Failed!|' . 'Cannot be deleted, failed content dependency.');
             $this->redirect($this->vars['backendUrl'] . 'negara');
         }
 

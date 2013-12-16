@@ -31,7 +31,7 @@ class GroupController extends BackendController {
         $pages->applyLimit($criteria);
 
         $data = Group::model()->findAll($criteria);
-        
+
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'System'),
             1 => array('url' => '', 'label' => 'Kelompok')
@@ -99,7 +99,7 @@ class GroupController extends BackendController {
                 Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed creating Group, please check below for errors.');
             }
         }
-        
+
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'System'),
             1 => array('url' => 'group', 'label' => 'Kelompok'),
@@ -178,7 +178,7 @@ class GroupController extends BackendController {
                 Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed updating Group, please check below for errors.');
             }
         }
-        
+
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'System'),
             1 => array('url' => 'group', 'label' => 'Kelompok'),

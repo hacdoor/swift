@@ -18,7 +18,7 @@
                 <li><a href="<?php echo $this->vars['backendUrl'] . 'swiftIncoming/addPengirimNonNasabah/' . $model->id; ?>">Non Nasabah</a></li>
             </ul>
         </li>
-        <li class="dropdown <?php if ($this->action->id == 'addPenerimaNasabahPerorangan' || $this->action->id == 'addPenerimaNasabahKorporasi' || $this->action->id == 'addPenerimaNasabahKorporasi'): ?>active<?php endif; ?>">
+        <li class="dropdown <?php if ($this->action->id == 'addPenerimaNasabahPerorangan' || $this->action->id == 'addPenerimaNasabahKorporasi' || $this->action->id == 'addPenerimaNonNasabah'): ?>active<?php endif; ?>">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 Identitas Penerima <span class="caret"></span>
             </a>

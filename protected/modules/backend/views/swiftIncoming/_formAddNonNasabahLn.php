@@ -12,8 +12,6 @@
         'htmlOptions' => array('class' => 'form-horizontal', 'role' => 'form')
             ));
     ?>
-    
-    <?php echo $form->errorSummary($nonNasabahLn); ?>
 
     <div class="col-md-12">
 
@@ -26,6 +24,13 @@
                 </div>
                 <div class="col-md-5">
                     <div class="alert alert-danger customAlert">Wajib diisi apabila alamat belum diisi !</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($nonNasabahLn, 'namaBank', array('class' => 'col-md-2 control-label')); ?>
+                <div class="col-md-5">
+                    <?php echo $form->textField($nonNasabahLn, 'namaBank', array('class' => 'form-control')); ?>
+                    <?php echo $form->error($nonNasabahLn, 'namaBank'); ?>
                 </div>
             </div>
             <div class="form-group">

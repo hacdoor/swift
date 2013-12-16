@@ -1,30 +1,20 @@
-<?php
-/* @var $this SwiftController */
-/* @var $model Swift */
-/* @var $form CActiveForm */
-?>
-
 <div class="form-wrapper">
 
     <?php
     $form = $this->beginWidget('CActiveForm', array(
         'id' => 'swiftOutgoing-form',
-        'enableAjaxValidation' => FALSE,
+        'enableAjaxValidation' => false,
+        'enableClientValidation' => true,
+        'clientOptions' => array(
+            'validateOnSubmit' => true,
+        ),
         'errorMessageCssClass' => 'label label-danger',
         'htmlOptions' => array('class' => 'form-horizontal', 'role' => 'form')
-    ));
+            ));
     ?>
 
-
     <div class="col-md-12">
-
         <fieldset>
-
-            <p class="note">Fields with <span class="required">*</span> are required.</p>
-
-            <?php echo $form->errorSummary($model); ?>
-
-
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'jenisLaporan', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
@@ -56,14 +46,14 @@
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'namaPjk', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->textField($model, 'namaPjk', array('class' => 'form-control')); ?>
+                    <?php echo $form->textField($model, 'namaPjk', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                     <?php echo $form->error($model, 'namaPjk'); ?>
                 </div>
             </div>
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'namaPejabatPjk', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-5">
-                    <?php echo $form->textField($model, 'namaPejabatPjk', array('class' => 'form-control')); ?>
+                    <?php echo $form->textField($model, 'namaPejabatPjk', array('class' => 'form-control', 'readonly' => 'readonly')); ?>
                     <?php echo $form->error($model, 'namaPejabatPjk'); ?>
                 </div>
             </div>
@@ -92,7 +82,7 @@
 
     <?php $this->endWidget(); ?>
 
-</div><!-- form -->
+</div>
 
 <script>
     $('#Swift_jenisLaporan').on('change', function() {

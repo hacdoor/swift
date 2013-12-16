@@ -8,7 +8,7 @@
             </h1>
 
             <div class="row">
-                <?php $this->renderPartial('/swift/_generate'); ?>
+                <?php $this->renderPartial('/swift/_generate',array('dateRange' => $dateRange)); ?>
             </div>
         </div>
     </div>

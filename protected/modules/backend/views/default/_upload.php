@@ -2,7 +2,7 @@
 
     <?php
     $form = $this->beginWidget('CActiveForm', array(
-        'id' => 'form-form',
+        'id' => 'upload-form',
         'enableAjaxValidation' => true,
         'errorMessageCssClass' => 'label label-danger',
         'clientOptions' => array(
@@ -17,7 +17,6 @@
     ?>
 
     <div class="col-md-12">
-
         <fieldset>
             <div class="form-group">
                 <label class="col-md-2 control-label required" for="Input_1">Upload Data Customer <span class="required">*</span></label>                
@@ -37,12 +36,11 @@
                 </div>
             </div>
         </fieldset>
-
     </div>
 
     <div class="col-md-12 clear form-actions">
         <hr>
-        <a href="<?php echo Yii::app()->request->baseUrl; ?>/backend/swift" class="btn btn-lg btn-default">Cancel</a>
+        <a href="<?php echo $this->vars['backendUrl']; ?>swift" class="btn btn-lg btn-default">Cancel</a>
         <?php echo CHtml::submitButton('Submit', array('class' => 'btn btn-lg btn-primary')); ?>
     </div>
 

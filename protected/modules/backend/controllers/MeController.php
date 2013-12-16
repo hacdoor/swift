@@ -52,7 +52,7 @@ class MeController extends BackendController {
 
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'System'),
-            1 => array('url' => '', 'label' => $model->username)
+            1 => array('url' => '', 'label' => ucwords($model->username))
         );
 
         $vars = array(

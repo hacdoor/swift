@@ -60,6 +60,7 @@ class Propinsi extends CActiveRecord
 		return array(
 			'kabupatens' => array(self::HAS_MANY, 'Kabupaten', 'propinsi_id'),
 			'negara' => array(self::BELONGS_TO, 'Negara', 'negara_id'),
+                        'kabupatenCount' => array(self::STAT, 'Kabupaten', 'propinsi_id'),
 		);
 	}
 

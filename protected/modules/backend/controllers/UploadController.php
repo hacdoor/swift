@@ -9,6 +9,22 @@ class UploadController extends BackendController {
 
     public function actionIndex() {
         $typeUpload = $_GET['type'];
+        
+        switch ($typeUpload) {
+            case 'trx':
+                $this->checkAccess('upload.trx');
+
+                break;
+            case 'person':
+                $this->checkAccess('upload.person');
+
+                break;
+            case 'kyc':
+                $this->checkAccess('upload.kyc');
+
+                break;
+        }
+        
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'Transaksi'),
             1 => array('url' => '', 'label' => 'Upload Data ' . $typeUpload)
@@ -133,7 +149,6 @@ class UploadController extends BackendController {
 
                 break;
             
-
             default:
                 $src = $source->trxSource;
                 break;

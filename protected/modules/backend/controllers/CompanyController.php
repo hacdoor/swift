@@ -15,7 +15,7 @@ class CompanyController extends BackendController {
         $actions = array(
             'edit' => array('permission' => 'company.update', 'url' => 'company/update/', 'icon' => 'pencil')
         );
-        $data_grid = array('namaPjk', 'namaPejabatPjk','trxSource','kycSource','personSource','tglAkhirData');
+        $data_grid = array('namaPjk', 'namaPejabatPjk', 'trxSource', 'kycSource', 'personSource');
         $breadcrumb = array(
             0 => array('url' => '', 'label' => 'System'),
             1 => array('url' => '', 'label' => 'System Parameter')
@@ -33,8 +33,6 @@ class CompanyController extends BackendController {
         );
         $this->render('index', $vars);
     }
-
-    
 
     public function actionUpdate($id) {
         $this->checkAccess('company.update');
@@ -79,5 +77,4 @@ class CompanyController extends BackendController {
         $this->render('update', $vars);
     }
 
-    
 }

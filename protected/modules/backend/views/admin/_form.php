@@ -2,7 +2,7 @@
 
     <?php
     $form = $this->beginWidget('CActiveForm', array(
-        'id' => 'user-_form-form',
+        'id' => 'admin-form',
         'enableAjaxValidation' => false,
         'errorMessageCssClass' => 'label label-danger',
         'htmlOptions' => array('class' => 'form-horizontal', 'role' => 'form')
@@ -20,7 +20,6 @@
                 </div>
             </div>
 
-
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'email', array('class' => 'col-md-2 control-label')); ?>
                 <div class="col-md-10">
@@ -28,7 +27,6 @@
                     <?php echo $form->error($model, 'email'); ?>
                 </div>
             </div>
-
 
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'realname', array('class' => 'col-md-2 control-label')); ?>
@@ -39,6 +37,7 @@
             </div>
 
             <!-- Inherited group permissions -->
+
             <?php
             $groupPerms = array();
             if (isset($model->group)):
@@ -87,9 +86,10 @@
         <?php endif; ?>
     <?php endif; ?>
 
-    <hr>
+    <hr/>
 
     <!-- Permissions -->
+
     <?php
     foreach ($permissions as $k => $v) {
         $i = -1;
@@ -216,7 +216,6 @@
                         <?php echo $form->error($model, 'password'); ?>
                     </div>
 
-
                     <div class="form-group">
                         <?php echo $form->labelEx($model, 'confirm_password', array('class' => 'control-label')); ?>
                         <?php echo $form->passwordField($model, 'confirm_password', array('class' => 'form-control', 'value' => '')); ?>
@@ -235,7 +234,6 @@
         <div class="panel-body panel-collapse collapse" id="panel-publish-body">
             <fieldset class="form">
 
-
                 <div class="form-group">
                     <label for="Admin_is_active" class="checkbox-inline">
                         <input type="checkbox" name="Admin[is_active]" id="Admin_is_active" <?php if ($model->is_active): ?>checked="checked"<?php endif; ?> value="1">
@@ -251,10 +249,10 @@
 
 <div class="col-md-12 clear form-actions">
     <hr>
-    <a href="<?php echo Yii::app()->request->baseUrl; ?>/backend/admin" class="btn btn-lg btn-default">Cancel</a>
+    <a href="<?php echo $this->vars['backendUrl']; ?>admin" class="btn btn-lg btn-default">Cancel</a>
     <?php echo CHtml::submitButton('Submit', array('class' => 'btn btn-lg btn-primary')); ?>
 </div>
 
 <?php $this->endWidget(); ?>
 
-</div><!-- form -->
+</div>

@@ -1,82 +1,85 @@
 <?php
 
-class SettingController extends BackendController
-{
-	protected function beforeAction($action) {
-		$this->checkAccess();
-		return parent::beforeAction($action);
-	}
+class SettingController extends BackendController {
 
-	public function actionIndex() {
-		$this->checkAccess('setting.manage');
+    protected function beforeAction($action) {
+        $this->checkAccess();
+        return parent::beforeAction($action);
+    }
 
-		$data = null;
-		$pages = null;
-		$filters = array(
-			'name' => '',
-		);
+    public function actionIndex() {
+        $this->checkAccess('setting.manage');
 
-		$criteria = new CDbCriteria;
-		$criteria->order = Yii::app()->setting->get('default_sort');
+        $data = null;
+        $pages = null;
+        $filters = array(
+            'name' => '',
+        );
 
-		if (isset($_GET['Filter'])) $filters = $_GET['Filter'];
-		if ($filters['name']) $criteria->addSearchCondition('name', $filters['name']);
+        $criteria = new CDbCriteria;
+        $criteria->order = Yii::app()->setting->get('default_sort');
 
-		$dataCount = Setting::model()->count($criteria);
+        if (isset($_GET['Filter']))
+            $filters = $_GET['Filter'];
+        if ($filters['name'])
+            $criteria->addSearchCondition('name', $filters['name']);
 
-		$pages = new CPagination($dataCount);
-		$pages->setPageSize(Yii::app()->setting->get('list_size'));
-		$pages->applyLimit($criteria);
+        $dataCount = Setting::model()->count($criteria);
 
-		$data = Setting::model()->findAll($criteria);
+        $pages = new CPagination($dataCount);
+        $pages->setPageSize(Yii::app()->setting->get('list_size'));
+        $pages->applyLimit($criteria);
 
-		$vars = array(
-			'data' => $data,
-			'pages' => $pages,
-			'filters' => $filters,
-		);
+        $data = Setting::model()->findAll($criteria);
 
-		$this->render('index', $vars);
-	}
+        $vars = array(
+            'data' => $data,
+            'pages' => $pages,
+            'filters' => $filters,
+        );
 
-	public function actionUpdate($id) {
-		$this->checkAccess('setting.manage');
+        $this->render('index', $vars);
+    }
 
-		$model = Setting::model()->findByPk($id);
+    public function actionUpdate($id) {
+        $this->checkAccess('setting.manage');
 
-		if (!$model) {
-			$this->redirect($this->vars['backendUrl'] . 'setting');
-			Yii::app()->end();
-		}
+        $model = Setting::model()->findByPk($id);
 
-		if ($model->name == 'salt') {
-			$this->redirect($this->vars['backendUrl'] . 'setting');
-			Yii::app()->end();
-		}
+        if (!$model) {
+            $this->redirect($this->vars['backendUrl'] . 'setting');
+            Yii::app()->end();
+        }
 
-		if (isset($_POST['Setting'])) {
-			$model->attributes = $_POST['Setting'];
+        if ($model->name == 'salt') {
+            $this->redirect($this->vars['backendUrl'] . 'setting');
+            Yii::app()->end();
+        }
 
-			if ($model->validate()) {
-				if ($model->save()) {
-					// Delete setting.json file
-					Yii::app()->setting->clearCache();
+        if (isset($_POST['Setting'])) {
+            $model->attributes = $_POST['Setting'];
 
-					// Redirect
-					Yii::app()->user->setFlash('success', 'Success!|' . 'Site Setting has been updated.');
-					$this->redirect($this->vars['backendUrl'] . 'setting');
-				} else {
-					Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed updating Site Setting, please try again.');
-				}
-			} else {
-				Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed updating Site Setting, please check below for errors.');
-			}
-		}
+            if ($model->validate()) {
+                if ($model->save()) {
+                    // Delete setting.json file
+                    Yii::app()->setting->clearCache();
 
-		$vars = array(
-			'model' => $model,
-		);
+                    // Redirect
+                    Yii::app()->user->setFlash('success', 'Success!|' . 'Site Setting has been updated.');
+                    $this->redirect($this->vars['backendUrl'] . 'setting');
+                } else {
+                    Yii::app()->user->setFlash('warning', 'Failed!|' . 'Failed updating Site Setting, please try again.');
+                }
+            } else {
+                Yii::app()->user->setFlash('danger', 'Error!|' . 'Failed updating Site Setting, please check below for errors.');
+            }
+        }
 
-		$this->render('update', $vars);
-	}
+        $vars = array(
+            'model' => $model,
+        );
+
+        $this->render('update', $vars);
+    }
+
 }

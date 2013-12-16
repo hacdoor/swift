@@ -7,6 +7,7 @@
  * @property integer $id
  * @property string $kodeRahasia
  * @property string $noRekening
+ * @property string $namaBank
  * @property string $namaLengkap
  * @property string $tglLahir
  * @property string $alamat
@@ -56,27 +57,33 @@ class NonNasabahLn extends CActiveRecord {
             array('namaLengkap, negaraBagianKota, idNegara, swift_id', 'required'),
             array('idNegara, swift_id', 'numerical', 'integerOnly' => true),
             array('nilaiTransaksiDalamRupiah', 'numerical'),
-            array('kodeRahasia, noRekening, negaraLain', 'length', 'max' => 50),
+            array('kodeRahasia, noRekening, namaBank, negaraLain', 'length', 'max' => 50),
             array('namaLengkap', 'length', 'max' => 255),
             array('alamat', 'length', 'max' => 100),
             array('noTelp, negaraBagianKota, ktp, sim, passport, kimsKitasKitap, npwp, jenisBuktiLain, noBuktiLain', 'length', 'max' => 30),
             array('tglLahir', 'safe'),
-            array('ktp, sim, passport, kimsKitasKitap, npwp', 'oneOfFive', 'on' => 'other'),
+            array('ktp, sim, passport, kimsKitasKitap, npwp', 'oneOfFive'),
             array('noRekening, alamat', 'oneOfTwo'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, kodeRahasia, noRekening, namaLengkap, tglLahir, alamat, noTelp, negaraBagianKota, idNegara, negaraLain, ktp, sim, passport, kimsKitasKitap, npwp, jenisBuktiLain, noBuktiLain, swift_id', 'safe', 'on' => 'search'),
+            array('id, kodeRahasia, noRekening, namaBank, namaLengkap, tglLahir, alamat, noTelp, negaraBagianKota, idNegara, negaraLain, ktp, sim, passport, kimsKitasKitap, npwp, jenisBuktiLain, noBuktiLain, swift_id', 'safe', 'on' => 'search'),
         );
     }
 
     public function oneOfFive($attribute, $params) {
-        if (!$this->ktp && !$this->sim && !$this->passport && !$this->kimsKitasKitap && !$this->npwp)
-            $this->addError($attribute, $attribute . ' is required.');
+        $action = Yii::app()->getController()->getAction()->getId();
+        if ($action !== 'addPengirimNonNasabah' || $action !== 'addPenerimaNonNasabah') {
+            if (!$this->ktp && !$this->sim && !$this->passport && !$this->kimsKitasKitap && !$this->npwp)
+                $this->addError($attribute, $attribute . ' is required.');
+        }
     }
-    
+
     public function oneOfTwo($attribute, $params) {
-        if (!$this->noRekening && !$this->alamat)
-            $this->addError($attribute, $attribute . ' is required.');
+        $action = Yii::app()->getController()->getAction()->getId();
+        if ($action !== 'addPengirimNonNasabah' || $action !== 'addPenerimaNonNasabah') {
+            if (!$this->noRekening && !$this->alamat)
+                $this->addError($attribute, $attribute . ' is required.');
+        }
     }
 
     /**
@@ -107,6 +114,7 @@ class NonNasabahLn extends CActiveRecord {
             'id' => 'ID',
             'kodeRahasia' => 'Kode Rahasia',
             'noRekening' => 'No Rekening',
+            'namaBank' => 'Nama Bank',
             'namaLengkap' => 'Nama Lengkap',
             'tglLahir' => 'Tgl Lahir',
             'alamat' => 'Alamat',
@@ -139,6 +147,7 @@ class NonNasabahLn extends CActiveRecord {
         $criteria->compare('id', $this->id);
         $criteria->compare('kodeRahasia', $this->kodeRahasia, true);
         $criteria->compare('noRekening', $this->noRekening, true);
+        $criteria->compare('namaBank', $this->namaBank, true);
         $criteria->compare('namaLengkap', $this->namaLengkap, true);
         $criteria->compare('tglLahir', $this->tglLahir, true);
         $criteria->compare('alamat', $this->alamat, true);
@@ -157,7 +166,7 @@ class NonNasabahLn extends CActiveRecord {
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
-        ));
+                ));
     }
 
 }
