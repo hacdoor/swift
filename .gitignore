@@ -3,4 +3,5 @@ protected/runtime/
 themes/classic/views/
 nbproject/
 log/
+log/*
 index.php
