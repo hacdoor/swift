@@ -36,9 +36,6 @@ $this->pageTitle = $title;
                         <table class="table table-bordered table-striped list">
                             <thead>
                                 <tr>
-                                    <th id="selectedIds" class="list-number checkbox-column hidden">
-                                        <input class="select-on-check-all" type="checkbox" value="1" name="selectedIds_all" id="selectedIds_all">
-                                    </th>
                                     <th class="list-number">#</th>
                                     <th><?php echo $sort->link('localId', $showSort . 'Local ID') ?></th>
                                     <th><?php echo $sort->link('noLtdln', $showSort . 'No LTDLN') ?></th>
@@ -59,9 +56,6 @@ $this->pageTitle = $title;
                                         $i++;
                                         ?>
                                         <tr>
-                                            <td class="list-number checkbox-column hidden">
-                                                <input class="select-on-check" value="<?php echo $d->id; ?>" id="selectedIds_<?php echo $i - 1; ?>" type="checkbox" name="selectedIds[]">
-                                            </td>
                                             <td class="list-number"><?php echo $i; ?>.</td>
                                             <td><?php echo Yii::app()->util->purify($d->localId); ?></td>
                                             <td><?php echo Yii::app()->util->purify($d->noLtdln); ?></td>
@@ -72,8 +66,8 @@ $this->pageTitle = $title;
                                                 <?php if ($admin->hasPermissions('nonSwiftOutgoing.update')): ?>
                                                     <a href="<?php echo $this->vars['backendUrl']; ?>nonSwiftOutgoing/umum/<?php echo $d->id; ?>" class="btn btn-xs btn-default bootip" title="Update"><span class="icon icon-pencil"></span></a>
                                                 <?php endif; ?>
-                                                <?php if ($admin->hasPermissions('nonSwiftOutgoing.generateExcel')): ?>
-                                                    <a href="<?php echo $this->vars['backendUrl']; ?>swift/createExcel/<?php echo $d->id; ?>" class="btn btn-xs btn-default bootip" title="Export to Excel"><span class="icon icon-file"></span></a>
+                                                <?php if ($admin->hasPermissions('nonSwiftOutgoing.exportExcel')): ?>
+                                                    <a href="<?php echo $this->vars['backendUrl']; ?>swift/exportExcel/<?php echo $d->id; ?>" class="btn btn-xs btn-default bootip" title="Export to Excel"><span class="icon icon-file"></span></a>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>

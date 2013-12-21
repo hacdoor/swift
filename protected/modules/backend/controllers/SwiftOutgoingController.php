@@ -711,5 +711,267 @@ class SwiftOutgoingController extends BackendController {
             Yii::app()->end();
         }
     }
+    
+    public function actionExportExcel($id) {
+        $this->checkAccess('swiftOutgoing.exportExcel');
+
+        // Find Single Data Swift
+        $oneData = Swift::model()->findByPk($id);
+        $jenisSwift = $oneData->jenisSwift;
+        $pengirim = Yii::app()->util->getPengirim($id, 'all');
+        $penerima = Yii::app()->util->getPenerima($id, 'all');
+
+        //Create Excel
+        Yii::import('ext.phpexcel.XPHPExcel');
+        $objPHPExcel = XPHPExcel::createPHPExcel();
+        $objPHPExcel->getProperties()->setCreator("Ahda Ridwan")
+                ->setLastModifiedBy("Ahda Ridwan")
+                ->setTitle("Office 2007 XLSX Production Document")
+                ->setSubject("Office 2007 XLSX Production Document")
+                ->setDescription("Production document for Office 2007 XLSX, generated using PHP classes.")
+                ->setKeywords("office 2007 openxml php")
+                ->setCategory("Production result file");
+
+        // Set AutoSize
+        PHPExcel_Shared_Font::setAutoSizeMethod(PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT);
+
+        // Set AutoSize to Column
+        foreach (range('A', 'E') as $columnID) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
+                    ->setAutoSize(true);
+        }
+
+        // White Page Default
+        $objPHPExcel->getDefaultStyle()->applyFromArray(
+                array(
+                    'fill' => array(
+                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                        'color' => array('argb' => 'FFFFFFFF')
+                    ),
+                )
+        );
+
+        // Set Bold & Center Font
+        $styleArray = array(
+            'font' => array(
+                'bold' => true
+            ),
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+            ),
+        );
+
+        // Set Border
+        $styleArrayBord = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            )
+        );
+
+        // Set Bold
+        $styleArrayOther = array(
+            'font' => array(
+                'bold' => true
+            )
+        );
+
+        // Add Text Header
+        $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A1', 'LAPORAN TRANSAKSI KEUANGAN TRANSFER DANA DARI DAN KE LUAR NEGERI');
+
+        // Merge Column
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:E1');
+
+        // Center Header
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray);
+
+        // Data Umum
+        $dataUmum = array(
+            array('1' => 'I. Umum', '2' => ''),
+            array('1' => 'No LTKL', '2' => ': ' . $oneData->noLtdln),
+            array('1' => 'No LTDLN Koreksi', '2' => ': ' . $oneData->noLtdlnKoreksi),
+            array('1' => 'Tanggal Laporan', '2' => ': ' . Yii::app()->dateFormatter->format('d-MM-yyyy', $oneData->tglLaporan)),
+            array('1' => 'Nama PJK Bank Pelapor', '2' => ': ' . $oneData->namaPjk),
+            array('1' => 'Nama Pejabat PJK Bank Pelapor', '2' => ': ' . $oneData->namaPejabatPjk),
+            array('1' => 'Jenis Laporan', '2' => ': ' . $oneData->getJenisLaporanText()),
+        );
+
+        $dataPengirimPerorangan = '';
+        $alamatSesuaiIndentitasPerorangan = '';
+        $negaraPerorangan = '';
+        $negaraPeroranganVoucher = '';
+        $wargaNegaraPerorangan = '';
+
+        switch ($pengirim['key']) {
+            case 1:
+                $pengirimPerorangan = $pengirim['data'];
+                $negaraPerorangan = $pengirimPerorangan->idNegaraKewarganegaraan0->nama;
+                $negaraPeroranganVoucher = $pengirimPerorangan->idNegaraVoucher0->nama;
+                $wargaNegaraPerorangan = Yii::app()->util->getKodeStandar(array('modul' => 'kewarganegaraan', 'data' => $pengirimPerorangan->wargaNegara));
+
+                // Data Identitas Pengirim Nasabah Perorangan
+                $dataPengirimPerorangan = array(
+                    array('1' => 'II. Identitas Pengirim Nasabah Perorangan', '2' => ''),
+                    array('1' => 'No Rekening', '2' => ': ' . $pengirimPerorangan->noRekening),
+                    array('1' => 'Nama Lengkap', '2' => ': ' . $pengirimPerorangan->namaLengkap),
+                    array('1' => 'Tanggal Lahir', '2' => ': ' . $pengirimPerorangan->tglLahir),
+                    array('1' => 'Kewarganegaraan', '2' => ': ' . $wargaNegaraPerorangan),
+                    array('1' => 'Negara', '2' => ': ' . $negaraPerorangan),
+                    array('1' => 'Negara Lain', '2' => ': ' . $pengirimPerorangan->negaraLainKewarganegaraan),
+                    array('1' => '', '2' => ': '),
+                );
+
+                $alamatSesuaiIndentitasPerorangan = array(
+                    array('1' => 'Alamat Sesuai Bukti Identitas/Voucher', '2' => ''),
+                    array('1' => 'Alamat', '2' => ': ' . $pengirimPerorangan->alamat),
+                    array('1' => 'Negara Bagian/Kota', '2' => ': ' . $pengirimPerorangan->negaraBagianKota),
+                    array('1' => 'Negara', '2' => ': ' . $negaraPeroranganVoucher),
+                    array('1' => 'Negara Lainnya', '2' => ': ' . $pengirimPerorangan->negaraLainVoucher),
+                    array('1' => 'No Telp', '2' => ': ' . $pengirimPerorangan->noTelp),
+                    array('1' => 'KTP', '2' => ': ' . $pengirimPerorangan->ktp),
+                );
+
+                if ($jenisSwift == 1 || $jenisSwift == 3) {
+                    $pengirimKorporasi = new NasabahKorporasiLn;
+                    $pengirimNonNasabah = new NonNasabahLn;
+                } else {
+                    $pengirimKorporasi = new NasabahKorporasiDn;
+                    $pengirimNonNasabah = new NonNasabahDn;
+                }
+                break;
+            case 2:
+                $pengirimKorporasi = $pengirim['data'];
+
+                if ($jenisSwift == 1 || $jenisSwift == 3) {
+                    $pengirimPerorangan = new NasabahPeroranganLn;
+                    $pengirimNonNasabah = new NonNasabahLn;
+                } else {
+                    $pengirimPerorangan = new NasabahPeroranganDn;
+                    $pengirimNonNasabah = new NonNasabahDn;
+                }
+                break;
+            case 3:
+                $pengirimNonNasabah = $pengirim['data'];
+
+                if ($jenisSwift == 1 || $jenisSwift == 3) {
+                    $pengirimPerorangan = new NasabahPeroranganLn;
+                    $pengirimKorporasi = new NasabahKorporasiLn;
+                } else {
+                    $pengirimPerorangan = new NasabahPeroranganDn;
+                    $pengirimKorporasi = new NasabahKorporasiDn;
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        switch ($penerima['key']) {
+            case 1:
+                $penerimaPerorangan = $penerima['data'];
+
+                if ($jenisSwift == 1 || $jenisSwift == 3) {
+                    $penerimaKorporasi = new NasabahKorporasiLn;
+                    $penerimaNonNasabah = new NonNasabahLn;
+                } else {
+                    $penerimaKorporasi = new NasabahKorporasiDn;
+                    $penerimaNonNasabah = new NonNasabahDn;
+                }
+                break;
+            case 2:
+                $penerimaKorporasi = $penerima['data'];
+
+                if ($jenisSwift == 1 || $jenisSwift == 3) {
+                    $penerimaPerorangan = new NasabahPeroranganLn;
+                    $penerimaNonNasabah = new NonNasabahLn;
+                } else {
+                    $penerimaPerorangan = new NasabahPeroranganDn;
+                    $penerimaNonNasabah = new NonNasabahDn;
+                }
+                break;
+            case 3:
+                $penerimaNonNasabah = $penerima['data'];
+
+                if ($jenisSwift == 1 || $jenisSwift == 3) {
+                    $penerimaPerorangan = new NasabahPeroranganLn;
+                    $penerimaKorporasi = new NasabahKorporasiLn;
+                } else {
+                    $penerimaPerorangan = new NasabahPeroranganDn;
+                    $penerimaKorporasi = new NasabahKorporasiDn;
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        // Array to Set Bold
+        $setBold = array(
+            '1' => 'A3',
+            '2' => 'A11:E11',
+            '3' => 'A19',
+            '4' => 'A22',
+        );
+
+        // Looping Bold
+        foreach ($setBold as $value) {
+            $objPHPExcel->getActiveSheet()->getStyle($value)->applyFromArray($styleArrayOther);
+        }
+
+        // Looping Data Umum
+        $sheetActive = $objPHPExcel->getActiveSheet();
+        foreach ($dataUmum as $row => $columns) {
+            foreach ($columns as $column => $data) {
+                $sheetActive->setCellValueByColumnAndRow($column - 1, $row + 3, $data);
+            }
+        }
+
+        // Looping Data Pengirim Nasabah Perorangan
+        if ($dataPengirimPerorangan) {
+            $sheetActive = $objPHPExcel->getActiveSheet();
+            foreach ($dataPengirimPerorangan as $row => $columns) {
+                foreach ($columns as $column => $data) {
+                    $sheetActive->setCellValueByColumnAndRow($column - 1, $row + 11, $data);
+                }
+            }
+        }
+
+        // Looping Data Pengirim Nasabah Perorangan :: Sesuai Identitas
+        if ($alamatSesuaiIndentitasPerorangan) {
+            $sheetActive = $objPHPExcel->getActiveSheet();
+            foreach ($alamatSesuaiIndentitasPerorangan as $row => $columns) {
+                foreach ($columns as $column => $data) {
+                    $sheetActive->setCellValueByColumnAndRow($column + 1, $row + 11, $data);
+                }
+            }
+        }
+
+        $jenisSwiftText = Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $jenisSwift));
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Rename worksheet
+        $objPHPExcel->getActiveSheet()->setTitle(date('d-m-Y'));
+
+        // Redirect output to a client web browser (Excel5)
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $jenisSwiftText . ' - ' . $oneData->localId . ', ' . date('d-m-Y') . '.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        Yii::app()->end();
+    }
 
 }

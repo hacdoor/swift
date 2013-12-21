@@ -156,6 +156,11 @@ fieldset.well legend {
     text-decoration: none;
 }
 
+.list h4 {
+    margin: 4px 0;
+    text-shadow: 0 1px #fff;
+}
+
 .sortIcon {
     margin-top: 4px;
 }
@@ -179,6 +184,10 @@ fieldset.well legend {
     position: absolute;
     top: 0;
     right: 0;
+}
+
+.listNumber {
+    padding-left: 20px; 
 }
 
 /* NavTab Modif */

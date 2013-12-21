@@ -38,6 +38,7 @@ $this->pageTitle = $title;
                             <table class="table table-bordered table-striped list">
                                 <thead>
                                     <tr>
+                                        <th class="wrap">#</th>
                                         <th><?php echo $sort->link('localId', $showSort . 'Local ID') ?></th>
                                         <th><?php echo $sort->link('jenisSwift', $showSort . 'Jenis Transaksi') ?></th>
                                         <th><?php echo $sort->link('tglLaporan', $showSort . 'Tanggal Transaksi') ?></th>
@@ -60,20 +61,21 @@ $this->pageTitle = $title;
                                             $i++;
                                             ?>
                                             <tr>
+                                                <td class="wrap"><?php echo $i; ?></td>
                                                 <td><?php echo Yii::app()->util->purify($d->localId); ?></td>
                                                 <td><?php echo Yii::app()->util->purify(Yii::app()->util->getKodeStandar(array('modul' => 'swift', 'data' => $d->jenisSwift))); ?></td>
                                                 <td><?php echo ($d->tglLaporan) ? Yii::app()->dateFormatter->format('dd-MM-yyyy', $d->tglLaporan) : ''; ?></td>
                                                 <td>
-                                                    <?php echo Yii::app()->util->getPengirim($d->id,'namaLengkap')?>
+                                                    <?php echo Yii::app()->util->getPengirim($d->id, 'namaLengkap') ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo Yii::app()->util->getPenerima($d->id,'namaLengkap')?>
+                                                    <?php echo Yii::app()->util->getPenerima($d->id, 'namaLengkap') ?>
                                                 </td>
                                                 <td><?php echo ($d->transaksis) ? $d->transaksis->currency->simbol : '' ?></td>
                                                 <td><?php echo ($d->transaksis) ? Yii::app()->numberFormatter->formatCurrency($d->transaksis->amountDalamRupiah, 'IDR') : ''; ?></td>
                                                 <td>User</td>
                                                 <td class="list-actions">
-                                                    <span class="label label-warning">-</span>
+                                                    -
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>

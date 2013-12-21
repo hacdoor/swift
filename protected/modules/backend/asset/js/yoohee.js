@@ -11,6 +11,7 @@ var yoohee = {
         $('.form-upload-file').on('change', function() {
             self.previewUpload(this, 'file-upload-preview');
         });
+        
         $('#toggle-upload').on('change', function() {
             if ($(this).is(':checked')) {
                 $('.form-upload-file').removeAttr('disabled');
@@ -101,6 +102,58 @@ var yoohee = {
             return false;
         });
         
+        $.fn.shiftSelectable = function() {
+            var lastChecked,
+            $boxes = this;
+            $boxes.click(function(evt) {
+                if(!lastChecked) {
+                    lastChecked = this;
+                    return;
+                }
+                if(evt.shiftKey) {
+                    var start = $boxes.index(this),
+                    end = $boxes.index(lastChecked);
+                    $boxes.slice(Math.min(start, end), Math.max(start, end) + 1)
+                    .attr('checked', lastChecked.checked)
+                    .trigger('change')
+                }
+                lastChecked = this;
+            });
+        };
+        
+        $('.checkbox-column input:checkbox').shiftSelectable();
+        
+        $('.list tbody tr').click(function () {
+            var check = $(this).find('input:checkbox');
+            if(check.length > 0){
+                if(!$(this).find('input:checkbox').is(":checked")){
+                    $(this).find('input:checkbox').prop('checked', true);
+                    $(this).addClass('selected');
+                    $('.btn-action input').removeClass('disabled');
+                }
+                else {
+                    $(this).find('input:checkbox').prop('checked', false);
+                    $(this).removeClass('selected');
+                    $('.btn-action input').addClass('disabled');
+                }
+            }
+        });
+        
+        $('.checkbox-column input:checkbox').click(function () {
+            if(!$(this).is(":checked")){
+                $(this).prop('checked', true);
+                $(this).parent().parent().removeClass('selected');
+                $('.btn-action input').addClass('disabled');
+                $('#DeleteButton').removeClass('disabled');
+            }
+            else {
+                $(this).prop('checked', false);
+                $(this).parent().parent().addClass('selected');
+                $('.btn-action input').removeClass('disabled');
+                $('#DeleteButton').removeClass('disabled');
+            }
+        });
+        
         $('.checkbox-column input:checkbox').change(function(){
             if($(this).is(":checked")) {
                 $(this).parent().parent().addClass('selected');
@@ -115,6 +168,18 @@ var yoohee = {
         
         $('#selectedIds input:checkbox').change(function(){
             if($(this).is(":checked")) {
+                $('.checkbox-column input:checkbox').parent().parent().addClass('selected');
+                $('.checkbox-column input:checkbox').prop('checked', true);
+                $('#DeleteButton').removeClass('disabled');
+            } else {
+                $('.checkbox-column input:checkbox').parent().parent().removeClass('selected');
+                $('.checkbox-column input:checkbox').prop('checked', false);
+                $('#DeleteButton').addClass('disabled');
+            }
+        });
+        
+        $('#selectedIds input:checkbox').click(function(){
+            if(!$(this).is(":checked")) {
                 $('.checkbox-column input:checkbox').parent().parent().addClass('selected');
                 $('.checkbox-column input:checkbox').prop('checked', true);
                 $('#DeleteButton').removeClass('disabled');
@@ -234,7 +299,7 @@ var yoohee = {
         $(".toggleSeach").click(function(){
             $(".advanceSearch").toggle();
         });
-       
+        
         /* Active MouseEnter */
         
         if($('.dropdown-menu li').hasClass('active')){
@@ -255,7 +320,7 @@ var yoohee = {
         
         /* Confirm Leave Page */
         
-        $('<input type="hidden" id="check" value="" name="check"/>').appendTo($('.form-actions'));
+        $('<input type="hidden" id="check" value="" name="check" disable="disabled"/>').appendTo($('.form-actions'));
         
         if($('.form-horizontal .form-control').length > 0) {
             $('.form-horizontal .form-control').each(function(index, item){
@@ -306,7 +371,7 @@ var yoohee = {
                         $(this).on('click', function(e) {
                             if(!$(this).hasClass('chzn-single')){
                                 var check = $('.form-horizontal #check').val();
-                                if(check.length){
+                                if(check == 1){
                                     var o = $(this);
                                     var text = 'Anda yakin meninggalkan halaman ini ?';
                                     var href = o.attr('href');

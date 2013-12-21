@@ -904,7 +904,7 @@ class SwiftController extends BackendController {
             }
 
             Yii::app()->util->actionCreatefile('SWIFTXML.zip', $dataFile);
-        }else{
+        } else {
             Yii::app()->user->setFlash('danger', 'Error!|' . 'Data empty');
             $this->redirect($this->vars['backendUrl'] . 'swift/generate');
         }
@@ -1272,6 +1272,25 @@ class SwiftController extends BackendController {
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
         Yii::app()->end();
+    }
+
+    public function actionDetail($id) {
+        $this->checkAccess('swift.detail');
+
+        $model = Swift::model()->findByPk($id);
+        
+        $breadcrumb = array(
+            0 => array('url' => '', 'label' => 'Proses'),
+            1 => array('url' => 'swift/konfirmasiDataTransaksi', 'label' => 'Konfirmasi Data Transaksi'),
+            2 => array('url' => '', 'label' => $model->localId)
+        );
+
+        $vars = array(
+            'model' => $model,
+            'breadcrumb' => $breadcrumb
+        );
+
+        $this->render('detail', $vars);
     }
 
 }

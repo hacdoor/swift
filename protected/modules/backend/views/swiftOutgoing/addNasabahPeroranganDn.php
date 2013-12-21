@@ -1,5 +1,5 @@
 <?php
-$nasabahPeroranganDn = $model->isNewRecord ? '<span class="icon-plus"></span> Tambah' : '<span class="icon-pencil"></span> Update';
+$title = $nasabahPeroranganDn->isNewRecord ? '<span class="icon-plus"></span> Tambah' : '<span class="icon-pencil"></span> Update';
 $title .= ' Identitas Pengirim Nasabah Perorangan';
 $this->pageTitle = $title;
 ?>
