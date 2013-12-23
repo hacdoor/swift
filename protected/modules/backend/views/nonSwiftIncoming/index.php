@@ -25,9 +25,9 @@ $this->pageTitle = $title;
                         <span class="btn btn-default btn-lg pull-right toggleSeach"><span class="icon icon-spinner"></span> Advance Search</span>
                     </div>
 
-                    <div class="btn-action hidden">
+                    <div class="btn-action">
                         <?php echo CHtml::submitButton('Finalize', array('name' => 'FinalizeButton', 'confirm' => 'Are you sure want to finalize this record?', 'class' => 'btn btn-lg btn-default bootip disabled', 'title' => 'Set to Finalize')); ?>
-                        <?php echo CHtml::submitButton('Draft', array('name' => 'DraftButton', 'confirm' => 'Are you sure want to draft this record?', 'class' => 'btn btn-lg btn-default bootip disabled', 'title' => 'Set to Draft')); ?>
+                        <?php // echo CHtml::submitButton('Draft', array('name' => 'DraftButton', 'confirm' => 'Are you sure want to draft this record?', 'class' => 'btn btn-lg btn-default bootip disabled', 'title' => 'Set to Draft')); ?>
                     </div>
 
                     <hr class="hidden"/>
@@ -36,6 +36,9 @@ $this->pageTitle = $title;
                         <table class="table table-bordered table-striped list">
                             <thead>
                                 <tr>
+                                    <th id="selectedIds" class="list-number checkbox-column">
+                                        <input class="select-on-check-all" type="checkbox" value="" onclick="checkall(this);" id="selectedIds_all">
+                                    </th>
                                     <th class="list-number">#</th>
                                     <th><?php echo $sort->link('localId', $showSort . 'Local ID') ?></th>
                                     <th><?php echo $sort->link('noLtdln', $showSort . 'No LTDLN') ?></th>
@@ -56,6 +59,9 @@ $this->pageTitle = $title;
                                         $i++;
                                         ?>
                                         <tr>
+                                            <td class="list-number checkbox-column">
+                                                <input class="select-on-check" value="<?php echo $d->id; ?>" id="selectedIds_<?php echo $i - 1; ?>" type="checkbox" name="selectedIds[]">
+                                            </td>
                                             <td class="list-number"><?php echo $i; ?>.</td>
                                             <td><?php echo Yii::app()->util->purify($d->localId); ?></td>
                                             <td><?php echo Yii::app()->util->purify($d->noLtdln); ?></td>

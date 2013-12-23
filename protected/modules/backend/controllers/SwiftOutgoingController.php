@@ -22,7 +22,7 @@ class SwiftOutgoingController extends BackendController {
                 foreach ($_POST['selectedIds'] as $id) {
                     $swift = Swift::model()->findByPk($id);
                     $swift->status = Swift::STATUS_FINALIZE;
-                    $swift->save();
+                    $swift->save(false);
                 }
             }
         }
@@ -32,7 +32,7 @@ class SwiftOutgoingController extends BackendController {
                 foreach ($_POST['selectedIds'] as $id) {
                     $swift = Swift::model()->findByPk($id);
                     $swift->status = Swift::STATUS_DRAFT;
-                    $swift->save();
+                    $swift->save(false);
                 }
             }
         }

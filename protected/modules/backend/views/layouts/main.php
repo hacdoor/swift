@@ -261,6 +261,7 @@ $isHome = ($this->id == 'default' && $this->action->id == 'dashboard' || $this->
         <script type="text/javascript" src="<?php echo $this->vars['assetsUrl']; ?>js/moment.min.js"></script>
         <script type="text/javascript" src="<?php echo $this->vars['assetsUrl']; ?>js/daterangepicker.js"></script>
         <script type="text/javascript" src="<?php echo $this->vars['assetsUrl']; ?>js/yoohee.js"></script>
+        <script type="text/javascript" src="<?php echo $this->vars['assetsUrl']; ?>js/cek_all.js"></script>
 
     </body>
 </html>
